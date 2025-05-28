@@ -56,3 +56,4 @@ You don't have to ever use `build`. The curated feature set is suitable for smal
 ## Author
 
 TriCargo - phunghoanglua2005@gmail.com
+Phan Phúc Đại - dai582005@gmail.com
