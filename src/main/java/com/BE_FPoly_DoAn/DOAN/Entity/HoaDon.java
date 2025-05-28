@@ -1,11 +1,9 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "HOA_DON")
@@ -21,8 +19,15 @@ public class HoaDon {
     @JoinColumn(name = "benhnhan_id")
     private BenhNhan benhNhan;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngay_tao;
+    @ManyToOne
+    @JoinColumn(name = "nguoidung_lap_hoadon_id")
+    private NguoiDung nguoiDungLapHoaDon;
 
-    private Double tong_tien;
+    private LocalDate ngay_tao;
+
+    private BigDecimal tong_tien;
+
+    private BigDecimal tong_tien_thanh_toan;
+
+    private BigDecimal tong_tien_con_no;
 }

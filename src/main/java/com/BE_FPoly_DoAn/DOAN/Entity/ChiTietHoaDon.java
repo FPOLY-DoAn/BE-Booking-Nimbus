@@ -1,9 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "CHI_TIET_HOA_DON")
@@ -25,7 +24,7 @@ public class ChiTietHoaDon {
 
     private Integer so_luong;
 
-    private Double don_gia;
+    private BigDecimal don_gia;
 
-    private Double tong_gia;
+    private BigDecimal tong_gia;
 }

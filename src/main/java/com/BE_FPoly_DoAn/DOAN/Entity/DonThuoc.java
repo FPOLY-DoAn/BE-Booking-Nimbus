@@ -1,11 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DON_THUOC")
@@ -21,6 +18,5 @@ public class DonThuoc {
     @JoinColumn(name = "ppdieutri_id")
     private PhuongPhapDieuTri phuongPhapDieuTri;
 
-    @Column(length = 1)
-    private String ngay_phat_hanh;
+    private LocalDateTime ngay_phat_hanh;
 }

@@ -1,11 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "NGUOI_DUNG")
@@ -29,12 +26,10 @@ public class NguoiDung {
     @Column(length = 15)
     private String so_dien_thoai;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 255)
     private String mat_khau;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngay_tao;
+    private LocalDateTime ngay_tao;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngay_cap_nhat;
+    private LocalDateTime ngay_cap_nhat;
 }

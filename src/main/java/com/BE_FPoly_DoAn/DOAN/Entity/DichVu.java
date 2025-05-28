@@ -1,9 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "DICH_VU")
@@ -25,5 +24,5 @@ public class DichVu {
     @Column(length = 250)
     private String mo_ta;
 
-    private Double gia;
+    private BigDecimal gia;
 }

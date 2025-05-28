@@ -1,11 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "BAC_SI")
@@ -33,9 +30,7 @@ public class BacSi {
 
     private Integer kinh_nghiem;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngay_tao;
+    private LocalDate ngay_tao;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngay_cap_nhat;
+    private LocalDate ngay_cap_nhat;
 }

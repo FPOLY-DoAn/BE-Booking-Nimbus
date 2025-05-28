@@ -1,10 +1,28 @@
-HELP.md
+# ========================
+# BUILD OUTPUT
+# ========================
 target/
-!.mvn/wrapper/maven-wrapper.jar
+build/
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### STS ###
+# ========================
+# MAVEN / WRAPPER
+# ========================
+!.mvn/wrapper/maven-wrapper.jar
+
+# ========================
+# IDE FILES
+# ========================
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Eclipse / STS
 .apt_generated
 .classpath
 .factorypath
@@ -13,21 +31,20 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# VS Code
+.vscode/
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# ========================
+# SENSITIVE FILES
+# ========================
+.env
+.application.properties
+
+HELP.md

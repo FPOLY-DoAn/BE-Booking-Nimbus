@@ -2,8 +2,6 @@ package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "VAI_TRO")
