@@ -1,0 +1,37 @@
+package com.BE_FPoly_DoAn.DOAN.Service.Impl;
+
+import com.BE_FPoly_DoAn.DOAN.Dao.BenhRepository;
+import com.BE_FPoly_DoAn.DOAN.Entity.Benh;
+import com.BE_FPoly_DoAn.DOAN.Service.BenhService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class BenhServiceImpl implements BenhService {
+
+    @Autowired
+    private BenhRepository benhRepository;
+
+    @Override
+    public List<Benh> getAll() {
+        return benhRepository.findAll();
+    }
+
+    @Override
+    public Optional<Benh> getById(Integer id) {
+        return benhRepository.findById(id);
+    }
+
+    @Override
+    public Benh save(Benh Benh) {
+        return benhRepository.save(Benh);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        benhRepository.findById(id).ifPresent(benhRepository::delete);
+    }
+}
