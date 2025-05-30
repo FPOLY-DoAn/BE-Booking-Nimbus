@@ -1,8 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "NGUOI_DUNG")
@@ -32,4 +36,16 @@ public class NguoiDung {
     private LocalDateTime ngay_tao;
 
     private LocalDateTime ngay_cap_nhat;
+
+    @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<PhanQuyen> phanQuyens;
+
+    @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<BacSi> bacSis;
+
+    @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<BenhNhan> benhNhans;
+
+    @OneToMany(mappedBy = "nguoiDungLapHoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<HoaDon> hoaDonsLap;
 }

@@ -1,9 +1,13 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "HOA_DON")
@@ -30,4 +34,10 @@ public class HoaDon {
     private BigDecimal tong_tien_thanh_toan;
 
     private BigDecimal tong_tien_con_no;
+
+    @OneToMany(mappedBy = "hoaDon",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<ChiTietHoaDon> chiTietHoaDons;
+
+    @OneToMany(mappedBy = "hoaDon",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<ThanhToan> thanhToans;
 }

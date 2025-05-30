@@ -1,7 +1,10 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,4 +41,7 @@ public class LichKham {
     private LocalDateTime ngay_tao;
 
     private LocalDateTime ngay_cap_nhat;
+
+    @OneToOne(mappedBy = "lichKham",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private BenhAn benhAn;
 }

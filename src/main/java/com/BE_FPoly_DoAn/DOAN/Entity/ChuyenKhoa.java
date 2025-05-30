@@ -1,7 +1,11 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "CHUYEN_KHOA")
@@ -18,4 +22,8 @@ public class ChuyenKhoa {
 
     @Column(length = 250)
     private String mo_ta;
+
+    @OneToMany(mappedBy = "chuyenKhoa",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<BacSi> bacSis;
+
 }

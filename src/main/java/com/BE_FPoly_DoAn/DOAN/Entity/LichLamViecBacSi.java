@@ -1,8 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "LICH_LAM_VIEC_BAC_SI")
@@ -23,4 +27,7 @@ public class LichLamViecBacSi {
     private LocalDate ngay_tao;
 
     private LocalDate ngay_cap_nhat;
+
+    @OneToMany(mappedBy = "lichLamViecBacSi",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<LichPhongKham> lichPhongKhams;
 }

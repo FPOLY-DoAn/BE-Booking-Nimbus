@@ -1,8 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "DICH_VU")
@@ -25,4 +29,7 @@ public class DichVu {
     private String mo_ta;
 
     private BigDecimal gia;
+
+    @OneToMany(mappedBy = "dichVu",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<ChiTietHoaDon> chiTietHoaDons;
 }
