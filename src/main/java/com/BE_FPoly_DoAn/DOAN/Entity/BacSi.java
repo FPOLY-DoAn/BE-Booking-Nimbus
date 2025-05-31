@@ -27,7 +27,7 @@ public class BacSi {
     @JoinColumn(name = "chuyenkhoa_id", referencedColumnName = "chuyenkhoa_id", columnDefinition = "INT")
     private ChuyenKhoa chuyenKhoa;
 
-    @Column(name = "chung_chi", length = 25, columnDefinition = "VARCHAR(25)")
+    @Column(name = "chung_chi", length = 200, columnDefinition = "NVARCHAR(200)")
     private String chungChi;
 
     @Column(name = "trinh_do", length = 50, columnDefinition = "NVARCHAR(50)")

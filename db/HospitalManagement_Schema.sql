@@ -69,7 +69,7 @@ CREATE TABLE BAC_SI (
     bacsi_id INT IDENTITY(1,1) PRIMARY KEY,
     nguoidung_id INT,
     chuyenkhoa_id INT,
-    chung_chi VARCHAR(25),
+    chung_chi NVARCHAR(200),
     trinh_do NVARCHAR(50),
     kinh_nghiem INT,
     ngay_tao DATE,
