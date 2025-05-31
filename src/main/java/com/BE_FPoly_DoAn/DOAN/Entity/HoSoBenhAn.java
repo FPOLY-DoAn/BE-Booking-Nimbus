@@ -11,15 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HoSoBenhAn {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hoso_id", columnDefinition = "INT")
     private Integer hoso_id;
 
     @ManyToOne
-    @JoinColumn(name = "benhan_id")
+    @JoinColumn(name = "benhan_id", referencedColumnName = "benhan_id", columnDefinition = "INT")
     private BenhAn benhAn;
 
     @ManyToOne
-    @JoinColumn(name = "benh_id")
+    @JoinColumn(name = "benh_id", referencedColumnName = "benh_id", columnDefinition = "INT")
     private Benh benh;
 }

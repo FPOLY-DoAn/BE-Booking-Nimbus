@@ -13,17 +13,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhongKham {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "phongkham_id", columnDefinition = "INT")
     private Integer phongkham_id;
 
-    @Column(length = 4)
+    @Column(name = "so_phong", length = 4, columnDefinition = "NVARCHAR(4)")
     private String so_phong;
 
-    @Column(length = 1)
+    @Column(name = "loai_phong", length = 1, columnDefinition = "CHAR(1)")
     private String loai_phong;
 
-    @Column(length = 250)
+    @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
     private String mo_ta;
 
     @OneToMany(mappedBy = "phongKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

@@ -14,20 +14,25 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LichLamViecBacSi {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lichlv_id", columnDefinition = "INT")
     private Integer lichlv_id;
 
     @ManyToOne
-    @JoinColumn(name = "bacsi_id")
+    @JoinColumn(name = "bacsi_id", referencedColumnName = "bacsi_id", columnDefinition = "INT")
     private BacSi bacSi;
 
+    @Column(name = "ngay", columnDefinition = "DATE")
     private LocalDate ngay;
 
+    @Column(name = "ngay_tao", columnDefinition = "DATE")
     private LocalDate ngay_tao;
 
+    @Column(name = "ngay_cap_nhat", columnDefinition = "DATE")
     private LocalDate ngay_cap_nhat;
 
-    @OneToMany(mappedBy = "lichLamViecBacSi",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "lichLamViecBacSi", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LichPhongKham> lichPhongKhams;
 }

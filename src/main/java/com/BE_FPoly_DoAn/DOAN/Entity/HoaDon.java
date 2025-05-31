@@ -15,29 +15,35 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HoaDon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hoadon_id", columnDefinition = "INT")
     private Integer hoadon_id;
 
     @ManyToOne
-    @JoinColumn(name = "benhnhan_id")
+    @JoinColumn(name = "benhnhan_id", referencedColumnName = "benhnhan_id", columnDefinition = "INT")
     private BenhNhan benhNhan;
 
     @ManyToOne
-    @JoinColumn(name = "nguoidung_lap_hoadon_id")
+    @JoinColumn(name = "nguoidung_lap_hoadon_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     private NguoiDung nguoiDungLapHoaDon;
 
+    @Column(name = "ngay_tao", columnDefinition = "DATE")
     private LocalDate ngay_tao;
 
+    @Column(name = "tong_tien", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
     private BigDecimal tong_tien;
 
+    @Column(name = "tong_tien_thanh_toan", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
     private BigDecimal tong_tien_thanh_toan;
 
+    @Column(name = "tong_tien_con_no", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
     private BigDecimal tong_tien_con_no;
 
-    @OneToMany(mappedBy = "hoaDon",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<ChiTietHoaDon> chiTietHoaDons;
 
-    @OneToMany(mappedBy = "hoaDon",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<ThanhToan> thanhToans;
 }

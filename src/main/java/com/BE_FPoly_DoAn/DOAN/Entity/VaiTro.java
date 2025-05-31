@@ -13,14 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VaiTro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "vaitro_id", columnDefinition = "INT")
     private Integer vaitro_id;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "ten_vai_tro", nullable = false, length = 50, columnDefinition = "NVARCHAR(50)")
     private String ten_vai_tro;
 
-    @Column(length = 250)
+    @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
     private String mo_ta;
 
     @OneToMany(mappedBy = "vaiTro", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
