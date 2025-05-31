@@ -18,7 +18,7 @@ public class BenhAn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "benhan_id", columnDefinition = "INT")
-    private Integer benhan_id;
+    private Integer benhAnId;
 
     @ManyToOne
     @JoinColumn(name = "lichkham_id", referencedColumnName = "lichkham_id", columnDefinition = "INT")
@@ -29,16 +29,16 @@ public class BenhAn {
     private BacSi bacSiKetLuan;
 
     @Column(name = "tom_tat", length = 100, columnDefinition = "NVARCHAR(100)")
-    private String tom_tat;
+    private String tomTat;
 
     @Column(name = "ket_luan", length = 250, columnDefinition = "NVARCHAR(250)")
-    private String ket_luan;
+    private String ketLuan;
 
     @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
-    private String ghi_chu;
+    private String ghiChu;
 
     @Column(name = "thoi_gian", columnDefinition = "DATETIME")
-    private LocalDateTime thoi_gian;
+    private LocalDateTime thoiGian;
 
     @OneToMany(mappedBy = "benhAn", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<HoSoBenhAn> hoSoBenhAns;

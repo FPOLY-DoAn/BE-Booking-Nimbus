@@ -18,23 +18,23 @@ public class BenhNhan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "benhnhan_id", columnDefinition = "INT")
-    private Integer benhnhan_id;
+    private Integer benhNhanId;
 
     @ManyToOne
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     private NguoiDung nguoiDung;
 
     @Column(name = "bao_hiem", length = 25, columnDefinition = "NVARCHAR(25)")
-    private String bao_hiem;
+    private String baoHiem;
 
     @Column(name = "lien_he_khan_cap", length = 50, columnDefinition = "NVARCHAR(50)")
-    private String lien_he_khan_cap;
+    private String lienHeKhanCap;
 
     @Column(name = "ngay_tao", columnDefinition = "DATE")
-    private LocalDate ngay_tao;
+    private LocalDate ngayTao;
 
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATE")
-    private LocalDate ngay_cap_nhat;
+    private LocalDate ngayCapNhat;
 
     @OneToMany(mappedBy = "benhNhan", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LichKham> lichKhams;

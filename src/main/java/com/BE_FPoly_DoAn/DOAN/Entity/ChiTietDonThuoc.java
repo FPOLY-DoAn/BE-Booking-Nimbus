@@ -15,21 +15,21 @@ public class ChiTietDonThuoc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ctdonthuoc_id", columnDefinition = "INT")
-    private Integer ctdonthuoc_id;
+    private Integer ctDonThuocId;
 
     @ManyToOne
     @JoinColumn(name = "donthuoc_id", referencedColumnName = "donthuoc_id", nullable = false, columnDefinition = "INT")
     private DonThuoc donThuoc;
 
     @Column(name = "ten_thuoc", length = 50, columnDefinition = "NVARCHAR(50)")
-    private String ten_thuoc;
+    private String tenThuoc;
 
     @Column(name = "lieu_dung", columnDefinition = "INT")
-    private Integer lieu_dung;
+    private Integer lieuDung;
 
     @Column(name = "tinh_thuong_xuyen", columnDefinition = "INT")
-    private Integer tinh_thuong_xuyen;
+    private Integer tinhThuongXuyen;
 
     @Column(name = "khoan_thoi_gian", columnDefinition = "INT")
-    private Integer khoan_thoi_gian;
+    private Integer khoanThoiGian;
 }

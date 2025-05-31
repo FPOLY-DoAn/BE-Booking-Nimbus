@@ -18,27 +18,27 @@ public class ThanhToan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "thanhtoan_id", columnDefinition = "INT")
-    private Integer thanhtoan_id;
+    private Integer thanhToanId;
 
     @ManyToOne
     @JoinColumn(name = "hoadon_id", referencedColumnName = "hoadon_id")
     private HoaDon hoaDon;
 
     @Column(name = "ngay_thanh_toan", columnDefinition = "DATE")
-    private LocalDate ngay_thanh_toan;
+    private LocalDate ngayThanhToan;
 
     @Column(name = "so_tien_thanh_toan", columnDefinition = "DECIMAL(18,2)")
-    private BigDecimal so_tien_thanh_toan;
+    private BigDecimal soTienThanhToan;
 
     @Column(name = "phuong_thuc_thanh_toan", length = 1, columnDefinition = "CHAR(1)")
-    private char phuong_thuc_thanh_toan;
+    private char phuongThucThanhToan;
 
     @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)")
-    private char trang_thai;
+    private char trangThai;
 
     @Column(name = "ma_giao_dich", length = 100, columnDefinition = "NVARCHAR(100)")
-    private String ma_giao_dich;
+    private String maGiaoDich;
 
     @Column(name = "ghi_chu", length = 100, columnDefinition = "NVARCHAR(100)")
-    private String ghi_chu;
+    private String ghiChu;
 }

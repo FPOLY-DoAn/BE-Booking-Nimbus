@@ -19,7 +19,7 @@ public class HoaDon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hoadon_id", columnDefinition = "INT")
-    private Integer hoadon_id;
+    private Integer hoaDonId;
 
     @ManyToOne
     @JoinColumn(name = "benhnhan_id", referencedColumnName = "benhnhan_id", columnDefinition = "INT")
@@ -30,16 +30,16 @@ public class HoaDon {
     private NguoiDung nguoiDungLapHoaDon;
 
     @Column(name = "ngay_tao", columnDefinition = "DATE")
-    private LocalDate ngay_tao;
+    private LocalDate ngayTao;
 
     @Column(name = "tong_tien", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
-    private BigDecimal tong_tien;
+    private BigDecimal tongTien;
 
     @Column(name = "tong_tien_thanh_toan", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
-    private BigDecimal tong_tien_thanh_toan;
+    private BigDecimal tongTienThanhToan;
 
     @Column(name = "tong_tien_con_no", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
-    private BigDecimal tong_tien_con_no;
+    private BigDecimal tongTienConNo;
 
     @OneToMany(mappedBy = "hoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<ChiTietHoaDon> chiTietHoaDons;

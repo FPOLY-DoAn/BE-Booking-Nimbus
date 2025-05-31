@@ -17,7 +17,7 @@ public class ChiTietHoaDon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cthoadon_id", columnDefinition = "INT")
-    private Integer cthoadon_id;
+    private Integer ctHoaDonId;
 
     @ManyToOne
     @JoinColumn(name = "hoadon_id", referencedColumnName = "hoadon_id", nullable = false, columnDefinition = "INT")
@@ -28,11 +28,11 @@ public class ChiTietHoaDon {
     private DichVu dichVu;
 
     @Column(name = "so_luong", columnDefinition = "INT")
-    private Integer so_luong;
+    private Integer soLuong;
 
     @Column(name = "don_gia", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
-    private BigDecimal don_gia;
+    private BigDecimal donGia;
 
     @Column(name = "tong_gia", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
-    private BigDecimal tong_gia;
+    private BigDecimal tongGia;
 }
