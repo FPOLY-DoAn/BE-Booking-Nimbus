@@ -1,8 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "BENH_NHAN")
@@ -10,21 +14,31 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BenhNhan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "benhnhan_id", columnDefinition = "INT")
     private Integer benhnhan_id;
 
     @ManyToOne
-    @JoinColumn(name = "nguoidung_id")
+    @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     private NguoiDung nguoiDung;
 
-    @Column(length = 25)
+    @Column(name = "bao_hiem", length = 25, columnDefinition = "NVARCHAR(25)")
     private String bao_hiem;
 
-    @Column(length = 50)
+    @Column(name = "lien_he_khan_cap", length = 50, columnDefinition = "NVARCHAR(50)")
     private String lien_he_khan_cap;
 
+    @Column(name = "ngay_tao", columnDefinition = "DATE")
     private LocalDate ngay_tao;
 
+    @Column(name = "ngay_cap_nhat", columnDefinition = "DATE")
     private LocalDate ngay_cap_nhat;
+
+    @OneToMany(mappedBy = "benhNhan", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<LichKham> lichKhams;
+
+    @OneToMany(mappedBy = "benhNhan", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<HoaDon> hoaDons;
 }
