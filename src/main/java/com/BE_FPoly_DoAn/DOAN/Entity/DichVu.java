@@ -18,17 +18,17 @@ public class DichVu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dichvu_id", columnDefinition = "INT")
-    private Integer dichvu_id;
+    private Integer dichVuId;
 
     @ManyToOne
     @JoinColumn(name = "benhan_id", referencedColumnName = "benhan_id", columnDefinition = "INT")
     private BenhAn benhAn;
 
     @Column(name = "ten_dich_vu", length = 100, columnDefinition = "NVARCHAR(100)")
-    private String ten_dich_vu;
+    private String tenDichVu;
 
     @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
-    private String mo_ta;
+    private String moTa;
 
     @Column(name = "gia", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
     private BigDecimal gia;

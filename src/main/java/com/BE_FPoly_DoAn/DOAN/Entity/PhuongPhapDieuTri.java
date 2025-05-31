@@ -17,17 +17,17 @@ public class PhuongPhapDieuTri {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ppdieutri_id", columnDefinition = "INT")
-    private Integer ppdieutri_id;
+    private Integer ppdieutriId;
 
     @ManyToOne
     @JoinColumn(name = "lsdieutri_id", referencedColumnName = "lsdieutri_id")
     private LichSuDieuTri lichSuDieuTri;
 
     @Column(name = "ten_phuong_phap", length = 100, columnDefinition = "NVARCHAR(100)")
-    private String ten_phuong_phap;
+    private String tenPhuongPhap;
 
     @Column(name = "hieu_qua", length = 1, columnDefinition = "CHAR(1)")
-    private char hieu_qua;
+    private char hieuQua;
 
     @OneToMany(mappedBy = "phuongPhapDieuTri", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<DonThuoc> donThuocs;

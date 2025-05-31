@@ -17,16 +17,16 @@ public class PhongKham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "phongkham_id", columnDefinition = "INT")
-    private Integer phongkham_id;
+    private Integer phongKhamId;
 
     @Column(name = "so_phong", length = 4, columnDefinition = "NVARCHAR(4)")
-    private String so_phong;
+    private String soPhong;
 
     @Column(name = "loai_phong", length = 1, columnDefinition = "CHAR(1)")
-    private String loai_phong;
+    private String loaiPhong;
 
     @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
-    private String mo_ta;
+    private String moTa;
 
     @OneToMany(mappedBy = "phongKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LichPhongKham> lichPhongKhams;
