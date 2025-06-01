@@ -1,8 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "NGUOI_DUNG")
@@ -12,24 +16,39 @@ import java.time.LocalDateTime;
 public class NguoiDung {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "nguoidung_id", columnDefinition = "INT")
     private Integer nguoidung_id;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "hoten", nullable = false, length = 50, columnDefinition = "NVARCHAR(50)")
     private String hoten;
 
-    @Column(length = 1)
-    private String gioi_tinh;
+    @Column(name = "gioi_tinh", length = 1, columnDefinition = "CHAR(1)")
+    private char gioi_tinh;
 
-    @Column(length = 50)
+    @Column(name = "email", length = 50, columnDefinition = "NVARCHAR(50)")
     private String email;
 
-    @Column(length = 15)
+    @Column(name = "so_dien_thoai", length = 15, columnDefinition = "VARCHAR(15)")
     private String so_dien_thoai;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "mat_khau", nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
     private String mat_khau;
 
+    @Column(name = "ngay_tao", columnDefinition = "DATETIME")
     private LocalDateTime ngay_tao;
 
+    @Column(name = "ngay_cap_nhat", columnDefinition = "DATETIME")
     private LocalDateTime ngay_cap_nhat;
+
+    @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<PhanQuyen> phanQuyens;
+
+    @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<BacSi> bacSis;
+
+    @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<BenhNhan> benhNhans;
+
+    @OneToMany(mappedBy = "nguoiDungLapHoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<HoaDon> hoaDonsLap;
 }

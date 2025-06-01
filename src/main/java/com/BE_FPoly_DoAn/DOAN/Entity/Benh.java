@@ -1,7 +1,11 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "BENH")
@@ -11,23 +15,27 @@ import lombok.*;
 public class Benh {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "benh_id", columnDefinition = "INT")
     private Integer benh_id;
 
-    @Column(length = 50)
+    @Column(name = "ten_benh", length = 50, columnDefinition = "NVARCHAR(50)")
     private String ten_benh;
 
-    @Column(length = 100)
+    @Column(name = "trieu_chung", length = 100, columnDefinition = "NVARCHAR(100)")
     private String trieu_chung;
 
-    @Column(length = 100)
+    @Column(name = "nguyen_nhan", length = 100, columnDefinition = "NVARCHAR(100)")
     private String nguyen_nhan;
 
-    @Column(length = 100)
+    @Column(name = "phong_ngua", length = 100, columnDefinition = "NVARCHAR(100)")
     private String phong_ngua;
 
-    @Column(length = 100)
+    @Column(name = "huong_dieu_tri", length = 100, columnDefinition = "NVARCHAR(100)")
     private String huong_dieu_tri;
 
-    @Column(length = 100)
+    @Column(name = "ghi_chu", length = 100, columnDefinition = "NVARCHAR(100)")
     private String ghi_chu;
+
+    @OneToMany(mappedBy = "benh", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<HoSoBenhAn> hoSoBenhAns;
 }

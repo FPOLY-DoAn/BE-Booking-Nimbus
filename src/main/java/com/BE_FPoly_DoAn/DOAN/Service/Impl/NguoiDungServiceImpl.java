@@ -11,6 +11,8 @@ import java.util.Optional;
 @Service
 public class NguoiDungServiceImpl implements NguoiDungService {
 
+
+
     @Autowired
     private NguoiDungRepository nguoiDungRepository;
 
@@ -32,5 +34,9 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     @Override
     public void delete(Integer id) {
         nguoiDungRepository.findById(id).ifPresent(nguoiDungRepository::delete);
+    }
+
+    public Optional<NguoiDung> findByName(String hoTen){
+       return nguoiDungRepository.findByHoten(hoTen);
     }
 }

@@ -8,4 +8,5 @@ public class DoanApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DoanApplication.class, args);
 	}
+
 }
