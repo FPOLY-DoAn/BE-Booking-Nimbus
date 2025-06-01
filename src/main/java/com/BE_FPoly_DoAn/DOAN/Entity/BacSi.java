@@ -17,7 +17,7 @@ public class BacSi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bacsi_id", columnDefinition = "INT")
-    private Integer bacsi_id;
+    private Integer bacSiId;
 
     @ManyToOne
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
@@ -27,20 +27,20 @@ public class BacSi {
     @JoinColumn(name = "chuyenkhoa_id", referencedColumnName = "chuyenkhoa_id", columnDefinition = "INT")
     private ChuyenKhoa chuyenKhoa;
 
-    @Column(name = "chung_chi", length = 25, columnDefinition = "VARCHAR(25)")
-    private String chung_chi;
+    @Column(name = "chung_chi", length = 200, columnDefinition = "NVARCHAR(200)")
+    private String chungChi;
 
     @Column(name = "trinh_do", length = 50, columnDefinition = "NVARCHAR(50)")
-    private String trinh_do;
+    private String trinhDo;
 
     @Column(name = "kinh_nghiem", columnDefinition = "INT")
-    private Integer kinh_nghiem;
+    private Integer kinhNghiem;
 
     @Column(name = "ngay_tao", columnDefinition = "DATE")
-    private LocalDate ngay_tao;
+    private LocalDate ngayTao;
 
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATE")
-    private LocalDate ngay_cap_nhat;
+    private LocalDate ngayCapNhat;
 
     @OneToMany(mappedBy = "bacSi", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LichLamViecBacSi> lichLamViecs;

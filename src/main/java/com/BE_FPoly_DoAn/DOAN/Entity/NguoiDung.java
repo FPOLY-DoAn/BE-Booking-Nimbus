@@ -14,31 +14,32 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NguoiDung {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nguoidung_id", columnDefinition = "INT")
-    private Integer nguoidung_id;
+    private Integer nguoiDungId;
 
     @Column(name = "hoten", nullable = false, length = 50, columnDefinition = "NVARCHAR(50)")
-    private String hoten;
+    private String hoTen;
 
     @Column(name = "gioi_tinh", length = 1, columnDefinition = "CHAR(1)")
-    private char gioi_tinh;
+    private char gioiTinh;
 
     @Column(name = "email", length = 50, columnDefinition = "NVARCHAR(50)")
     private String email;
 
     @Column(name = "so_dien_thoai", length = 15, columnDefinition = "VARCHAR(15)")
-    private String so_dien_thoai;
+    private String soDienThoai;
 
     @Column(name = "mat_khau", nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
-    private String mat_khau;
+    private String matKhau;
 
     @Column(name = "ngay_tao", columnDefinition = "DATETIME")
-    private LocalDateTime ngay_tao;
+    private LocalDateTime ngayTao;
 
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATETIME")
-    private LocalDateTime ngay_cap_nhat;
+    private LocalDateTime ngayCapNhat;
 
     @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<PhanQuyen> phanQuyens;

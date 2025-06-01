@@ -17,7 +17,7 @@ public class LichKham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lichkham_id", columnDefinition = "INT")
-    private Integer lichkham_id;
+    private Integer lichkhamId;
 
     @ManyToOne
     @JoinColumn(name = "bacsi_id", referencedColumnName = "bacsi_id", columnDefinition = "INT")
@@ -28,25 +28,25 @@ public class LichKham {
     private BenhNhan benhNhan;
 
     @Column(name = "thoi_gian_hen", columnDefinition = "DATETIME")
-    private LocalDateTime thoi_gian_hen;
+    private LocalDateTime thoiGianHen;
 
     @Column(name = "thoi_gian_den", columnDefinition = "DATETIME")
-    private LocalDateTime thoi_gian_den;
+    private LocalDateTime thoiGianDen;
 
     @Column(name = "kieu_lich_kham", length = 1, columnDefinition = "CHAR(1)")
-    private char kieu_lich_kham; // H, T, D
+    private char kieuLichKham; // H, T, D
 
     @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)")
-    private char trang_thai;
+    private char trangThai;
 
     @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
-    private String ghi_chu;
+    private String ghiChu;
 
     @Column(name = "ngay_tao", columnDefinition = "DATETIME")
-    private LocalDateTime ngay_tao;
+    private LocalDateTime ngayTao;
 
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATETIME")
-    private LocalDateTime ngay_cap_nhat;
+    private LocalDateTime ngayCapNhat;
 
     @OneToOne(mappedBy = "lichKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private BenhAn benhAn;

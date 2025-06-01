@@ -17,13 +17,13 @@ public class ChuyenKhoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chuyenkhoa_id", columnDefinition = "INT")
-    private Integer chuyenkhoa_id;
+    private Integer chuyenKhoaId;
 
     @Column(name = "ten_khoa", length = 50, columnDefinition = "NVARCHAR(50)")
-    private String ten_khoa;
+    private String tenKhoa;
 
     @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
-    private String mo_ta;
+    private String moTa;
 
     @OneToMany(mappedBy = "chuyenKhoa", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<BacSi> bacSis;
