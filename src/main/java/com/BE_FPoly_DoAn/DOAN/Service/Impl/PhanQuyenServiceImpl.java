@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.PhanQuyenRepository;
+import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Entity.PhanQuyen;
 import com.BE_FPoly_DoAn.DOAN.Service.PhanQuyenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,9 @@ public class PhanQuyenServiceImpl implements PhanQuyenService {
     @Override
     public void delete(Integer id) {
         phanQuyenRepository.findById(id).ifPresent(phanQuyenRepository::delete);
+    }
+
+    public List<PhanQuyen> findByNguoiDung(NguoiDung nguoiDung){
+        return phanQuyenRepository.findByNguoiDung(nguoiDung);
     }
 }
