@@ -9,5 +9,5 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface PhanQuyenRepository extends JpaRepository<PhanQuyen, Integer> {
-    public List<PhanQuyen> phanQuyenList(NguoiDung nguoiDung);
+    public List<PhanQuyen> findByNguoiDung(NguoiDung nguoiDung);
 }

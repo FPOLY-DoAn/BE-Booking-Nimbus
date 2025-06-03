@@ -11,6 +11,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -37,16 +38,16 @@ public class JwtService  {
         boolean isBenhNhan = false;
         if(!newNguoiDung.get().getPhanQuyens().isEmpty()){
             for (PhanQuyen pq : phanQuyenList){
-                if(pq.getVaiTro().getVaitro_id() == 1){
+                if(pq.getVaiTro().getVaiTroId() == 1){
                     isBacSi = true;
                 }
-                if(pq.getVaiTro().getVaitro_id() == 2){
+                if(pq.getVaiTro().getVaiTroId() == 2){
                     isBenhNhan = true;
                 }
-                if(pq.getVaiTro().getVaitro_id() == 3){
+                if(pq.getVaiTro().getVaiTroId() == 3){
                     isQuanLy = true;
                 }
-                if(pq.getVaiTro().getVaitro_id() == 4){
+                if(pq.getVaiTro().getVaiTroId() == 4){
                     isLeTan = true;
                 }
             }
@@ -55,9 +56,9 @@ public class JwtService  {
         claims.put("isQuanLy",isQuanLy);
         claims.put("isLeTan",isLeTan);
         claims.put("isBenhNhan",isBenhNhan);
-        claims.put("fullName", newNguoiDung.get().getHoten());
+        claims.put("fullName", newNguoiDung.get().getHoTen());
 
-        return createToken(claims, newNguoiDung.get().getHoten());
+        return createToken(claims, newNguoiDung.get().getHoTen());
     }
 
     public String createToken(Map<String, Object> claims, String hoten) {
@@ -95,5 +96,6 @@ public class JwtService  {
     public boolean isTokenExpired(String token){
         return extractAllClaims(token).getExpiration().before(new Date());
     }
+
 
 }

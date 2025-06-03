@@ -37,6 +37,6 @@ public class PhanQuyenServiceImpl implements PhanQuyenService {
     }
 
     public List<PhanQuyen> findByNguoiDung(NguoiDung nguoiDung){
-        return phanQuyenRepository.phanQuyenList(nguoiDung);
+        return phanQuyenRepository.findByNguoiDung(nguoiDung);
     }
 }
