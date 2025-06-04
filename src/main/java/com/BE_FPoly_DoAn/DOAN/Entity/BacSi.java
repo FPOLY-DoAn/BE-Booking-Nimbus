@@ -1,9 +1,13 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NotFound;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,18 +32,24 @@ public class BacSi {
     private ChuyenKhoa chuyenKhoa;
 
     @Column(name = "chung_chi", length = 200, columnDefinition = "NVARCHAR(200)")
+    @NotBlank
     private String chungChi;
 
     @Column(name = "trinh_do", length = 50, columnDefinition = "NVARCHAR(50)")
+    @NotBlank
+    @Positive
     private String trinhDo;
 
     @Column(name = "kinh_nghiem", columnDefinition = "INT")
+    @NotBlank
     private Integer kinhNghiem;
 
     @Column(name = "ngay_tao", columnDefinition = "DATE")
+    @NotBlank
     private LocalDate ngayTao;
 
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATE")
+    @NotBlank
     private LocalDate ngayCapNhat;
 
     @OneToMany(mappedBy = "bacSi", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

@@ -1,14 +1,14 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "PHAN_QUYEN")
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 public class PhanQuyen {
 
@@ -19,9 +19,13 @@ public class PhanQuyen {
 
     @ManyToOne
     @JoinColumn(name = "vaitro_id", referencedColumnName = "vaitro_id", nullable = false)
+    @JsonIgnore
+    @ToString.Exclude
     private VaiTro vaiTro;
 
     @ManyToOne
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", nullable = false)
+    @JsonIgnore
+    @ToString.Exclude
     private NguoiDung nguoiDung;
 }

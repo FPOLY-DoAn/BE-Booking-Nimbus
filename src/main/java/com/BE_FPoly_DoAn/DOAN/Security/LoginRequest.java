@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LoginRequest {
-    private String taiKhoan;
+    private String soDienThoai;
     private String matKhau;
 }
