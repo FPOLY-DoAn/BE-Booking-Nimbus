@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +21,11 @@ public class ChuyenKhoa {
     private Integer chuyenKhoaId;
 
     @Column(name = "ten_khoa", length = 50, columnDefinition = "NVARCHAR(50)")
+    @NotBlank(message = "Tên khoa không được để trống")
     private String tenKhoa;
 
     @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
+    @NotBlank(message = "Mô tả không được để trống")
     private String moTa;
 
     @OneToMany(mappedBy = "chuyenKhoa", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
