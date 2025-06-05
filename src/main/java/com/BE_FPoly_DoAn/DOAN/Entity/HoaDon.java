@@ -1,17 +1,21 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "HOA_DON")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class HoaDon {
@@ -22,15 +26,18 @@ public class HoaDon {
     private Integer hoaDonId;
 
     @ManyToOne
-    @JoinColumn(name = "benhnhan_id", referencedColumnName = "benhnhan_id", columnDefinition = "INT")
+    @JoinColumn(name = "benhnhan_id", referencedColumnName = "benhnhan_id", columnDefinition = "INT", nullable = false)
+    @NotNull(message = "Bệnh nhân không được để trống")
     private BenhNhan benhNhan;
 
     @ManyToOne
-    @JoinColumn(name = "nguoidung_lap_hoadon_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
+    @JoinColumn(name = "nguoidung_lap_hoadon_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT", nullable = false)
+    @NotNull(message = "Người dùng lập hóa đơn không được để trống")
     private NguoiDung nguoiDungLapHoaDon;
 
-    @Column(name = "ngay_tao", columnDefinition = "DATE")
-    private LocalDate ngayTao;
+    @CreationTimestamp
+    @Column(name = "ngay_tao", columnDefinition = "DATETIME", updatable = false)
+    private LocalDateTime ngayTao;
 
     @Column(name = "tong_tien", precision = 18, scale = 2, columnDefinition = "DECIMAL(18,2)")
     private BigDecimal tongTien;

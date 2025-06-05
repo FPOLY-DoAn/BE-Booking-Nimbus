@@ -24,9 +24,26 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     private NguoiDungRepository nguoiDungRepository;
 
     @Override
-    public NguoiDung findByHoTen(String name) {
-        return nguoiDungRepository.findByHoTen(name).get();
+    public NguoiDung findBySoDienThoai(String soDienThoai) {
+        return nguoiDungRepository.findBySoDienThoai(soDienThoai).get();
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String soDienThoai) throws UsernameNotFoundException {
+        Optional<NguoiDung> nguoiDungOption = nguoiDungRepository.findBySoDienThoai(soDienThoai);
+        if (nguoiDungOption.isEmpty()) {
+            throw new UsernameNotFoundException("tài khoản không được tìm thấy");
+        }
+        User user = new User(nguoiDungOption.get().getSoDienThoai(), nguoiDungOption.get().getMatKhau(),toRolesAuthories(nguoiDungOption.get().getPhanQuyens()) );
+        return user;
+    }
+
+    private Collection<? extends GrantedAuthority> toRolesAuthories(List<PhanQuyen> phanQuyens) {
+        return phanQuyens.stream()
+                .map(quyen -> new SimpleGrantedAuthority(quyen.getVaiTro().getTenVaiTro()))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<NguoiDung> getAll() {
@@ -48,24 +65,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
         nguoiDungRepository.findById(id).ifPresent(nguoiDungRepository::delete);
     }
 
-    public Optional<NguoiDung> findByName(String hoTen){
-       return nguoiDungRepository.findByHoTen(hoTen);
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-         Optional<NguoiDung> nguoiDungOption = nguoiDungRepository.findByHoTen(username);
-         if(nguoiDungOption.isEmpty()){
-             throw new UsernameNotFoundException("tài khoản không được tìm thấy");
-         }
-         User user = new User(nguoiDungOption.get().getHoTen(), nguoiDungOption.get().getMatKhau(), toRolesAuthories(nguoiDungOption.get().getPhanQuyens()));
-    return user;
-    }
-
-    private Collection<? extends GrantedAuthority> toRolesAuthories(List<PhanQuyen> phanQuyens) {
-        return phanQuyens.stream()
-                .map(quyen -> new SimpleGrantedAuthority(quyen.getVaiTro().getTenVaiTro()))
-                .collect(Collectors.toList());
+    public Optional<NguoiDung> findByHoTen(String hoTen) {
+        return nguoiDungRepository.findByHoTen(hoTen);
     }
 }

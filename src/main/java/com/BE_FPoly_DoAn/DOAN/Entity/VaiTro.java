@@ -1,15 +1,19 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "VAI_TRO")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class VaiTro {
@@ -20,9 +24,12 @@ public class VaiTro {
     private Integer vaiTroId;
 
     @Column(name = "ten_vai_tro", nullable = false, length = 50, columnDefinition = "NVARCHAR(50)")
+    @NotBlank(message = "Tên vai trò không được để trống")
+    @Size(max = 50, message = "Tên vai trò không được vượt quá 50 ký tự")
     private String tenVaiTro;
 
     @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
+    @Size(max = 250, message = "Mô tả không được vượt quá 250 ký tự")
     private String moTa;
 
     @OneToMany(mappedBy = "vaiTro", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
