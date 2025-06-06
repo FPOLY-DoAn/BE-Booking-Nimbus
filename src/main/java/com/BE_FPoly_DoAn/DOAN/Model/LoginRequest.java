@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Security;
+package com.BE_FPoly_DoAn.DOAN.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
