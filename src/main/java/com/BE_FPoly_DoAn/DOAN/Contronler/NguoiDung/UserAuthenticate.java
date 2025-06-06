@@ -61,6 +61,7 @@ public class UserAuthenticate {
     public ResponseEntity<?> dangXuat(HttpServletRequest httpRequest) {
         try {
             String tokenHeader = httpRequest.getHeader("Authorization");
+            System.out.println("Token is " + tokenHeader);
             if (tokenHeader.startsWith("Bearer ")) {
                 String token = tokenHeader.replace("Bearer ", "");
                 long expiration = jwtService.getExpired(token) - System.currentTimeMillis();
