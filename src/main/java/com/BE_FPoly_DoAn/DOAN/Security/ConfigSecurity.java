@@ -42,7 +42,6 @@ public class ConfigSecurity {
         http.authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/*").permitAll()
-
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFillter, UsernamePasswordAuthenticationFilter.class)
