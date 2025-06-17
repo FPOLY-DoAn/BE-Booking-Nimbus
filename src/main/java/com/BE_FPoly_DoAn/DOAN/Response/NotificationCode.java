@@ -5,10 +5,12 @@ public enum NotificationCode {
     // ===== USER =====
     USER_REGISTER_SUCCESS("USR_001", "Đăng ký thành công"),
     USER_REGISTER_FAIL("USR_002", "Đăng ký thất bại"),
-    USER_EMAIL_EXISTS("USR_003", "Email đã tồn tại"),
-    USER_NOT_FOUND("USR_004", "Người dùng không tồn tại"),
-    USER_UPDATE_SUCCESS("USR_005", "Cập nhật thông tin người dùng thành công"),
-    USER_UPDATE_FAIL("USR_006", "Cập nhật thông tin người dùng thất bại"),
+    USER_REGISTER_NOT_ENGOUGH("USR_003", "Thông tin không đầy đủ"),
+    USER_EMAIL_EXISTS("USR_004", "Email đã tồn tại"),
+    USER_SODIENTHOAI_EXISTS("USR_006", "Số điện thoại đã tồn tại"),
+    USER_NOT_FOUND("USR_007", "Người dùng không tồn tại"),
+    USER_UPDATE_SUCCESS("USR_008", "Cập nhật thông tin người dùng thành công"),
+    USER_UPDATE_FAIL("USR_009", "Cập nhật thông tin người dùng thất bại"),
 
     // ===== OTP =====
     OTP_INVALID("OTP_001", "Mã OTP không hợp lệ"),

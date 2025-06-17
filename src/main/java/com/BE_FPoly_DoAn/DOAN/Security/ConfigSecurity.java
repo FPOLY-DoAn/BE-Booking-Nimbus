@@ -40,6 +40,13 @@ public class ConfigSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz -> authz
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/*").permitAll()
                         .anyRequest().authenticated()
