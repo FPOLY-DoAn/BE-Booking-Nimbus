@@ -1,10 +1,11 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.NguoiDung;
 
+import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
-import com.BE_FPoly_DoAn.DOAN.Model.SmsModelRequest;
+import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Security.RedisTemplateConfig;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.SmsService;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.NguoiDungService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,21 +23,25 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/auth")
 public class UserAuthenticate {
-    @Autowired
-    private NguoiDungService nguoiDungServicel;
+    private final NguoiDungServiceImpl nguoiDungServicel;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final RedisTemplateConfig redisTemplateConfig;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    public UserAuthenticate(NguoiDungServiceImpl nguoiDungServicel, RedisTemplateConfig redisTemplateConfig, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.nguoiDungServicel = nguoiDungServicel;
+        this.redisTemplateConfig = redisTemplateConfig;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
-    @Autowired
-    private JwtService jwtService;
+    @GetMapping("/check-expirationtoken")
+    public ResponseEntity<?> checkExpiration(@RequestParam String token) {
+        Long timeExiration = jwtService.getExpired(token);
+        return ResponseEntity.ok("Expiration " + timeExiration);
+    }
 
-    @Autowired
-    private RedisTemplateConfig redisTemplateConfig;
-
-    @Autowired
-    private SmsService smsService;
-
+    //Kiểm tra token trong blacklisted
     @PostMapping("/check-token")
     public ResponseEntity<?> checkToken(@RequestParam String token) {
         boolean exists = Boolean.TRUE.equals(redisTemplateConfig.redisTemplate().hasKey(token));
@@ -48,8 +53,9 @@ public class UserAuthenticate {
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getSoDienThoai(), loginRequest.getMatKhau()));
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getMatKhau()));
             UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+            //tạo token cho người dùng vừa đăng nhập
             final String token = jwtService.generateToken(userDetails.getUsername());
             return ResponseEntity.ok().body(token);
         } catch (BadCredentialsException e) {
@@ -61,13 +67,15 @@ public class UserAuthenticate {
     public ResponseEntity<?> dangXuat(HttpServletRequest httpRequest) {
         try {
             String tokenHeader = httpRequest.getHeader("Authorization");
-            System.out.println("Token is " + tokenHeader);
+            //Kiểm tra có token
             if (tokenHeader.startsWith("Bearer ")) {
                 String token = tokenHeader.replace("Bearer ", "");
                 long expiration = jwtService.getExpired(token) - System.currentTimeMillis();
+                //chèn token vào blacklist
                 redisTemplateConfig.redisTemplate()
                         .opsForValue()
-                        .set(token, "blacklisted", expiration, TimeUnit.MILLISECONDS);            }
+                        .set(token, "blacklisted", expiration, TimeUnit.MILLISECONDS);
+            }
             return ResponseEntity.ok().build();
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Đăng xuất thất bại");
@@ -75,12 +83,26 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> dangKi(@RequestParam long soDienThoai) {
+    public ResponseEntity<?> dangKi(@RequestBody NguoiDung nguoiDung) {
         try {
-            smsService.sendCodeAuth(soDienThoai);
+            ServiceResponse<?> response = nguoiDungServicel.checkAccountRegister(nguoiDung);
+            if (!response.isSuccess()) {
+                return ResponseEntity.badRequest().body(response.getData());
+            }
+            nguoiDungServicel.sendCodeConfirm(nguoiDung);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Đăng kí thất bại");
+        }
+    }
+
+    @PostMapping("/confirm_OTP")
+    public ResponseEntity<?> confirmOTP(@RequestParam(required = true) Integer otp) {
+        try {
+            nguoiDungServicel.save(otp);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Đăng xuất thất bại");
         }
+        return ResponseEntity.ok().body("Đã tạo tài khoản thành công");
     }
 }

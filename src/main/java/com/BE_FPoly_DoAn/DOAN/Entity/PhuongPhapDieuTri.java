@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class PhuongPhapDieuTri {
     @ManyToOne
     @JoinColumn(name = "lsdieutri_id", referencedColumnName = "lsdieutri_id", nullable = false)
     @NotNull(message = "Lịch sử điều trị không được để trống")
+    @JsonIgnore
     private LichSuDieuTri lichSuDieuTri;
 
     @Column(name = "ten_phuong_phap", length = 100, columnDefinition = "NVARCHAR(100)")
