@@ -35,4 +35,9 @@ public class PhanQuyen {
     @JsonIgnore
     @ToString.Exclude
     private NguoiDung nguoiDung;
+
+    public PhanQuyen(VaiTro vaiTro, NguoiDung nguoiDung) {
+        this.vaiTro = vaiTro;
+        this.nguoiDung = nguoiDung;
+    }
 }

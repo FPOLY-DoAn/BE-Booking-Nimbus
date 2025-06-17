@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourPass123!"
+      ACCEPT_EULA: "Y"
+    networks:
+      - backend
+
+  booking-backend:
+    build:
+      context: .
+    container_name: booking-nimbus-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=BENH_VIEN_NIMBUS;encrypt=false;trustServerCertificate=true
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: YourPass123!
+    networks:
+      - backend
+
+networks:
+  backend:

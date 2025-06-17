@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,15 +31,18 @@ public class BenhNhan {
     @ManyToOne
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     @NotNull(message = "Người dùng không được để trống")
+    @Schema(hidden = true)
     private NguoiDung nguoiDung;
 
     @Column(name = "bao_hiem", length = 25, columnDefinition = "NVARCHAR(25)")
     @NotBlank(message = "Bảo hiểm không được để trống")
+    @Schema(hidden = true)
     private String baoHiem;
 
     @Column(name = "lien_he_khan_cap", length = 50, columnDefinition = "NVARCHAR(50)")
     @NotBlank(message = "Liên hệ khẩn cấp không được để trống")
     @Pattern(regexp = "^\\+?[0-9\\-\\s]{7,15}$", message = "Số điện thoại không hợp lệ")
+    @Schema(hidden = true)
     private String lienHeKhanCap;
 
     @CreationTimestamp

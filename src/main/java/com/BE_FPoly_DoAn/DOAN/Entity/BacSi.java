@@ -48,7 +48,6 @@ public class BacSi {
     @Column(name = "kinh_nghiem", columnDefinition = "INT")
     @NotNull(message = "Kinh nghiệm không được để trống")
     @Positive(message = "Kinh nghiệm phải là số dương")
-    @PositiveOrZero(message = "Kinh nghiệm phải là số dương hoặc bằng 0")
     private Integer kinhNghiem;
 
     @CreationTimestamp
