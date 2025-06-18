@@ -1,13 +1,20 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "HO_SO_BENH_AN")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class HoSoBenhAn {
@@ -18,10 +25,18 @@ public class HoSoBenhAn {
     private Integer hoSoId;
 
     @ManyToOne
-    @JoinColumn(name = "benhan_id", referencedColumnName = "benhan_id", columnDefinition = "INT")
+    @JoinColumn(name = "benhan_id", nullable = false, referencedColumnName = "benhan_id", columnDefinition = "INT")
+    @NotNull(message = "Bệnh án không được để trống")
+    @JsonIgnore
     private BenhAn benhAn;
 
     @ManyToOne
-    @JoinColumn(name = "benh_id", referencedColumnName = "benh_id", columnDefinition = "INT")
+    @JoinColumn(name = "benh_id", nullable = false, referencedColumnName = "benh_id", columnDefinition = "INT")
+    @NotNull(message = "Bệnh không được để trống")
+    @JsonIgnore
     private Benh benh;
+
+    @CreationTimestamp
+    @Column(name = "ngay_tao", columnDefinition = "DATETIME", updatable = false)
+    private LocalDateTime ngayTao;
 }
