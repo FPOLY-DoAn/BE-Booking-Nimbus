@@ -57,7 +57,7 @@ public class JwtService {
         claims.put("hoten", newNguoiDung.getHoTen());
         claims.put("soDienThoai", newNguoiDung.getSoDienThoai());
 
-        return createToken(claims, newNguoiDung.getSoDienThoai());
+        return createToken(claims, newNguoiDung.getEmail());
     }
 
     // tạo token
