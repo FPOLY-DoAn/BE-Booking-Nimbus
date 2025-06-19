@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.NguoiDung;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
@@ -83,13 +84,13 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> dangKi(@RequestBody NguoiDung nguoiDung) {
+    public ResponseEntity<?> dangKi(@RequestBody NguoiDungDTO NguoiDungDTO) {
         try {
-            ServiceResponse<?> response = nguoiDungServicel.checkAccountRegister(nguoiDung);
+            ServiceResponse<?> response = nguoiDungServicel.checkAccountRegister(NguoiDungDTO);
             if (!response.isSuccess()) {
                 return ResponseEntity.badRequest().body(response.getData());
             }
-            nguoiDungServicel.sendCodeConfirm(nguoiDung);
+            nguoiDungServicel.sendCodeConfirm(NguoiDungDTO);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Đăng kí thất bại");
