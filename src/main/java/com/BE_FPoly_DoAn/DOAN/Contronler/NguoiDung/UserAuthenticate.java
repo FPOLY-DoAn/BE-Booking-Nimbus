@@ -101,7 +101,7 @@ public class UserAuthenticate {
         try {
             nguoiDungServicel.save(otp);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Đăng xuất thất bại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Xác nhận mã OTP thất bại");
         }
         return ResponseEntity.ok().body("Đã tạo tài khoản thành công");
     }
