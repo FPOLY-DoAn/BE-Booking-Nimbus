@@ -44,7 +44,7 @@ build/
 # ========================
 # SENSITIVE FILES
 # ========================
-.env
-.application.properties
+.evn
+src/main/resources/application.properties
 
 HELP.md
