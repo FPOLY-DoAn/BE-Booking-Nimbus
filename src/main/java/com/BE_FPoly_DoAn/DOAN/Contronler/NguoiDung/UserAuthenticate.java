@@ -38,8 +38,12 @@ public class UserAuthenticate {
 
     @GetMapping("/check-expirationtoken")
     public ResponseEntity<?> checkExpiration(@RequestParam String token) {
-        Long timeExiration = jwtService.getExpired(token);
-        return ResponseEntity.ok("Expiration " + timeExiration);
+        try {
+            Long timeExpiration = jwtService.getExpired(token);
+            return ResponseEntity.ok("Thời gian hết hạn: " + timeExpiration);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token không hợp lệ hoặc đã hết hạn");
+        }
     }
 
     //Kiểm tra token trong blacklisted
@@ -60,7 +64,9 @@ public class UserAuthenticate {
             final String token = jwtService.generateToken(userDetails.getUsername());
             return ResponseEntity.ok().body(token);
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Đăng nhập thất bại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email hoặc mật khẩu không đúng");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống khi đăng nhập");
         }
     }
 
@@ -88,22 +94,26 @@ public class UserAuthenticate {
         try {
             ServiceResponse<?> response = nguoiDungServicel.checkAccountRegister(NguoiDungDTO);
             if (!response.isSuccess()) {
-                return ResponseEntity.badRequest().body(response.getData());
+                return ResponseEntity.badRequest().body("Tài khoản đã tồn tại hoặc thông tin không hợp lệ");
             }
             nguoiDungServicel.sendCodeConfirm(NguoiDungDTO);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Mã xác nhận đã được gửi đến email của bạn");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Đăng kí thất bại");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đăng ký thất bại: " + e.getMessage());
         }
     }
 
     @PostMapping("/confirm_OTP")
     public ResponseEntity<?> confirmOTP(@RequestParam(required = true) Integer otp) {
         try {
-            nguoiDungServicel.save(otp);
+            ServiceResponse<?> response = nguoiDungServicel.save(otp);
+            if (!response.isSuccess()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mã OTP sai hoặc đã hết hạn");
+            }
+            return ResponseEntity.ok().body("Xác nhận OTP thành công. Tài khoản đã được tạo.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Xác nhận mã OTP thất bại");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xác nhận OTP thất bại: " + e.getMessage());
         }
-        return ResponseEntity.ok().body("Đã tạo tài khoản thành công");
     }
 }
