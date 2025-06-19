@@ -54,6 +54,7 @@ public class JwtService {
         claims.put("isQuanLy", isQuanLy);
         claims.put("isLeTan", isLeTan);
         claims.put("isBenhNhan", isBenhNhan);
+        claims.put("hoten", newNguoiDung.getHoTen());
         claims.put("soDienThoai", newNguoiDung.getSoDienThoai());
 
         return createToken(claims, newNguoiDung.getSoDienThoai());

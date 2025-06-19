@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
@@ -115,7 +116,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     }
 
 
-    public boolean sendCodeConfirm(NguoiDung nguoiDung) {
+    public boolean sendCodeConfirm(NguoiDungDTO nguoiDung) {
         try {
             String otpCode = generateOtpCode();
             String nguoiDungJson = objectMapper.writeValueAsString(nguoiDung);
@@ -125,7 +126,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
                         <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
                             <h2 style="text-align: center; color: #0a5bff;">Mimbus - Xác nhận tài khoản</h2>
                             <p>Xin chào <strong>%s</strong>,</p>
-                            <p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>Mimbus</strong> – hệ thống đặt lịch khám bệnh hiện đại.</p>
+                            <p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>Nimbus</strong> – hệ thống đặt lịch khám bệnh hiện đại.</p>
                             <p style="margin: 20px 0;">Mã xác nhận của bạn là:</p>
                             <div style="font-size: 24px; font-weight: bold; text-align: center; letter-spacing: 5px; background: #f0f3ff; padding: 15px; border-radius: 8px; color: #0a5bff;">
                                 %s
@@ -145,7 +146,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
         Random random = new Random();
         return String.valueOf(100000 + random.nextInt(99999));}
 
-    public ServiceResponse<?> checkAccountRegister(NguoiDung nguoiDung) {
+    public ServiceResponse<?> checkAccountRegister(NguoiDungDTO nguoiDung) {
         if (nguoiDung.getHoTen() == null || nguoiDung.getEmail() == null ||
                 nguoiDung.getGioiTinh() == null || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
             return ServiceResponse.error(NotificationCode.USER_REGISTER_NOT_ENGOUGH.code(), NotificationCode.USER_REGISTER_NOT_ENGOUGH.message());
