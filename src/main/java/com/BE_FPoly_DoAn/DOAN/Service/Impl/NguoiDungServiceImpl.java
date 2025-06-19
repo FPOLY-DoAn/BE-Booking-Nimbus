@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
@@ -115,7 +116,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     }
 
 
-    public boolean sendCodeConfirm(NguoiDung nguoiDung) {
+    public boolean sendCodeConfirm(NguoiDungDTO nguoiDung) {
         try {
             String otpCode = generateOtpCode();
             String nguoiDungJson = objectMapper.writeValueAsString(nguoiDung);
@@ -145,7 +146,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
         Random random = new Random();
         return String.valueOf(100000 + random.nextInt(99999));}
 
-    public ServiceResponse<?> checkAccountRegister(NguoiDung nguoiDung) {
+    public ServiceResponse<?> checkAccountRegister(NguoiDungDTO nguoiDung) {
         if (nguoiDung.getHoTen() == null || nguoiDung.getEmail() == null ||
                 nguoiDung.getGioiTinh() == null || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
             return ServiceResponse.error(NotificationCode.USER_REGISTER_NOT_ENGOUGH.code(), NotificationCode.USER_REGISTER_NOT_ENGOUGH.message());
