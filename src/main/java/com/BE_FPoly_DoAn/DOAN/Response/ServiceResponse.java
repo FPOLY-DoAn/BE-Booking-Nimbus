@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ServiceResponse<T> {
     private boolean success;
     private String code;
@@ -16,6 +16,11 @@ public class ServiceResponse<T> {
     public static <T> ServiceResponse<T> success(String code, String message, T data) {
         return new ServiceResponse<>(true, code, message, data);
     }
+
+    public static <T> ServiceResponse<T> success(String code, String message) {
+        return new ServiceResponse<>(true, code, message, null);
+    }
+
 
     public static <T> ServiceResponse<T> success() {
         return new ServiceResponse<>(true, null, null, null);
