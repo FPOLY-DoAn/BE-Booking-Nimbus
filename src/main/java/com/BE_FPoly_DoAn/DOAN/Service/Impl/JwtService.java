@@ -26,14 +26,28 @@ public class JwtService {
     private PhanQuyenServiceImpl phanQuyenService;
 
     //cung cấp thông tin tạo token
-    public String generateToken(String soDienThoai) {
+    public String generateToken(String Email) {
         Map<String, Object> claims = new HashMap<>();
-        NguoiDung newNguoiDung = nguoiDungService.findBySoDienThoai(soDienThoai);
+        NguoiDung newNguoiDung = nguoiDungService.findByEmail(Email);
         List<PhanQuyen> phanQuyenList = newNguoiDung.getPhanQuyens();
         boolean isBacSi = false;
         boolean isQuanLy = false;
         boolean isLeTan = false;
         boolean isBenhNhan = false;
+        List<String> roles = phanQuyenList.stream()
+                .map(pq -> {
+                    String ten = pq.getVaiTro().getTenVaiTro().toLowerCase();
+                    return switch (ten) {
+                        case "bác sĩ" -> "ROLE_BACSI";
+                        case "bệnh nhân" -> "ROLE_BENHNHAN";
+                        case "quản lý" -> "ROLE_QUANLY";
+                        case "lễ tân" -> "ROLE_LETAN";
+                        default -> "ROLE_UNKNOWN";
+                    };
+                })
+                .toList();
+
+
         if (!newNguoiDung.getPhanQuyens().isEmpty()) {
             for (PhanQuyen pq : phanQuyenList) {
                 if (pq.getVaiTro().getVaiTroId() == 1) {
@@ -50,6 +64,7 @@ public class JwtService {
                 }
             }
         }
+        claims.put("roles", roles);
         claims.put("isBacSi", isBacSi);
         claims.put("isQuanLy", isQuanLy);
         claims.put("isLeTan", isLeTan);

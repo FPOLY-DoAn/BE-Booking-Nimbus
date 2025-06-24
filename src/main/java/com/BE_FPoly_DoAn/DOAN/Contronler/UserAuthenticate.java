@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Contronler.NguoiDung;
+package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
@@ -62,14 +62,11 @@ public class UserAuthenticate {
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
-                            loginRequest.getMatKhau()
-                    )
-            );
+                            loginRequest.getMatKhau()));
             UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
             final String token = jwtService.generateToken(userDetails.getUsername());
             return ResponseEntity.ok(
-                    ServiceResponse.success("200", "Đăng nhập thành công", token)
-            );
+                    ServiceResponse.success("200", "Đăng nhập thành công", token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ServiceResponse.error("401", "Email hoặc mật khẩu không đúng")

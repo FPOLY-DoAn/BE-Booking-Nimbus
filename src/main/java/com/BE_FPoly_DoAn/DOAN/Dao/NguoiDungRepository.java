@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface NguoiDungRepository extends JpaRepository<NguoiDung, Integer> {
     Optional<NguoiDung> findByEmail(String email);
     Optional<NguoiDung> findByHoTen(String hoTen);
+    Optional<NguoiDung>  findBySoDienThoai(String soDienThoai);
     boolean existsByEmail(String email);
     boolean existsBySoDienThoai(String soDienThoai);
-    boolean existsByHoTen(String hoTen);
-}
+ }
