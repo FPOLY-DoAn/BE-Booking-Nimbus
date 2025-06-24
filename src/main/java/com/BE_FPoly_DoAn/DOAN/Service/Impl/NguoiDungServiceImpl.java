@@ -49,9 +49,13 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Override
-    public NguoiDung findBySoDienThoai(String soDienThoai) {
-        return nguoiDungRepository.findByEmail(soDienThoai).get();
+     public NguoiDung findBySoDienThoai(String soDienThoai) {
+        return nguoiDungRepository.findBySoDienThoai(soDienThoai).get();
+    }
+
+
+    public NguoiDung findByEmail(String email) {
+        return nguoiDungRepository.findByEmail(email).get();
     }
 
     @Override
@@ -66,8 +70,18 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
     private Collection<? extends GrantedAuthority> toRolesAuthories(List<PhanQuyen> phanQuyens) {
         return phanQuyens.stream()
-                .map(quyen -> new SimpleGrantedAuthority(quyen.getVaiTro().getTenVaiTro()))
-                .collect(Collectors.toList());
+                .map(quyen ->{
+                    String vaiTroGoc = quyen.getVaiTro().getTenVaiTro();
+                    String role = switch (vaiTroGoc) {
+                        case "bác sĩ" -> "ROLE_BACSI";
+                        case "bệnh nhân" -> "ROLE_BENHNHAN";
+                        case "quản lý" -> "ROLE_QUANLY";
+                        case "lễ tân" -> "ROLE_LETAN";
+                        default -> "ROLE_UNKNOWN";
+                    };
+                    return new SimpleGrantedAuthority(role);
+
+                }).collect(Collectors.toList());
     }
 
     @Override

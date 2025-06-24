@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Contronler.NguoiDung;
+package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import java.util.concurrent.TimeUnit;
+
+import static com.BE_FPoly_DoAn.DOAN.Response.NotificationCode.OTP_EXPIRED;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,15 +57,21 @@ public class UserAuthenticate {
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getMatKhau()));
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getMatKhau()));
             UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
-            //tạo token cho người dùng vừa đăng nhập
             final String token = jwtService.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok().body(token);
+            return ResponseEntity.ok(
+                    ServiceResponse.success("200", "Đăng nhập thành công", token));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email hoặc mật khẩu không đúng");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ServiceResponse.error("401", "Email hoặc mật khẩu không đúng")
+            );
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống khi đăng nhập");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    ServiceResponse.error("500", "Lỗi hệ thống khi đăng nhập")
+            );
         }
     }
 
@@ -82,7 +90,7 @@ public class UserAuthenticate {
             }
             return ResponseEntity.ok().build();
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Đăng xuất thất bại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ServiceResponse.error("500", "Lỗi hệ thống khi đăng xuất"));
         }
     }
 
@@ -91,12 +99,12 @@ public class UserAuthenticate {
         try {
             ServiceResponse<?> response = nguoiDungServicel.checkAccountRegister(NguoiDungDTO);
             if (!response.isSuccess()) {
-                return ResponseEntity.badRequest().body("Tài khoản đã tồn tại hoặc thông tin không hợp lệ");
+                return ResponseEntity.badRequest().body(ServiceResponse.error("500", "Tài khoản đã tồn tại hoặc thông tin không hợp lệ"));
             }
             nguoiDungServicel.sendCodeConfirm(NguoiDungDTO);
-            return ResponseEntity.ok("Mã xác nhận đã được gửi đến email của bạn");
+            return ResponseEntity.ok(ServiceResponse.success("200","Mã xác nhận đã được gửi đến email của bạn"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đăng ký thất bại: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ServiceResponse.error("500","Đăng ký thất bại: " + e.getMessage()));
         }
     }
 
@@ -105,12 +113,12 @@ public class UserAuthenticate {
         try {
             ServiceResponse<?> response = nguoiDungServicel.save(otp);
             if (!response.isSuccess()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mã OTP sai hoặc đã hết hạn");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ServiceResponse.error(OTP_EXPIRED.code(), OTP_EXPIRED.message()));
             }
-            return ResponseEntity.ok().body("Xác nhận OTP thành công. Tài khoản đã được tạo.");
+            return ResponseEntity.ok().body(ServiceResponse.success("200", "Bạn đã đăng kí thành công"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Xác nhận OTP thất bại: " + e.getMessage());
+                    .body(ServiceResponse.error("500","Xác nhận OTP thất bại: " + e.getMessage()));
         }
     }
 }
