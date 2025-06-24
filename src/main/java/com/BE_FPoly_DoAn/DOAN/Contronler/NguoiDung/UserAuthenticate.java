@@ -1,15 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.NguoiDung;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
-import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
+import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Security.RedisTemplateConfig;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
-import com.BE_FPoly_DoAn.DOAN.Service.NguoiDungService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Service;
+package com.BE_FPoly_DoAn.DOAN.Service.Doctor;
 
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 

@@ -1,6 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;

@@ -1,7 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.Doctor;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.ScheduleDto;
-import com.BE_FPoly_DoAn.DOAN.Service.DoctorScheduleService;
+import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.ScheduleDto;
+import com.BE_FPoly_DoAn.DOAN.Service.Doctor.DoctorScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,19 +15,19 @@ public class DoctorScheduleController {
     private DoctorScheduleService scheduleService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('Bác sĩ')")
     public ResponseEntity<?> getSchedule(@PathVariable Integer id) {
         return ResponseEntity.ok(scheduleService.getSchedule(id));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('Bác sĩ')")
     public ResponseEntity<?> updateSchedule(@PathVariable Integer id, @RequestBody ScheduleDto dto) {
         return ResponseEntity.ok(scheduleService.updateSchedule(id, dto));
     }
 
     @PostMapping("/{id}/leave-request")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('Bác sĩ')")
     public ResponseEntity<?> requestLeave(@PathVariable Integer id, @RequestBody ScheduleDto dto) {
         return ResponseEntity.ok(scheduleService.requestLeave(id, dto));
     }

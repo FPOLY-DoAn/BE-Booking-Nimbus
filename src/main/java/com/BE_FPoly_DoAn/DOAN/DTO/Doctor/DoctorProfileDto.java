@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.DTO;
+package com.BE_FPoly_DoAn.DOAN.DTO.Doctor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
