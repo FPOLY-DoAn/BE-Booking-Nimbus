@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
-import com.BE_FPoly_DoAn.DOAN.Service.BacSiService;
+import com.BE_FPoly_DoAn.DOAN.Service.Doctor.BacSiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
