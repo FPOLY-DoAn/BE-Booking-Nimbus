@@ -244,3 +244,38 @@ CREATE TABLE THANH_TOAN (
     ghi_chu NVARCHAR(100),
     FOREIGN KEY (hoadon_id) REFERENCES HOA_DON(hoadon_id)
 );
+
+-- 22. QUAN_LY
+CREATE TABLE quan_ly (
+    quanly_id INT IDENTITY(1,1) PRIMARY KEY,
+    nguoidung_id INT UNIQUE,
+    chuc_vu NVARCHAR(50),
+    ghi_chu NVARCHAR(250),
+    ngay_tao DATE DEFAULT GETDATE(),
+    ngay_cap_nhat DATE DEFAULT GETDATE(),
+    FOREIGN KEY (nguoidung_id) REFERENCES NGUOI_DUNG(nguoidung_id)
+);
+GO
+
+-- 23. LE_TAN
+CREATE TABLE le_tan (
+    letan_id INT IDENTITY(1,1) PRIMARY KEY,
+    nguoidung_id INT UNIQUE,
+    ca_lam CHAR(1), -- S: Sáng, C: Chiều, T: Tối
+    ghi_chu NVARCHAR(250),
+    ngay_tao DATE DEFAULT GETDATE(),
+    ngay_cap_nhat DATE DEFAULT GETDATE(),
+    FOREIGN KEY (nguoidung_id) REFERENCES NGUOI_DUNG(nguoidung_id)
+);
+GO
+
+
+-- Thêm FK từ LICH_KHAM → LE_TAN
+ALTER TABLE LICH_KHAM
+ADD letan_id INT;
+
+ALTER TABLE LICH_KHAM
+ADD CONSTRAINT FK_LICHKHAM_LETAN
+    FOREIGN KEY (letan_id) REFERENCES LE_TAN(letan_id);
+GO
+

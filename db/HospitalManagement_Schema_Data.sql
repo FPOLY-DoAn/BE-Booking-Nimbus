@@ -6609,3 +6609,16 @@ INSERT INTO THANH_TOAN
     (hoadon_id, ngay_thanh_toan, so_tien_thanh_toan, phuong_thuc_thanh_toan, trang_thai, ma_giao_dich, ghi_chu)
     VALUES
     (7, '2025-05-26', 1977196.37, 'T', 'C', N'eb99a1ae-6a1e-4cdc-b7e4-de3bbd0495aa', N'Của nếu từng đi hoặc lớn này.');
+
+-- Dữ liệu cho bảng QUAN_LY
+INSERT INTO quan_ly (nguoidung_id, chuc_vu, ghi_chu)
+VALUES 
+(1, N'Quản trị viên hệ thống', N'Tạo mặc định theo vai trò quản lý'),
+(4, N'Trưởng phòng', N'Phụ trách giám sát hoạt động các bộ phận');
+
+-- Dữ liệu cho bảng LE_TAN
+INSERT INTO le_tan (nguoidung_id, ca_lam, ghi_chu)
+VALUES 
+(2, 'S', N'Ca sáng, trực quầy lễ tân chính'),
+(5, 'C', N'Ca chiều, hỗ trợ đăng ký khám'),
+(8, 'T', N'Ca tối, tiếp nhận bệnh nhân cấp cứu');
