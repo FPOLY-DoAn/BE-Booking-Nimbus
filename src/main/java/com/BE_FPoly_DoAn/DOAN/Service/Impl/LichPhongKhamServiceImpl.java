@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.LichPhongKhamRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichPhongKham;
-import com.BE_FPoly_DoAn.DOAN.Service.LichPhongKhamService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LichPhongKhamServiceImpl implements LichPhongKhamService {
+public class LichPhongKhamServiceImpl implements InterfaceService<LichPhongKham> {
 
     @Autowired
     private LichPhongKhamRepository lichPhongKhamRepository;
@@ -31,7 +31,9 @@ public class LichPhongKhamServiceImpl implements LichPhongKhamService {
     }
 
     @Override
-    public void delete(Integer id) {
-        lichPhongKhamRepository.findById(id).ifPresent(lichPhongKhamRepository::delete);
+    public void delete(LichPhongKham id) {
+
     }
+
+
 }

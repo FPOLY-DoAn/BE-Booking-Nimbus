@@ -1,27 +1,29 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
+import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
+import com.BE_FPoly_DoAn.DOAN.Dao.OtpRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
-import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
-import com.BE_FPoly_DoAn.DOAN.Entity.PhanQuyen;
-import com.BE_FPoly_DoAn.DOAN.Entity.VaiTro;
+import com.BE_FPoly_DoAn.DOAN.Entity.*;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Security.RedisTemplateConfig;
-import com.BE_FPoly_DoAn.DOAN.Service.NguoiDungService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -29,29 +31,26 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
-public class NguoiDungServiceImpl implements NguoiDungService {
+public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDetailsService {
 
-    @Autowired
-    private NguoiDungRepository nguoiDungRepository;
 
-    @Autowired
-    private MailConfig mailConfig;
+    private final NguoiDungRepository nguoiDungRepository;
+    private final MailConfig mailConfig;
+    private final PhanQuyenServiceImpl phanQuyenService;
+    private final VaiTroRepository vaiTroRepository;
+    private final BenhNhanRepository benhNhanRepository;
+    private final OtpRepository otpRepository;
 
-    @Autowired
-    private RedisTemplateConfig redisTemplateConfig;
-
-    @Autowired
-    private PhanQuyenServiceImpl phanQuyenService;
-
-    @Autowired
-    private VaiTroRepository vaiTroRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-     public NguoiDung findBySoDienThoai(String soDienThoai) {
-        return nguoiDungRepository.findBySoDienThoai(soDienThoai).get();
+    public NguoiDungServiceImpl(NguoiDungRepository nguoiDungRepository, MailConfig mailConfig, PhanQuyenServiceImpl phanQuyenService, VaiTroRepository vaiTroRepository, BenhNhanRepository benhNhanRepository, OtpRepository otpRepository) {
+        this.nguoiDungRepository = nguoiDungRepository;
+        this.mailConfig = mailConfig;
+        this.phanQuyenService = phanQuyenService;
+        this.vaiTroRepository = vaiTroRepository;
+        this.benhNhanRepository = benhNhanRepository;
+        this.otpRepository = otpRepository;
     }
+
+
 
 
     public NguoiDung findByEmail(String email) {
@@ -70,7 +69,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
     private Collection<? extends GrantedAuthority> toRolesAuthories(List<PhanQuyen> phanQuyens) {
         return phanQuyens.stream()
-                .map(quyen ->{
+                .map(quyen -> {
                     String vaiTroGoc = quyen.getVaiTro().getTenVaiTro();
                     String role = switch (vaiTroGoc) {
                         case "bác sĩ" -> "ROLE_BACSI";
@@ -95,46 +94,115 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     }
 
     @Override
-    public ServiceResponse<?> delete(Integer id) {
-        nguoiDungRepository.findById(id).ifPresent(nguoiDungRepository::delete);
-        return ServiceResponse.error(NotificationCode.USER_EMAIL_EXISTS.code(), NotificationCode.USER_EMAIL_EXISTS.message());
+    public NguoiDung save(NguoiDung thanhToan) {
+        return null;
     }
+
+    @Override
+    public void delete(NguoiDung id) {
+
+    }
+
+
+    public Optional<NguoiDung> updateNguoiDung_BenhNhan(BenhNhanDTO benhNhanDTO) {
+        try {
+            Optional<NguoiDung> optionalNguoiDung = nguoiDungRepository.findByEmail(benhNhanDTO.getEmail());
+
+            if (optionalNguoiDung.isEmpty()) {
+                return Optional.empty();
+            }
+
+            NguoiDung nguoiDung = optionalNguoiDung.get();
+            Optional<BenhNhan> optionalBenhNhan = benhNhanRepository.getByNguoiDung(nguoiDung);
+
+            if (optionalBenhNhan.isEmpty()) {
+                return Optional.empty();
+            }
+
+            BenhNhan benhNhan = optionalBenhNhan.get();
+
+            // Cập nhật NguoiDung nếu có field nào khác null
+            if (benhNhanDTO.getEmail() != null) {
+                nguoiDung.setEmail(benhNhanDTO.getEmail());
+            }
+
+            if (benhNhanDTO.getHoTen() != null) {
+                nguoiDung.setHoTen(benhNhanDTO.getHoTen());
+            }
+
+            if (benhNhanDTO.getSoDienThoai() != null) {
+                nguoiDung.setSoDienThoai(benhNhanDTO.getSoDienThoai());
+            }
+
+            if (benhNhanDTO.getGioiTinh() != null && !benhNhanDTO.getGioiTinh().isEmpty()) {
+                nguoiDung.setGioiTinh(benhNhanDTO.getGioiTinh().charAt(0));
+            }
+
+            nguoiDungRepository.save(nguoiDung);
+
+            benhNhan.setBaoHiem(benhNhanDTO.getBaoHiem());
+            benhNhan.setLienHeKhanCap(benhNhanDTO.getLienHeKhanCap());
+            benhNhan.setNgayCapNhat(LocalDate.now());
+
+            benhNhanRepository.save(benhNhan);
+
+            return Optional.of(nguoiDung);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Log ra lỗi cho dễ debug
+            return Optional.empty();
+        }
+    }
+
 
     public Optional<NguoiDung> findByHoTen(String hoTen) {
         return nguoiDungRepository.findByHoTen(hoTen);
     }
-
-    @Override
-    public ServiceResponse<?> save(int otpCode) {
+    @Transactional
+    public int save(String otpCode) {
         try {
-            //kiểm tra otp
-            if (!redisTemplateConfig.redisTemplate().hasKey("nguoiDung:" + otpCode)) {
-                return ServiceResponse.error(NotificationCode.OTP_INVALID.code(), NotificationCode.OTP_INVALID.message());
+            Optional<OTP_NguoiDung> otpNguoiDungOpt = otpRepository.findByOtpCode(otpCode);
+            if (otpNguoiDungOpt.isEmpty()) return -1;
+
+            OTP_NguoiDung otpNguoiDung = otpNguoiDungOpt.get();
+
+            if (otpNguoiDung.getExpireAt().isBefore(LocalDateTime.now())) {
+                return -2;
             }
-            String nguoiDungJSON = redisTemplateConfig.redisTemplate().opsForValue().get("nguoiDung:" + otpCode);
-            NguoiDung nguoiDung = objectMapper.readValue(nguoiDungJSON, NguoiDung.class);
-            //mã hóa mật khẩu
-            BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
-            String enscryptPassword = passwordEncoder.encode(nguoiDung.getMatKhau());
-            nguoiDung.setMatKhau(enscryptPassword);
-            //set vai trò cho người dùng
-            VaiTro vaiTro = vaiTroRepository.getById(2);
-            PhanQuyen phanQuyen = new PhanQuyen(vaiTro, nguoiDung);
+
+            NguoiDung nguoiDung = NguoiDung.builder()
+                    .hoTen(otpNguoiDung.getHoTen())
+                    .gioiTinh(otpNguoiDung.getGioiTinh())
+                    .email(otpNguoiDung.getEmail())
+                    .soDienThoai(otpNguoiDung.getSoDienThoai())
+                    .matKhau(new BCryptPasswordEncoder().encode(otpNguoiDung.getMatKhau()))
+                    .build();
+
             nguoiDungRepository.save(nguoiDung);
-            phanQuyenService.save(phanQuyen);
-            redisTemplateConfig.redisTemplate().delete("nguoiDung:" + otpCode);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+
+            VaiTro vaiTro = vaiTroRepository.findById(2)
+                    .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
+
+            phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
+
+            otpRepository.deleteAllByOtpCode(otpCode);
+            return 1;
+        } catch (Exception e) {
+            // Có thể log lỗi tại đây nếu cần
+            return 0;
         }
-        return ServiceResponse.success();
     }
+
+
 
 
     public boolean sendCodeConfirm(NguoiDungDTO nguoiDung) {
         try {
             String otpCode = generateOtpCode();
-            String nguoiDungJson = objectMapper.writeValueAsString(nguoiDung);
-            redisTemplateConfig.redisTemplate().opsForValue().set("nguoiDung:" + otpCode, nguoiDungJson, Duration.ofMinutes(5));
+            OTP_NguoiDung otpNguoiDung = new OTP_NguoiDung(otpCode,
+                    nguoiDung.getEmail(), nguoiDung.getHoTen()
+                    , nguoiDung.getGioiTinh(), nguoiDung.getSoDienThoai(), nguoiDung.getMatKhau());
+            otpRepository.save(otpNguoiDung);
             String text = """
                     <div style="font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f6f8fc; color: #333;">
                         <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
@@ -154,15 +222,18 @@ public class NguoiDungServiceImpl implements NguoiDungService {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;}}
+            return false;
+        }
+    }
 
     private String generateOtpCode() {
         Random random = new Random();
-        return String.valueOf(100000 + random.nextInt(99999));}
+        return String.valueOf(100000 + random.nextInt(99999));
+    }
 
     public ServiceResponse<?> checkAccountRegister(NguoiDungDTO nguoiDung) {
         if (nguoiDung.getHoTen() == null || nguoiDung.getEmail() == null ||
-                nguoiDung.getGioiTinh() == null || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
+                nguoiDung.getGioiTinh() == ' ' || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
             return ServiceResponse.error(NotificationCode.USER_REGISTER_NOT_ENGOUGH.code(), NotificationCode.USER_REGISTER_NOT_ENGOUGH.message());
         } else if (nguoiDungRepository.existsByEmail(nguoiDung.getEmail())) {
 

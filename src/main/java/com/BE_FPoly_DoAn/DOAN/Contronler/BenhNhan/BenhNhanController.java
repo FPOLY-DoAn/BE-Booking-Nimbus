@@ -1,29 +1,22 @@
-package com.BE_FPoly_DoAn.DOAN.Contronler;
+package com.BE_FPoly_DoAn.DOAN.Contronler.BenhNhan;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
-import com.BE_FPoly_DoAn.DOAN.Entity.BenhNhan;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
+import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.BenhNhanService;
-import com.BE_FPoly_DoAn.DOAN.Service.NguoiDungService;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("nguoi_dung")
-public class NguoiDungController {
+public class BenhNhanController {
 
-    private NguoiDungService nguoiDungService;
+    private NguoiDungServiceImpl nguoiDungService;
 
-    public NguoiDungController( NguoiDungService nguoiDungService) {
-        this.nguoiDungService = nguoiDungService;
-    }
 
     @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
     @GetMapping("infor/{benhNhanId}")
@@ -40,5 +33,15 @@ public class NguoiDungController {
             return ResponseEntity.ok(benhNhanDTO);
         }
         return ResponseEntity.badRequest().body(ServiceResponse.error("500","Không tìm thấy người dùng này"));
+    }
+
+    @PostMapping("update")
+    public ResponseEntity<?> getNguoiDung(@RequestBody BenhNhanDTO benhNhanDTO) {
+        Optional<NguoiDung> nguoiDung = nguoiDungService.updateNguoiDung_BenhNhan(benhNhanDTO);
+
+        if (nguoiDung.isPresent()) {
+            return ResponseEntity.ok(nguoiDung);
+        }
+        return ResponseEntity.badRequest().body(ServiceResponse.error(NotificationCode.USER_REGISTER_FAIL.code(), NotificationCode.USER_REGISTER_FAIL.code()));
     }
 }

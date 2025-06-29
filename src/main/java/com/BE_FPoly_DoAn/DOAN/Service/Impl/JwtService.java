@@ -46,8 +46,6 @@ public class JwtService {
                     };
                 })
                 .toList();
-
-
         if (!newNguoiDung.getPhanQuyens().isEmpty()) {
             for (PhanQuyen pq : phanQuyenList) {
                 if (pq.getVaiTro().getVaiTroId() == 1) {

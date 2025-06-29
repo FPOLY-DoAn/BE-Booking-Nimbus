@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.HoSoBenhAnRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.HoSoBenhAn;
-import com.BE_FPoly_DoAn.DOAN.Service.HoSoBenhAnService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class HoSoBenhAnServiceImpl implements HoSoBenhAnService {
+public class HoSoBenhAnServiceImpl implements InterfaceService<HoSoBenhAn> {
 
     @Autowired
     private HoSoBenhAnRepository hoSoBenhAnRepository;
@@ -31,7 +31,8 @@ public class HoSoBenhAnServiceImpl implements HoSoBenhAnService {
     }
 
     @Override
-    public void delete(Integer id) {
-        hoSoBenhAnRepository.findById(id).ifPresent(hoSoBenhAnRepository::delete);
+    public void delete(HoSoBenhAn id) {
+
     }
+
 }

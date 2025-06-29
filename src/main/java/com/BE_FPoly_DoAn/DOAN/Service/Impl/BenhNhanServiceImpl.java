@@ -2,16 +2,15 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BenhNhan;
-import com.BE_FPoly_DoAn.DOAN.Service.BenhNhanService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BenhNhanServiceImpl implements BenhNhanService {
+public class BenhNhanServiceImpl implements InterfaceService<BenhNhan> {
 
     @Autowired
     private BenhNhanRepository benhNhanRepository;
@@ -34,7 +33,14 @@ public class BenhNhanServiceImpl implements BenhNhanService {
     }
 
     @Override
-    public void delete(Integer id) {
-        benhNhanRepository.findById(id).ifPresent(benhNhanRepository::delete);
+    public void delete(BenhNhan id) {
+
     }
+
+
+    public BenhNhan update(BenhNhan benhNhan) {
+        return benhNhanRepository.save(benhNhan);
+    }
+
+
 }

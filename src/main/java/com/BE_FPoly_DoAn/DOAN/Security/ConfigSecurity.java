@@ -1,7 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Security;
 
 import com.BE_FPoly_DoAn.DOAN.Fillter.JwtFillter;
-import com.BE_FPoly_DoAn.DOAN.Service.NguoiDungService;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -36,7 +36,7 @@ public class ConfigSecurity {
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(NguoiDungService nguoiDungService) {
+    public DaoAuthenticationProvider daoAuthenticationProvider(NguoiDungServiceImpl nguoiDungService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(nguoiDungService);
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());

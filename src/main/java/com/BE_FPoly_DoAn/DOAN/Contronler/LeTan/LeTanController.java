@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Contronler;
+package com.BE_FPoly_DoAn.DOAN.Contronler.LeTan;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

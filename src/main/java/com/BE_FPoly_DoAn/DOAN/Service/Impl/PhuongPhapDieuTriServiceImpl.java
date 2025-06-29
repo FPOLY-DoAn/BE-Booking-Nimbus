@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.PhuongPhapDieuTriRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.PhuongPhapDieuTri;
-import com.BE_FPoly_DoAn.DOAN.Service.PhuongPhapDieuTriService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PhuongPhapDieuTriServiceImpl implements PhuongPhapDieuTriService {
+public class PhuongPhapDieuTriServiceImpl implements InterfaceService<PhuongPhapDieuTri> {
 
     @Autowired
     private PhuongPhapDieuTriRepository phuongPhapDieuTriRepository;
@@ -31,7 +31,7 @@ public class PhuongPhapDieuTriServiceImpl implements PhuongPhapDieuTriService {
     }
 
     @Override
-    public void delete(Integer id) {
-        phuongPhapDieuTriRepository.findById(id).ifPresent(phuongPhapDieuTriRepository::delete);
+    public void delete(PhuongPhapDieuTri id) {
+
     }
 }

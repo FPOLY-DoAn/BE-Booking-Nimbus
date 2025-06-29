@@ -3,7 +3,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 import com.BE_FPoly_DoAn.DOAN.Dao.PhanQuyenRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Entity.PhanQuyen;
-import com.BE_FPoly_DoAn.DOAN.Service.PhanQuyenService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PhanQuyenServiceImpl implements PhanQuyenService {
+public class PhanQuyenServiceImpl implements InterfaceService<PhanQuyen> {
 
     @Autowired
     private PhanQuyenRepository phanQuyenRepository;
@@ -32,9 +32,10 @@ public class PhanQuyenServiceImpl implements PhanQuyenService {
     }
 
     @Override
-    public void delete(Integer id) {
-        phanQuyenRepository.findById(id).ifPresent(phanQuyenRepository::delete);
+    public void delete(PhanQuyen id) {
+
     }
+
 
     public List<PhanQuyen> findByNguoiDung(NguoiDung nguoiDung){
         return phanQuyenRepository.findByNguoiDung(nguoiDung);
