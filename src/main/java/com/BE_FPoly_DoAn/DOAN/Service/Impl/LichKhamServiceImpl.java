@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.LichKhamRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichKham;
-import com.BE_FPoly_DoAn.DOAN.Service.LichKhamService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LichKhamServiceImpl implements LichKhamService {
+public class LichKhamServiceImpl implements InterfaceService<LichKham> {
 
     @Autowired
     private LichKhamRepository lichKhamRepository;
@@ -31,7 +31,9 @@ public class LichKhamServiceImpl implements LichKhamService {
     }
 
     @Override
-    public void delete(Integer id) {
-        lichKhamRepository.findById(id).ifPresent(lichKhamRepository::delete);
+    public void delete(LichKham id) {
+
     }
+
+
 }

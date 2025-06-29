@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.ChuyenKhoaRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.ChuyenKhoa;
-import com.BE_FPoly_DoAn.DOAN.Service.ChuyenKhoaService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ChuyenKhoaServiceImpl implements ChuyenKhoaService {
+public class ChuyenKhoaServiceImpl implements InterfaceService<ChuyenKhoa> {
 
     @Autowired
     private ChuyenKhoaRepository chuyenKhoaRepository;
@@ -31,7 +31,9 @@ public class ChuyenKhoaServiceImpl implements ChuyenKhoaService {
     }
 
     @Override
-    public void delete(Integer id) {
-        chuyenKhoaRepository.findById(id).ifPresent(chuyenKhoaRepository::delete);
+    public void delete(ChuyenKhoa chuyenKhoa) {
+        chuyenKhoaRepository.findById(chuyenKhoa.getChuyenKhoaId()).ifPresent(chuyenKhoaRepository::delete);
     }
+
+
 }

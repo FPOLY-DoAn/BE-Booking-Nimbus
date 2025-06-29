@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Fillter;
 
+import com.BE_FPoly_DoAn.DOAN.Dao.BlacklistRepository;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -7,7 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,13 +24,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtFillter extends OncePerRequestFilter  {
+public class JwtFillter extends OncePerRequestFilter {
 
-    @Autowired
     private JwtService jwtService;
+    private BlacklistRepository blacklistRepository;
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    public JwtFillter(JwtService jwtService, BlacklistRepository blacklistRepository) {
+        this.jwtService = jwtService;
+        this.blacklistRepository = blacklistRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -58,7 +60,7 @@ public class JwtFillter extends OncePerRequestFilter  {
         }
 
         // Nếu token nằm trong blacklist
-        if (token != null && redisTemplate.hasKey(token)) {
+        if (token != null && blacklistRepository.existsByTokenBlackList(token)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write("Token is blacklisted");
             return;
@@ -78,7 +80,6 @@ public class JwtFillter extends OncePerRequestFilter  {
             List<GrantedAuthority> authorities = roles.stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
-
             UserDetails userDetails = new User(email, "", authorities);
 
             if (jwtService.isTokenValid(token, userDetails.getUsername())) {
@@ -90,8 +91,7 @@ public class JwtFillter extends OncePerRequestFilter  {
 
                 System.out.println("Authorities đã set: " + authenticationToken.getAuthorities());
             }
-           }
-
+        }
         filterChain.doFilter(request, response);
     }
 }

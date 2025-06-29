@@ -1,7 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
-import com.BE_FPoly_DoAn.DOAN.Service.Doctor.BacSiService;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor.BacSiServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.List;
 public class DoctorController {
 
     @Autowired
-    private BacSiService bacSiService;
+    private BacSiServiceImpl bacSiService;
 
     @GetMapping
     public List<BacSi> getAll() {
@@ -46,7 +46,7 @@ public class DoctorController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable BacSi id) {
         bacSiService.delete(id);
         return ResponseEntity.noContent().build();
     }

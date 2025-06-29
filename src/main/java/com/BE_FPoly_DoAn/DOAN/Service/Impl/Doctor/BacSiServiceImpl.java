@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
-import com.BE_FPoly_DoAn.DOAN.Service.Doctor.BacSiService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BacSiServiceImpl implements BacSiService {
+public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
     @Autowired
     private BacSiRepository bacSiRepository;
@@ -31,7 +31,8 @@ public class BacSiServiceImpl implements BacSiService {
     }
 
     @Override
-    public void delete(Integer id) {
-        bacSiRepository.findById(id).ifPresent(bacSiRepository::delete);
+    public void delete(BacSi id) {
+
     }
+
 }

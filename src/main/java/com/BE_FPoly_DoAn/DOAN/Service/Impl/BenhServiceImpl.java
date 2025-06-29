@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.Benh;
-import com.BE_FPoly_DoAn.DOAN.Service.BenhService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BenhServiceImpl implements BenhService {
+public class BenhServiceImpl implements InterfaceService<Benh> {
 
     @Autowired
     private BenhRepository benhRepository;
@@ -31,7 +31,8 @@ public class BenhServiceImpl implements BenhService {
     }
 
     @Override
-    public void delete(Integer id) {
-        benhRepository.findById(id).ifPresent(benhRepository::delete);
+    public void delete(Benh id) {
+
     }
+
 }

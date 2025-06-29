@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +33,7 @@ public class BenhNhan {
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     @NotNull(message = "Người dùng không được để trống")
     @Schema(hidden = true)
+    @JsonManagedReference
     private NguoiDung nguoiDung;
 
     @Column(name = "bao_hiem", length = 25, columnDefinition = "NVARCHAR(25)")

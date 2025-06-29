@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.LichLamViecBacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichLamViecBacSi;
-import com.BE_FPoly_DoAn.DOAN.Service.LichLamViecBacSiService;
+import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LichLamViecBacSiServiceImpl implements LichLamViecBacSiService {
+public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViecBacSi> {
 
     @Autowired
     private LichLamViecBacSiRepository lichLamViecBacSiRepository;
@@ -31,7 +31,9 @@ public class LichLamViecBacSiServiceImpl implements LichLamViecBacSiService {
     }
 
     @Override
-    public void delete(Integer id) {
-        lichLamViecBacSiRepository.findById(id).ifPresent(lichLamViecBacSiRepository::delete);
+    public void delete(LichLamViecBacSi id) {
+
     }
+
+
 }

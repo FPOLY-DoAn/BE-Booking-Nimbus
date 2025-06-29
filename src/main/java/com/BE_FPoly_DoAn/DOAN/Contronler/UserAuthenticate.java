@@ -1,9 +1,9 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.NguoiDungDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Security.RedisTemplateConfig;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.BlackListServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,32 +26,14 @@ public class UserAuthenticate {
     private final NguoiDungServiceImpl nguoiDungServicel;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final RedisTemplateConfig redisTemplateConfig;
+    private final BlackListServiceImpl blackListService;
 
-    public UserAuthenticate(NguoiDungServiceImpl nguoiDungServicel, RedisTemplateConfig redisTemplateConfig, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public UserAuthenticate(NguoiDungServiceImpl nguoiDungServicel, JwtService jwtService, AuthenticationManager authenticationManager, BlackListServiceImpl blackListService) {
         this.nguoiDungServicel = nguoiDungServicel;
-        this.redisTemplateConfig = redisTemplateConfig;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.blackListService = blackListService;
     }
-
-    @GetMapping("/check-expirationtoken")
-    public ResponseEntity<?> checkExpiration(@RequestParam String token) {
-        try {
-            Long timeExpiration = jwtService.getExpired(token);
-            return ResponseEntity.ok("Thời gian hết hạn: " + timeExpiration);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token không hợp lệ hoặc đã hết hạn");
-        }
-    }
-
-    //Kiểm tra token trong blacklisted
-    @PostMapping("/check-token")
-    public ResponseEntity<?> checkToken(@RequestParam String token) {
-        boolean exists = Boolean.TRUE.equals(redisTemplateConfig.redisTemplate().hasKey(token));
-        return ResponseEntity.ok("Token " + (exists ? "tồn tại trong Redis (BLACKLIST)" : "không có trong Redis"));
-    }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {
@@ -62,15 +44,12 @@ public class UserAuthenticate {
                             loginRequest.getMatKhau()));
             UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
             final String token = jwtService.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok(
-                    ServiceResponse.success("200", "Đăng nhập thành công", token));
+            return ResponseEntity.ok(ServiceResponse.success("200", "Đăng nhập thành công", token));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    ServiceResponse.error("401", "Email hoặc mật khẩu không đúng")
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ServiceResponse.error("401", "Email hoặc mật khẩu không đúng")
             );
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    ServiceResponse.error("500", "Lỗi hệ thống khi đăng nhập")
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ServiceResponse.error("500", "Lỗi hệ thống khi đăng nhập")
             );
         }
     }
@@ -79,16 +58,18 @@ public class UserAuthenticate {
     public ResponseEntity<?> dangXuat(HttpServletRequest httpRequest) {
         try {
             String tokenHeader = httpRequest.getHeader("Authorization");
-            //Kiểm tra có token
-            if (tokenHeader.startsWith("Bearer ")) {
+
+            if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
                 String token = tokenHeader.replace("Bearer ", "");
-                long expiration = jwtService.getExpired(token) - System.currentTimeMillis();
-                //chèn token vào blacklist
-                redisTemplateConfig.redisTemplate()
-                        .opsForValue()
-                        .set(token, "blacklisted", expiration, TimeUnit.MILLISECONDS);
+
+                long millisLeft = jwtService.getExpired(token) - System.currentTimeMillis();
+
+                if (millisLeft > 0) {
+                    blackListService.save(token, millisLeft);
+                }
             }
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok().body("Đăng xuất thành công!");
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ServiceResponse.error("500", "Lỗi hệ thống khi đăng xuất"));
         }
@@ -109,16 +90,25 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/confirm_OTP")
-    public ResponseEntity<?> confirmOTP(@RequestParam(required = true) Integer otp) {
+    public ResponseEntity<?> confirmOTP(@RequestParam(required = true) String otp) {
         try {
-            ServiceResponse<?> response = nguoiDungServicel.save(otp);
-            if (!response.isSuccess()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ServiceResponse.error(OTP_EXPIRED.code(), OTP_EXPIRED.message()));
-            }
-            return ResponseEntity.ok().body(ServiceResponse.success("200", "Bạn đã đăng kí thành công"));
+            int result = nguoiDungServicel.save(otp);
+
+            return switch (result) {
+                case 1 -> ResponseEntity.ok(ServiceResponse.success("200", "Bạn đã đăng kí thành công"));
+                case -1 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(ServiceResponse.error("OTP_001", "OTP không tồn tại"));
+                case -2 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(ServiceResponse.error("OTP_002", "Mã OTP đã hết hạn"));
+                case 0 -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ServiceResponse.error("500", "Đã có lỗi xảy ra khi xử lý đăng ký"));
+                default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ServiceResponse.error("500", "Lỗi không xác định"));
+            };
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ServiceResponse.error("500","Xác nhận OTP thất bại: " + e.getMessage()));
+                    .body(ServiceResponse.error("500", "Xác nhận OTP thất bại: " + e.getMessage()));
         }
     }
+
 }
