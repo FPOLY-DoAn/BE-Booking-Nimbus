@@ -6611,14 +6611,35 @@ INSERT INTO THANH_TOAN
     (7, '2025-05-26', 1977196.37, 'T', 'C', N'eb99a1ae-6a1e-4cdc-b7e4-de3bbd0495aa', N'Của nếu từng đi hoặc lớn này.');
 
 -- Dữ liệu cho bảng QUAN_LY
-INSERT INTO quan_ly (nguoidung_id, chuc_vu, ghi_chu)
+INSERT INTO QUAN_LY (nguoidung_id, chuc_vu, ghi_chu)
 VALUES 
-(1, N'Quản trị viên hệ thống', N'Tạo mặc định theo vai trò quản lý'),
-(4, N'Trưởng phòng', N'Phụ trách giám sát hoạt động các bộ phận');
+(1 , N'Giám đốc điều hành',          N'Phụ trách hoạt động toàn bệnh viện'),
+(2 , N'Phó GĐ chuyên môn',            N'Giám sát nghiệp vụ các khoa phòng'),
+(3 , N'Trưởng phòng Hành chính‑NS',  N'Quản lý nhân sự và hành chính'),
+(4 , N'Trưởng phòng CNTT',           N'Quản lý hạ tầng & phần mềm'),
+(5 , N'Kế toán trưởng',              N'Phụ trách tài chính kế toán');
+GO
 
 -- Dữ liệu cho bảng LE_TAN
-INSERT INTO le_tan (nguoidung_id, ca_lam, ghi_chu)
-VALUES 
-(2, 'S', N'Ca sáng, trực quầy lễ tân chính'),
-(5, 'C', N'Ca chiều, hỗ trợ đăng ký khám'),
-(8, 'T', N'Ca tối, tiếp nhận bệnh nhân cấp cứu');
+INSERT INTO LE_TAN (nguoidung_id, chuc_vu, ghi_chu)
+VALUES
+(6 , N'Nhân viên lễ tân',  N'Quầy tiếp nhận tầng 1 – ca sáng'),
+(7 , N'Nhân viên lễ tân',  N'Khu khám Ngoại – ca chiều'),
+(8 , N'Nhân viên lễ tân',  N'Khu khám Nhi – ca sáng'),
+(9 , N'Nhân viên lễ tân',  N'Khu Chẩn đoán hình ảnh – ca tối'),
+(10, N'Trưởng ca lễ tân',  N'Điều phối & hỗ trợ tất cả quầy');
+GO
+
+-- Ca trực ngày 01‑07‑2025
+INSERT INTO LICH_LAM_VIEC_LE_TAN (letan_id, ngay, ca_lam, ghi_chu) VALUES
+(1, '2025-07-01', 'S', N'Ca sáng'),
+(1, '2025-07-01', 'C', N'Hỗ trợ ca chiều'),
+(2, '2025-07-01', 'C', N'Ca chiều'),
+(3, '2025-07-01', 'S', N'Ca sáng'),
+(4, '2025-07-01', 'T', N'Ca tối'),
+(5, '2025-07-01', 'S', N'Trưởng ca');
+
+-- Ca trực ngày 02‑07‑2025
+INSERT INTO LICH_LAM_VIEC_LE_TAN (letan_id, ngay, ca_lam, ghi_chu) VALUES
+(5, '2025-07-02', 'S', N'Trưởng ca (lặp ca sáng)');
+GO

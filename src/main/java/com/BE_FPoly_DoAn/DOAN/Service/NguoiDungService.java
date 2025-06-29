@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface NguoiDungService extends UserDetailsService {
 
-    public NguoiDung findBySoDienThoai(String soDienThoai);
 
     List<NguoiDung> getAll();
 

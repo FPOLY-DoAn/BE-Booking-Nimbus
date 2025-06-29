@@ -17,8 +17,8 @@ CREATE TABLE NGUOI_DUNG (
     nguoidung_id INT IDENTITY(1,1) PRIMARY KEY,
     hoten NVARCHAR(50) NOT NULL,
     gioi_tinh CHAR(1),
-    email VARCHAR(50),
-    so_dien_thoai VARCHAR(15),
+    email VARCHAR(50) UNIQUE,
+    so_dien_thoai VARCHAR(15) UNIQUE,
     mat_khau VARCHAR(255) NOT NULL,
     ngay_tao DATETIME DEFAULT GETDATE(),
     ngay_cap_nhat DATETIME DEFAULT GETDATE()
@@ -119,7 +119,7 @@ CREATE TABLE LICH_KHAM (
     benhnhan_id INT,
     thoi_gian_hen DATETIME,
     thoi_gian_den DATETIME,
-    kieu_lich_kham CHAR(1), -- H: hẹn, T: tái khám, D: định kỳ
+    kieu_lich_kham CHAR(1) CHECK (kieu_lich_kham IN ('H', 'T', 'D')),
     trang_thai CHAR(1),
     ghi_chu NVARCHAR(250),
     ngay_tao DATETIME,
@@ -244,9 +244,10 @@ CREATE TABLE THANH_TOAN (
     ghi_chu NVARCHAR(100),
     FOREIGN KEY (hoadon_id) REFERENCES HOA_DON(hoadon_id)
 );
+GO
 
 -- 22. QUAN_LY
-CREATE TABLE quan_ly (
+CREATE TABLE QUAN_LY (
     quanly_id INT IDENTITY(1,1) PRIMARY KEY,
     nguoidung_id INT UNIQUE,
     chuc_vu NVARCHAR(50),
@@ -258,24 +259,25 @@ CREATE TABLE quan_ly (
 GO
 
 -- 23. LE_TAN
-CREATE TABLE le_tan (
+CREATE TABLE LE_TAN (
     letan_id INT IDENTITY(1,1) PRIMARY KEY,
     nguoidung_id INT UNIQUE,
-    ca_lam CHAR(1), -- S: Sáng, C: Chiều, T: Tối
+    chuc_vu NVARCHAR(50),
     ghi_chu NVARCHAR(250),
     ngay_tao DATE DEFAULT GETDATE(),
     ngay_cap_nhat DATE DEFAULT GETDATE(),
     FOREIGN KEY (nguoidung_id) REFERENCES NGUOI_DUNG(nguoidung_id)
 );
+
 GO
 
-
--- Thêm FK từ LICH_KHAM → LE_TAN
-ALTER TABLE LICH_KHAM
-ADD letan_id INT;
-
-ALTER TABLE LICH_KHAM
-ADD CONSTRAINT FK_LICHKHAM_LETAN
-    FOREIGN KEY (letan_id) REFERENCES LE_TAN(letan_id);
+-- 24. LICH_LAM_VIEC_LE_TAN
+CREATE TABLE LICH_LAM_VIEC_LE_TAN (
+    lichlt_id INT IDENTITY(1,1) PRIMARY KEY,
+    letan_id INT,
+    ngay DATE NOT NULL,
+    ca_lam CHAR(1) CHECK (ca_lam IN ('S', 'C', 'T')),
+    ghi_chu NVARCHAR(250),
+    FOREIGN KEY (letan_id) REFERENCES LE_TAN(letan_id)
+);
 GO
-

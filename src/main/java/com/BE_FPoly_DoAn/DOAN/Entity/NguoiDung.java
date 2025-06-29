@@ -53,7 +53,7 @@ public class NguoiDung {
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATETIME")
     private LocalDateTime ngayCapNhat;
 
-    @OneToMany(mappedBy = "nguoiDung", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "nguoiDung", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<PhanQuyen> phanQuyens;
 
     @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
