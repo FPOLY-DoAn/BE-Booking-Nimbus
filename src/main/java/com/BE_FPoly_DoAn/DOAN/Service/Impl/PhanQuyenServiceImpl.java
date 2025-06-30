@@ -4,7 +4,6 @@ import com.BE_FPoly_DoAn.DOAN.Dao.PhanQuyenRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Entity.PhanQuyen;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.Optional;
 @Service
 public class PhanQuyenServiceImpl implements InterfaceService<PhanQuyen> {
 
-    @Autowired
-    private PhanQuyenRepository phanQuyenRepository;
+    private final PhanQuyenRepository phanQuyenRepository;
+
+    public PhanQuyenServiceImpl(PhanQuyenRepository phanQuyenRepository) {
+        this.phanQuyenRepository = phanQuyenRepository;
+    }
 
     @Override
     public List<PhanQuyen> getAll() {

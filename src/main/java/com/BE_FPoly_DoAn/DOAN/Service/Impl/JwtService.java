@@ -7,7 +7,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +18,14 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String salt;
 
-    @Autowired
-    private NguoiDungServiceImpl nguoiDungService;
+    private final NguoiDungServiceImpl nguoiDungService;
 
-    @Autowired
-    private PhanQuyenServiceImpl phanQuyenService;
+    private final PhanQuyenServiceImpl phanQuyenService;
+
+    public JwtService(NguoiDungServiceImpl nguoiDungService, PhanQuyenServiceImpl phanQuyenService) {
+        this.nguoiDungService = nguoiDungService;
+        this.phanQuyenService = phanQuyenService;
+    }
 
     //cung cấp thông tin tạo token
     public String generateToken(String Email) {

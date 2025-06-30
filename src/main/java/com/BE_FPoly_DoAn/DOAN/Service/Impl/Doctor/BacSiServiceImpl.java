@@ -1,9 +1,8 @@
-package com.BE_FPoly_DoAn.DOAN.Service.Impl;
+package com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.Optional;
 @Service
 public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
-    @Autowired
-    private BacSiRepository bacSiRepository;
+    private final BacSiRepository bacSiRepository;
+
+    public BacSiServiceImpl(BacSiRepository bacSiRepository) {
+        this.bacSiRepository = bacSiRepository;
+    }
 
     @Override
     public List<BacSi> getAll() {

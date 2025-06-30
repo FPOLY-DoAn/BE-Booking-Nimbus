@@ -22,6 +22,7 @@ public enum NotificationCode {
     AUTH_LOGIN_FAIL("AUTH_002", "Sai tài khoản hoặc mật khẩu"),
     AUTH_UNAUTHORIZED("AUTH_003", "Chưa đăng nhập hoặc phiên đã hết hạn"),
     AUTH_ACCESS_DENIED("AUTH_004", "Không có quyền truy cập chức năng này"),
+    AUTH_LOGOUT_SUCCESS("AUTH_005", "Đăng xuất thành công"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
