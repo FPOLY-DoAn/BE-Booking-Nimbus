@@ -3,7 +3,6 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 import com.BE_FPoly_DoAn.DOAN.Dao.ChuyenKhoaRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.ChuyenKhoa;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.Optional;
 @Service
 public class ChuyenKhoaServiceImpl implements InterfaceService<ChuyenKhoa> {
 
-    @Autowired
-    private ChuyenKhoaRepository chuyenKhoaRepository;
+    private final ChuyenKhoaRepository chuyenKhoaRepository;
+
+    public ChuyenKhoaServiceImpl(ChuyenKhoaRepository chuyenKhoaRepository) {
+        this.chuyenKhoaRepository = chuyenKhoaRepository;
+    }
 
     @Override
     public List<ChuyenKhoa> getAll() {

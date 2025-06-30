@@ -3,7 +3,6 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy;
 import com.BE_FPoly_DoAn.DOAN.Dao.QuanLyRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.QuanLy;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.Optional;
 @Service
 public class QuanLyServiceImpl implements InterfaceService<QuanLy> {
 
-    @Autowired
-    private QuanLyRepository quanLyRepository;
+    private final QuanLyRepository quanLyRepository;
+
+    public QuanLyServiceImpl(QuanLyRepository quanLyRepository) {
+        this.quanLyRepository = quanLyRepository;
+    }
 
     @Override
     public List<QuanLy> getAll() {

@@ -2,7 +2,6 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.Doctor;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.ScheduleDto;
 import com.BE_FPoly_DoAn.DOAN.Service.Doctor.DoctorScheduleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/bac-si/schedule")
 public class DoctorScheduleController {
 
-    @Autowired
-    private DoctorScheduleService scheduleService;
+    private final DoctorScheduleService scheduleService;
+
+    public DoctorScheduleController(DoctorScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_BACSI')")

@@ -50,9 +50,6 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         this.otpRepository = otpRepository;
     }
 
-
-
-
     public NguoiDung findByEmail(String email) {
         return nguoiDungRepository.findByEmail(email).get();
     }

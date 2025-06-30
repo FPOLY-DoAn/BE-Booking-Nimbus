@@ -17,7 +17,6 @@ public class BenhNhanController {
 
     private NguoiDungServiceImpl nguoiDungService;
 
-
     @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
     @GetMapping("infor/{benhNhanId}")
     public ResponseEntity<?> getNguoiDung(@PathVariable Integer benhNhanId) {

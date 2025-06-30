@@ -3,7 +3,6 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 import com.BE_FPoly_DoAn.DOAN.Dao.HoSoBenhAnRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.HoSoBenhAn;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.Optional;
 @Service
 public class HoSoBenhAnServiceImpl implements InterfaceService<HoSoBenhAn> {
 
-    @Autowired
-    private HoSoBenhAnRepository hoSoBenhAnRepository;
+    private final HoSoBenhAnRepository hoSoBenhAnRepository;
+
+    public HoSoBenhAnServiceImpl(HoSoBenhAnRepository hoSoBenhAnRepository) {
+        this.hoSoBenhAnRepository = hoSoBenhAnRepository;
+    }
 
     @Override
     public List<HoSoBenhAn> getAll() {

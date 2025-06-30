@@ -3,7 +3,6 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor.BacSiServiceImpl;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,11 @@ import java.util.List;
 @RequestMapping("/api/bac-si")
 public class DoctorController {
 
-    @Autowired
-    private BacSiServiceImpl bacSiService;
+    private final BacSiServiceImpl bacSiService;
+
+    public DoctorController(BacSiServiceImpl bacSiService) {
+        this.bacSiService = bacSiService;
+    }
 
     @GetMapping
     public List<BacSi> getAll() {

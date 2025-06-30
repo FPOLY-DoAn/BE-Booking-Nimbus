@@ -3,8 +3,6 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 import com.BE_FPoly_DoAn.DOAN.Dao.PhongKhamRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.PhongKham;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import org.hibernate.integrator.internal.IntegratorServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +11,11 @@ import java.util.Optional;
 @Service
 public class PhongKhamServiceImpl implements InterfaceService<PhongKham> {
 
-    @Autowired
-    private PhongKhamRepository phongKhamRepository;
+    private final PhongKhamRepository phongKhamRepository;
+
+    public PhongKhamServiceImpl(PhongKhamRepository phongKhamRepository) {
+        this.phongKhamRepository = phongKhamRepository;
+    }
 
     @Override
     public List<PhongKham> getAll() {

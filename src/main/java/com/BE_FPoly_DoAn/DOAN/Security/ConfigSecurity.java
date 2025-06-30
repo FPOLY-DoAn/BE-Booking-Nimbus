@@ -2,7 +2,6 @@ package com.BE_FPoly_DoAn.DOAN.Security;
 
 import com.BE_FPoly_DoAn.DOAN.Fillter.JwtFillter;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +26,11 @@ import java.util.Arrays;
 @EnableMethodSecurity(prePostEnabled = true)
 public class ConfigSecurity {
 
-    @Autowired
-    private JwtFillter jwtFillter;
+    private final JwtFillter jwtFillter;
+
+    public ConfigSecurity(JwtFillter jwtFillter) {
+        this.jwtFillter = jwtFillter;
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

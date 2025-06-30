@@ -2,7 +2,6 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.DoctorProfileDto;
 import com.BE_FPoly_DoAn.DOAN.Service.Doctor.DoctorProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/bac-si/profile")
 public class DoctorProfileController {
 
-    @Autowired
-    private DoctorProfileService profileService;
+    private final DoctorProfileService profileService;
+
+    public DoctorProfileController(DoctorProfileService profileService) {
+        this.profileService = profileService;
+    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
