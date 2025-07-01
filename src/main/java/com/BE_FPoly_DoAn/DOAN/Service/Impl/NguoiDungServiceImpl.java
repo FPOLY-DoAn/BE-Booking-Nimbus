@@ -151,10 +151,10 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         }
     }
 
-
     public Optional<NguoiDung> findByHoTen(String hoTen) {
         return nguoiDungRepository.findByHoTen(hoTen);
     }
+
     @Transactional
     public int save(String otpCode) {
         try {
@@ -189,9 +189,6 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             return 0;
         }
     }
-
-
-
 
     public boolean sendCodeConfirm(NguoiDungDTO nguoiDung) {
         try {

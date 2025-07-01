@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "QUAN_LY")
 @Getter
+@Builder
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor

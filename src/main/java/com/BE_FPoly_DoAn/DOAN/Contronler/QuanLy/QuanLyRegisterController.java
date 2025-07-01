@@ -1,18 +1,73 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.QuanLy;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSiDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.LeTanDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.QuanLyDTO;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor.BacSiServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.LeTan.LeTanServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy.QuanLyServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 
 @RestController
 @RequestMapping("quanly")
 public class QuanLyRegisterController {
-    @GetMapping("/dangki")
-    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
-    public ResponseEntity<?> dangKiLeTan(){
+    private final LeTanServiceImpl leTanService;
+    private final BacSiServiceImpl bacSiService;
+    private final QuanLyServiceImpl quanLyService;
 
+
+    public QuanLyRegisterController(LeTanServiceImpl leTanService, BacSiServiceImpl bacSiService, QuanLyServiceImpl quanLyService) {
+        this.leTanService = leTanService;
+        this.bacSiService = bacSiService;
+        this.quanLyService = quanLyService;
+    }
+
+    @PostMapping("/dangki/letan")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    public ResponseEntity<?> dangKiLeTan(@Valid @RequestBody LeTanDTO leTanDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+        leTanService.createNguoiDungAndLeTan(leTanDTO);
+        return ResponseEntity.ok().body("");
+    }
+
+    @PostMapping("/dangki/bacsi")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    public ResponseEntity<?> dangKiBacSi(@Valid @RequestBody BacSiDTO bacSiDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+        bacSiService.createNguoiDungAndBacSi(bacSiDTO);
+        return ResponseEntity.ok().body("");
+    }
+
+    @PostMapping("/dangki/quanly")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    public ResponseEntity<?> dangKiQuanLy(@Valid @RequestBody QuanLyDTO quanLyDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+        quanLyService.createNguoiDungAndQuanLy(quanLyDTO);
         return ResponseEntity.ok().body("");
     }
 }
