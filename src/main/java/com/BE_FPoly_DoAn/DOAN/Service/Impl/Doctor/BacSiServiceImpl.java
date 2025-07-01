@@ -1,8 +1,16 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSiDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
-import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
+import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
+import com.BE_FPoly_DoAn.DOAN.Entity.*;
+import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
+import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.ChuyenKhoaServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.PhanQuyenServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +20,18 @@ import java.util.Optional;
 public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
     private final BacSiRepository bacSiRepository;
+    private final NguoiDungServiceImpl nguoiDungService;
+    private final VaiTroRepository vaiTroRepository;
+    private final PhanQuyenServiceImpl phanQuyenServiceImpl;
+    private final ChuyenKhoaServiceImpl chuyenKhoaServiceImpl;
 
-    public BacSiServiceImpl(BacSiRepository bacSiRepository) {
+
+    public BacSiServiceImpl(ChuyenKhoaServiceImpl chuyenKhoaServiceImpl, PhanQuyenServiceImpl phanQuyenServiceImpl, VaiTroRepository vaiTroRepository, BacSiRepository bacSiRepository, NguoiDungServiceImpl nguoiDungService) {
         this.bacSiRepository = bacSiRepository;
+        this.nguoiDungService = nguoiDungService;
+        this.vaiTroRepository = vaiTroRepository;
+        this.phanQuyenServiceImpl = phanQuyenServiceImpl;
+        this.chuyenKhoaServiceImpl = chuyenKhoaServiceImpl;
     }
 
     @Override
@@ -37,4 +54,24 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
     }
 
+    public ServiceResponse<?> createNguoiDungAndBacSi(@Valid BacSiDTO bacSiDTO) {
+        try {
+            NguoiDung nguoiDung = NguoiDung.builder().hoTen(bacSiDTO.getHoTen())
+                    .email(bacSiDTO.getEmail()).soDienThoai(bacSiDTO.getSoDienThoai()).matKhau(bacSiDTO.getMatKhau())
+                    .gioiTinh(bacSiDTO.getGioiTinh()).build();
+            nguoiDungService.save(nguoiDung);
+            BacSi bacSi = BacSi.builder().nguoiDung(nguoiDung).
+                    chungChi(bacSiDTO.getChungChi()).trinhDo(bacSiDTO.getTrinhDo())
+                    .chuyenKhoa(chuyenKhoaServiceImpl.getById(bacSiDTO.getChuyenKhoaId()).get())
+                    .kinhNghiem(bacSiDTO.getKinhNghiem()).build();
+            bacSiRepository.save(bacSi);
+            VaiTro vaiTro = vaiTroRepository.findById(1)
+                    .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
+
+            phanQuyenServiceImpl.save(new PhanQuyen(vaiTro, nguoiDung));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+        return ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS.code(),NotificationCode.USER_REGISTER_SUCCESS.message());
+    }
 }

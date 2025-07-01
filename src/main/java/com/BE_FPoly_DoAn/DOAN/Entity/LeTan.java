@@ -2,6 +2,8 @@ package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.util.List;
 @Table(name = "LE_TAN")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LeTan {
@@ -24,18 +27,16 @@ public class LeTan {
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", unique = true)
     private NguoiDung nguoiDung;
 
-    @Column(name = "chuc_vu", columnDefinition = "NVARCHAR(50)")
-    @NotBlank(message = "Chức vụ không được để trống")
-    private String chucVu;
+
+    @NotNull(message = "Ngày tuyển dụng không được để trống")
+    @PastOrPresent(message = "Ngày tuyển dụng không được là ngày trong tương lai")
+    private LocalDate ngayTuyenDung;
 
     @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(250)")
     private String ghiChu;
 
-    @Column(name = "ngay_tao")
-    private LocalDate ngayTao;
-
-    @Column(name = "ngay_cap_nhat")
-    private LocalDate ngayCapNhat;
+    @NotNull(message = "Trạng thái hoạt động không được để trống")
+    private boolean trangThaiHoatDong;
 
     @OneToMany(mappedBy = "leTan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LichLamViecLeTan> lichLamViecs;
