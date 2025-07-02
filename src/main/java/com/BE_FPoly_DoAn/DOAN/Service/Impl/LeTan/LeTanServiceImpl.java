@@ -13,6 +13,7 @@ import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.PhanQuyenServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,11 +60,13 @@ public class LeTanServiceImpl implements InterfaceService<LeTan> {
     public ServiceResponse<?> createNguoiDungAndLeTan(LeTanDTO leTanDTO) {
         try {
             NguoiDung nguoiDung = NguoiDung.builder().hoTen(leTanDTO.getHoTen())
-                    .email(leTanDTO.getEmail()).matKhau(leTanDTO.getMatKhau())
+                    .email(leTanDTO.getEmail()).matKhau(new BCryptPasswordEncoder().encode(leTanDTO.getMatKhau()))
+                    .soDienThoai(leTanDTO.getSoDienThoai())
                     .gioiTinh(leTanDTO.getGioiTinh()).build();
             nguoiDungRepository.save(nguoiDung);
             LeTan leTan = LeTan.builder().nguoiDung(nguoiDung).
                     ghiChu(leTanDTO.getGhiChu()).trangThaiHoatDong(leTanDTO.getTrangThaiHoatDong())
+                    .chucVu(leTanDTO.getChucVu())
                     .ngayTuyenDung(leTanDTO.getNgayTuyenDung()).build();
             leTanRepository.save(leTan);
             VaiTro vaiTro = vaiTroRepository.findById(4)

@@ -13,6 +13,7 @@ public enum NotificationCode {
     USER_UPDATE_FAIL("USR_009", "Cập nhật thông tin người dùng thất bại"),
 
     // ===== OTP =====
+    OTP("OTP_000", "Mã OTP đã gửi tới email của bạn"),
     OTP_INVALID("OTP_001", "Mã OTP không hợp lệ"),
     OTP_EXPIRED("OTP_002", "Mã OTP đã hết hạn"),
     OTP_MISSING("OTP_003", "Chưa nhập mã OTP"),
@@ -26,15 +27,31 @@ public enum NotificationCode {
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
-    VALIDATION_EMAIL_INVALID("VAL_001", "Email không đúng định dạng"),
-    VALIDATION_PASSWORD_TOO_SHORT("VAL_002", "Mật khẩu phải có ít nhất 6 ký tự"),
-    VALIDATION_PASSWORD_TOO_WEAK("VAL_003", "Mật khẩu phải chứa chữ hoa, số hoặc ký tự đặc biệt"),
-    VALIDATION_PHONE_INVALID("VAL_004", "Số điện thoại không hợp lệ"),
-    VALIDATION_NAME_REQUIRED("VAL_005", "Họ tên không được để trống"),
-    VALIDATION_EMAIL_REQUIRED("VAL_006", "Email là bắt buộc"),
-    VALIDATION_PASSWORD_REQUIRED("VAL_007", "Mật khẩu là bắt buộc"),
-    VALIDATION_OTP_REQUIRED("VAL_008", "Vui lòng nhập mã OTP"),
-
+    VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),
+    VALIDATION_NAME_TOO_LONG("VAL_002", "Họ tên không vượt quá 50 ký tự"),
+    VALIDATION_GENDER_REQUIRED("VAL_003", "Giới tính không được để trống"),
+    VALIDATION_EMAIL_REQUIRED("VAL_004", "Email không được để trống"),
+    VALIDATION_EMAIL_INVALID("VAL_005", "Email không hợp lệ"),
+    VALIDATION_PHONE_REQUIRED("VAL_006", "Số điện thoại không được để trống"),
+    VALIDATION_PHONE_TOO_LONG("VAL_007", "Số điện thoại không vượt quá 15 ký tự"),
+    VALIDATION_PHONE_INVALID("VAL_008", "Số điện thoại không hợp lệ"),
+    VALIDATION_BAOHIEM_REQUIRED("VAL_009", "Bảo hiểm không được để trống"),
+    VALIDATION_KHANCAP_REQUIRED("VAL_010", "Liên hệ khẩn cấp không được để trống"),
+    VALIDATION_KHANCAP_INVALID("VAL_011", "Số điện thoại liên hệ khẩn cấp không hợp lệ"),
+    VALIDATION_CHUCVU_REQUIRED("VAL_012", "Chức vụ không được để trống"),
+    VALIDATION_NGAY_TUYEN_REQUIRED("VAL_013", "Ngày tuyển dụng không được để trống"),
+    VALIDATION_NGAY_TUYEN_PAST("VAL_014", "Ngày tuyển dụng không được là ngày trong tương lai"),
+    VALIDATION_GHICHU_TOO_LONG("VAL_015", "Ghi chú không được vượt quá 250 ký tự"),
+    VALIDATION_TRANGTHAI_REQUIRED("VAL_016", "Trạng thái hoạt động không được để trống"),
+    VALIDATION_CHUYENKHOA_REQUIRED("VAL_017", "ID chuyên khoa không được để trống"),
+    VALIDATION_CHUNGCHI_REQUIRED("VAL_018", "Chứng chỉ không được để trống"),
+    VALIDATION_TRINHDO_REQUIRED("VAL_019", "Trình độ không được để trống"),
+    VALIDATION_KINHNGHIEM_REQUIRED("VAL_020", "Kinh nghiệm không được để trống"),
+    VALIDATION_KINHNGHIEM_POSITIVE("VAL_021", "Kinh nghiệm phải là số dương"),
+    VALIDATION_NGAYTUYEN_REQUIRED("VAL_022", "Ngày tuyển dụng không được để trống"),
+    VALIDATION_NGAYTUYEN_PAST("VAL_023", "Ngày tuyển dụng không được là ngày trong tương lai"),
+    VALIDATION_PASSWORD_REQUIRED("VAL_024", "Mật khẩu không được để trống"),
+    VALIDATION_CHUCVU_TOO_LONG("VAL_025", "Chức vụ không được vượt quá số ký tự cho phép"),
     // ===== SYSTEM =====
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),
     SERVICE_UNAVAILABLE("SYS_503", "Dịch vụ tạm thời không khả dụng");

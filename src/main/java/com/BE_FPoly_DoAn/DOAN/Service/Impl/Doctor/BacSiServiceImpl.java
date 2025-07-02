@@ -11,6 +11,7 @@ import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.PhanQuyenServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,13 +58,17 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
     public ServiceResponse<?> createNguoiDungAndBacSi(@Valid BacSiDTO bacSiDTO) {
         try {
             NguoiDung nguoiDung = NguoiDung.builder().hoTen(bacSiDTO.getHoTen())
-                    .email(bacSiDTO.getEmail()).soDienThoai(bacSiDTO.getSoDienThoai()).matKhau(bacSiDTO.getMatKhau())
+                    .email(bacSiDTO.getEmail()).soDienThoai(bacSiDTO.getSoDienThoai()).matKhau(new BCryptPasswordEncoder().encode(bacSiDTO.getMatKhau()))
                     .gioiTinh(bacSiDTO.getGioiTinh()).build();
             nguoiDungService.save(nguoiDung);
             BacSi bacSi = BacSi.builder().nguoiDung(nguoiDung).
                     chungChi(bacSiDTO.getChungChi()).trinhDo(bacSiDTO.getTrinhDo())
                     .chuyenKhoa(chuyenKhoaServiceImpl.getById(bacSiDTO.getChuyenKhoaId()).get())
-                    .kinhNghiem(bacSiDTO.getKinhNghiem()).build();
+                    .kinhNghiem(bacSiDTO.getKinhNghiem())
+                    .ngayTuyenDung(bacSiDTO.getNgayTuyenDung())
+                    .ghiChu(bacSiDTO.getGhiChu())
+                    .trangThaiHoatDong(bacSiDTO.getTrangThaiHoatDong())
+                    .build();
             bacSiRepository.save(bacSi);
             VaiTro vaiTro = vaiTroRepository.findById(1)
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));

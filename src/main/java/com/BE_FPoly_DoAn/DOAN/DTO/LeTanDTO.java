@@ -1,37 +1,45 @@
 package com.BE_FPoly_DoAn.DOAN.DTO;
+
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
-@Data
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class LeTanDTO {
-        @NotBlank(message = "Họ tên không được để trống")
+
+        @NotBlank(message = "VALIDATION_NAME_REQUIRED")
         private String hoTen;
 
-        @NotNull(message = "Giới tính không được để trống")
+        @NotNull(message = "VALIDATION_GENDER_REQUIRED")
         private Character gioiTinh;
 
-        @NotBlank(message = "Email không được để trống")
-        @Email(message = "Email không đúng định dạng")
+        @NotBlank(message = "VALIDATION_EMAIL_REQUIRED")
+        @Email(message = "VALIDATION_EMAIL_INVALID")
         private String email;
 
-        @NotBlank(message = "Số điện thoại không được để trống")
+        @NotBlank(message = "VALIDATION_PHONE_REQUIRED")
         private String soDienThoai;
 
-        @NotBlank(message = "Mật khẩu không được để trống")
+        @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
         private String matKhau;
 
-        @NotBlank(message = "Chức vụ không được để trống")
+        @NotBlank(message = "VALIDATION_CHUCVU_REQUIRED")
         private String chucVu;
 
-        @NotNull(message = "Ngày tuyển dụng không được để trống")
-        @PastOrPresent(message = "Ngày tuyển dụng không được là ngày trong tương lai")
+        @NotNull(message = "VALIDATION_NGAY_TUYEN_REQUIRED")
+        @PastOrPresent(message = "VALIDATION_NGAY_TUYEN_PAST")
         private LocalDate ngayTuyenDung;
 
-        @Size(max = 250, message = "Ghi chú không được vượt quá 250 ký tự")
+        @Size(max = 250, message = "VALIDATION_GHICHU_TOO_LONG")
         private String ghiChu;
 
-        @NotNull(message = "Trạng thái hoạt động không được để trống")
+        @NotNull(message = "VALIDATION_TRANGTHAI_REQUIRED")
         private Boolean trangThaiHoatDong;
-
 }

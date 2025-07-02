@@ -11,8 +11,10 @@ import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.PhanQuyenServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,12 +55,15 @@ public class QuanLyServiceImpl implements InterfaceService<QuanLy> {
     public ServiceResponse<?> createNguoiDungAndQuanLy(@Valid QuanLyDTO quanLyDTO) {
         try {
             NguoiDung nguoiDung = NguoiDung.builder().hoTen(quanLyDTO.getHoTen())
-                    .email(quanLyDTO.getEmail()).soDienThoai(quanLyDTO.getSoDienThoai()).matKhau(quanLyDTO.getMatKhau())
+                    .email(quanLyDTO.getEmail()).soDienThoai(quanLyDTO.getSoDienThoai()).matKhau(new BCryptPasswordEncoder().encode(quanLyDTO.getMatKhau()))
                     .gioiTinh(quanLyDTO.getGioiTinh()).build();
             nguoiDungService.save(nguoiDung);
-            QuanLy bacSi = QuanLy.builder().nguoiDung(nguoiDung)
-                    .chucVu(quanLyDTO.getChucVu()).ghiChu(quanLyDTO.getGhiChu()).build();
-            quanLyRepository.save(bacSi);
+            QuanLy quanLy = QuanLy.builder().nguoiDung(nguoiDung)
+                    .chucVu(quanLyDTO.getChucVu()).ghiChu(quanLyDTO.getGhiChu())
+                    .ngayTao(LocalDate.now())
+                    .ngayCapNhat(LocalDate.now())
+                    .build();
+            quanLyRepository.save(quanLy);
             VaiTro vaiTro = vaiTroRepository.findById(1)
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
 

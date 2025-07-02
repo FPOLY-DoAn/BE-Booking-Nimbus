@@ -1,5 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.DangKyBenhNhanDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
@@ -8,6 +10,7 @@ import com.BE_FPoly_DoAn.DOAN.Service.Impl.BlackListServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +18,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -73,14 +79,29 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> dangKi(@RequestBody NguoiDungDTO nguoiDungDTO) {
+    public ResponseEntity<?> dangKi(@Valid @RequestBody NguoiDungDTO nguoiDungDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(err -> {
+                        try {
+                            NotificationCode code = NotificationCode.valueOf(err.getDefaultMessage());
+                            return err.getField() + ": " + code.message();
+                        } catch (IllegalArgumentException ex) {
+                            return err.getField() + ": " + err.getDefaultMessage();
+                        }
+                    }).toList();
+            return ResponseEntity.badRequest().body(
+                    ServiceResponse.error(NotificationCode.VALIDATION_FAILED, errors)
+            );
+        }
+
         try {
             ServiceResponse<?> response = nguoiDungServicel.checkAccountRegister(nguoiDungDTO);
             if (!response.isSuccess()) {
-                return ResponseEntity.badRequest().body(ServiceResponse.error(NotificationCode.USER_EMAIL_EXISTS));
+                return ResponseEntity.badRequest().body(response);
             }
             nguoiDungServicel.sendCodeConfirm(nguoiDungDTO);
-            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
+            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.OTP));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ServiceResponse.error(NotificationCode.USER_REGISTER_FAIL));
@@ -88,18 +109,15 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/confirm_OTP")
-    public ResponseEntity<?> confirmOTP(@RequestParam String otp) {
+    public ResponseEntity<?> confirmOTP(@RequestParam String otp, @RequestBody DangKyBenhNhanDTO dto) {
         try {
-            int result = nguoiDungServicel.save(otp);
-
+            int result = nguoiDungServicel.save(otp, dto);
             return switch (result) {
                 case 1 -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
                 case -1 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(ServiceResponse.error(NotificationCode.OTP_INVALID));
                 case -2 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(ServiceResponse.error(NotificationCode.OTP_EXPIRED));
-                case 0 -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(ServiceResponse.error(NotificationCode.USER_REGISTER_FAIL));
                 default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(ServiceResponse.error(NotificationCode.SERVER_ERROR));
             };

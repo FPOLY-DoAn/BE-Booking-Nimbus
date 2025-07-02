@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -61,6 +62,7 @@ public class NguoiDung {
     private List<BacSi> bacSis;
 
     @OneToMany(mappedBy = "nguoiDung", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<BenhNhan> benhNhans;
 
     @OneToMany(mappedBy = "nguoiDungLapHoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

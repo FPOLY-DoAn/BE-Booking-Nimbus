@@ -1,17 +1,14 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,9 +16,11 @@ import java.util.List;
 @Entity
 @Table(name = "BENH_NHAN")
 @Getter
+@Builder
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BenhNhan {
 
     @Id
@@ -33,17 +32,15 @@ public class BenhNhan {
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     @NotNull(message = "Người dùng không được để trống")
     @Schema(hidden = true)
-    @JsonManagedReference
+    @JsonBackReference
     private NguoiDung nguoiDung;
 
     @Column(name = "bao_hiem", length = 25, columnDefinition = "NVARCHAR(25)")
-    @NotBlank(message = "Bảo hiểm không được để trống")
     @Schema(hidden = true)
     private String baoHiem;
 
     @Column(name = "lien_he_khan_cap", length = 50, columnDefinition = "NVARCHAR(50)")
-    @NotBlank(message = "Liên hệ khẩn cấp không được để trống")
-    @Pattern(regexp = "^\\+?[0-9\\-\\s]{7,15}$", message = "Số điện thoại không hợp lệ")
+    @Pattern(regexp = "^$|^Chưa cập nhật$|^\\+?[0-9\\-\\s]{7,15}$", message = "Số điện thoại không hợp lệ")
     @Schema(hidden = true)
     private String lienHeKhanCap;
 
