@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.DangKyBenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
@@ -10,8 +11,7 @@ import com.BE_FPoly_DoAn.DOAN.Entity.*;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.BE_FPoly_DoAn.DOAN.Utils.StringUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -151,21 +151,19 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         }
     }
 
-
     public Optional<NguoiDung> findByHoTen(String hoTen) {
         return nguoiDungRepository.findByHoTen(hoTen);
     }
+
     @Transactional
-    public int save(String otpCode) {
+    public int save(String otpCode, DangKyBenhNhanDTO dto) {
         try {
             Optional<OTP_NguoiDung> otpNguoiDungOpt = otpRepository.findByOtpCode(otpCode);
             if (otpNguoiDungOpt.isEmpty()) return -1;
 
             OTP_NguoiDung otpNguoiDung = otpNguoiDungOpt.get();
 
-            if (otpNguoiDung.getExpireAt().isBefore(LocalDateTime.now())) {
-                return -2;
-            }
+            if (otpNguoiDung.getExpireAt().isBefore(LocalDateTime.now())) return -2;
 
             NguoiDung nguoiDung = NguoiDung.builder()
                     .hoTen(otpNguoiDung.getHoTen())
@@ -174,24 +172,30 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
                     .soDienThoai(otpNguoiDung.getSoDienThoai())
                     .matKhau(new BCryptPasswordEncoder().encode(otpNguoiDung.getMatKhau()))
                     .build();
-
             nguoiDungRepository.save(nguoiDung);
 
             VaiTro vaiTro = vaiTroRepository.findById(2)
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
 
+            BenhNhan benhNhan = BenhNhan.builder()
+                    .nguoiDung(nguoiDung)
+                    .baoHiem(StringUtil.defaultIfBlank(dto.getBaoHiem(), "Chưa cập nhật"))
+                    .lienHeKhanCap(StringUtil.defaultIfBlank(dto.getLienHeKhanCap(), "Chưa cập nhật"))
+                    .ngayTao(LocalDate.now())
+                    .ngayCapNhat(LocalDate.now())
+                    .build();
+            benhNhanRepository.save(benhNhan);
+
             phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
 
             otpRepository.deleteAllByOtpCode(otpCode);
+
             return 1;
         } catch (Exception e) {
-            // Có thể log lỗi tại đây nếu cần
+            e.printStackTrace();
             return 0;
         }
     }
-
-
-
 
     public boolean sendCodeConfirm(NguoiDungDTO nguoiDung) {
         try {

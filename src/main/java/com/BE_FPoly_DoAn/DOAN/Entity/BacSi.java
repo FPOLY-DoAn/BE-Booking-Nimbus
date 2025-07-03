@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,6 +15,7 @@ import java.util.List;
 @Table(name = "BAC_SI")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BacSi {
@@ -26,7 +24,7 @@ public class BacSi {
     @Column(name = "bacsi_id", columnDefinition = "INT")
     private Integer bacSiId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     @NotNull(message = "Người dùng không được để trống")
     private NguoiDung nguoiDung;
@@ -48,6 +46,15 @@ public class BacSi {
     @NotNull(message = "Kinh nghiệm không được để trống")
     @Positive(message = "Kinh nghiệm phải là số dương")
     private Integer kinhNghiem;
+
+    @Column(name = "ngay_tuyen_dung")
+    private LocalDate ngayTuyenDung;
+
+    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(250)")
+    private String ghiChu;
+
+    @Column(name = "trang_thai_hoat_dong")
+    private Boolean trangThaiHoatDong;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", columnDefinition = "DATE", updatable = false)

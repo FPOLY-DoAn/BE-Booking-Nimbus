@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Table(name = "QUAN_LY")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuanLy {

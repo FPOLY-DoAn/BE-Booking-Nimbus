@@ -42,4 +42,11 @@ public class PhanQuyenServiceImpl implements InterfaceService<PhanQuyen> {
     public List<PhanQuyen> findByNguoiDung(NguoiDung nguoiDung){
         return phanQuyenRepository.findByNguoiDung(nguoiDung);
     }
+
+    public void deleteByNguoiDung(NguoiDung nguoiDung) {
+        List<PhanQuyen> list = phanQuyenRepository.findByNguoiDung(nguoiDung);
+        if (!list.isEmpty()) {
+            phanQuyenRepository.deleteAll(list);
+        }
+    }
 }
