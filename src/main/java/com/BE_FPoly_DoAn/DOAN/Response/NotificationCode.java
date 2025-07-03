@@ -25,6 +25,11 @@ public enum NotificationCode {
     AUTH_ACCESS_DENIED("AUTH_004", "Không có quyền truy cập chức năng này"),
     AUTH_LOGOUT_SUCCESS("AUTH_005", "Đăng xuất thành công"),
 
+    // ===== DOCTOR =====
+    DOCTOR_DELETE_SUCCESS("DOC_001", "Xóa bác sĩ thành công"),
+    DOCTOR_DELETE_FAIL("DOC_002", "Xóa bác sĩ thất bại"),
+    DOCTOR_NOT_FOUND("DOC_003", "Không tìm thấy bác sĩ"),
+
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
     VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),
