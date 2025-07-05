@@ -10,6 +10,7 @@ import com.BE_FPoly_DoAn.DOAN.Service.Impl.ChuyenKhoaServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.PhanQuyenServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,19 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
     }
 
     @Override
-    public void delete(BacSi id) {
-
+    @Transactional
+    public void delete(BacSi bacSi) {
+        if (bacSi == null) {
+            throw new IllegalArgumentException("Bác sĩ không được null");
+        }
+        if (bacSi.getLichKhams() == null || bacSi.getLichKhams().isEmpty()) {
+            NguoiDung nguoiDung = bacSi.getNguoiDung();
+            if (nguoiDung != null) {
+                phanQuyenServiceImpl.deleteByNguoiDung(nguoiDung);
+                nguoiDungService.delete(nguoiDung);
+            }
+        }
+        bacSiRepository.delete(bacSi);
     }
 
     public ServiceResponse<?> createNguoiDungAndBacSi(@Valid BacSiDTO bacSiDTO) {
