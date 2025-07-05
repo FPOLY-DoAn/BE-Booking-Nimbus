@@ -1,7 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.DangKyBenhNhanDTO;
-import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
@@ -109,9 +107,9 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/confirm_OTP")
-    public ResponseEntity<?> confirmOTP(@RequestParam String otp, @RequestBody DangKyBenhNhanDTO dto) {
+    public ResponseEntity<?> confirmOTP(@RequestParam String otp) {
         try {
-            int result = nguoiDungServicel.save(otp, dto);
+            int result = nguoiDungServicel.save(otp);
             return switch (result) {
                 case 1 -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
                 case -1 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
