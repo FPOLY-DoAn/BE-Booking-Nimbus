@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
+import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 
@@ -37,12 +39,20 @@ public class QuanLyRegisterController {
     public ResponseEntity<?> dangKiLeTan(@Valid @RequestBody LeTanDTO leTanDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream()
-                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                    .toList();
-            return ResponseEntity.badRequest().body(errors);
+                    .map(err -> {
+                        try {
+                            NotificationCode code = NotificationCode.valueOf(err.getDefaultMessage());
+                            return err.getField() + ": " + code.message();
+                        } catch (IllegalArgumentException ex) {
+                            return err.getField() + ": " + err.getDefaultMessage();
+                        }
+                    }).toList();
+            return ResponseEntity.badRequest().body(
+                    ServiceResponse.error(NotificationCode.VALIDATION_FAILED, errors)
+            );
         }
         leTanService.createNguoiDungAndLeTan(leTanDTO);
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
     }
 
     @PostMapping("/dangki/bacsi")
@@ -50,12 +60,20 @@ public class QuanLyRegisterController {
     public ResponseEntity<?> dangKiBacSi(@Valid @RequestBody BacSiDTO bacSiDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream()
-                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                    .toList();
-            return ResponseEntity.badRequest().body(errors);
+                    .map(err -> {
+                        try {
+                            NotificationCode code = NotificationCode.valueOf(err.getDefaultMessage());
+                            return err.getField() + ": " + code.message();
+                        } catch (IllegalArgumentException ex) {
+                            return err.getField() + ": " + err.getDefaultMessage();
+                        }
+                    }).toList();
+            return ResponseEntity.badRequest().body(
+                    ServiceResponse.error(NotificationCode.VALIDATION_FAILED, errors)
+            );
         }
         bacSiService.createNguoiDungAndBacSi(bacSiDTO);
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
     }
 
     @PostMapping("/dangki/quanly")
@@ -63,11 +81,19 @@ public class QuanLyRegisterController {
     public ResponseEntity<?> dangKiQuanLy(@Valid @RequestBody QuanLyDTO quanLyDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream()
-                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                    .toList();
-            return ResponseEntity.badRequest().body(errors);
+                    .map(err -> {
+                        try {
+                            NotificationCode code = NotificationCode.valueOf(err.getDefaultMessage());
+                            return err.getField() + ": " + code.message();
+                        } catch (IllegalArgumentException ex) {
+                            return err.getField() + ": " + err.getDefaultMessage();
+                        }
+                    }).toList();
+            return ResponseEntity.badRequest().body(
+                    ServiceResponse.error(NotificationCode.VALIDATION_FAILED, errors)
+            );
         }
         quanLyService.createNguoiDungAndQuanLy(quanLyDTO);
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
     }
 }

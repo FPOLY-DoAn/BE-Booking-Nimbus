@@ -1,53 +1,60 @@
 package com.BE_FPoly_DoAn.DOAN.DTO;
 
 import jakarta.validation.constraints.*;
-import lombok.Data;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDate;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class BacSiDTO {
 
     // ============ Thông tin người dùng chung ============
-    @NotBlank(message = "Họ tên không được để trống")
-    @Size(max = 50, message = "Họ tên không vượt quá 50 ký tự")
+
+    @NotBlank(message = "VALIDATION_NAME_REQUIRED")
+    @Size(max = 50, message = "VALIDATION_NAME_TOO_LONG")
     private String hoTen;
 
+    @NotNull(message = "VALIDATION_GENDER_REQUIRED")
     private Character gioiTinh;
 
-    @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không hợp lệ")
+    @NotBlank(message = "VALIDATION_EMAIL_REQUIRED")
+    @Email(message = "VALIDATION_EMAIL_INVALID")
     private String email;
 
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Size(max = 15, message = "Số điện thoại không vượt quá 15 ký tự")
+    @NotBlank(message = "VALIDATION_PHONE_REQUIRED")
+    @Size(max = 15, message = "VALIDATION_PHONE_TOO_LONG")
     private String soDienThoai;
 
-    @NotBlank(message = "Mật khẩu không được để trống")
+    @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
     private String matKhau;
 
     // ============ Thông tin riêng của bác sĩ ============
 
-    @NotNull(message = "ID chuyên khoa không được để trống")
+    @NotNull(message = "VALIDATION_CHUYENKHOA_REQUIRED")
     private Integer chuyenKhoaId;
 
-    @NotBlank(message = "Chứng chỉ không được để trống")
+    @NotBlank(message = "VALIDATION_CHUNGCHI_REQUIRED")
     private String chungChi;
 
-    @NotBlank(message = "Trình độ không được để trống")
+    @NotBlank(message = "VALIDATION_TRINHDO_REQUIRED")
     private String trinhDo;
 
-    @NotNull(message = "Kinh nghiệm không được để trống")
-    @Positive(message = "Kinh nghiệm phải là số dương")
+    @NotNull(message = "VALIDATION_KINHNGHIEM_REQUIRED")
+    @Positive(message = "VALIDATION_KINHNGHIEM_POSITIVE")
     private Integer kinhNghiem;
 
-    @NotNull(message = "Ngày tuyển dụng không được để trống")
-    @PastOrPresent(message = "Ngày tuyển dụng không được là ngày trong tương lai")
+    @NotNull(message = "VALIDATION_NGAYTUYEN_REQUIRED")
+    @PastOrPresent(message = "VALIDATION_NGAYTUYEN_PAST")
     private LocalDate ngayTuyenDung;
 
-    @Size(max = 250, message = "Ghi chú không vượt quá 250 ký tự")
+    @Size(max = 250, message = "VALIDATION_GHICHU_TOO_LONG")
     private String ghiChu;
 
-    @NotNull(message = "Trạng thái hoạt động không được để trống")
+    @NotNull(message = "VALIDATION_TRANGTHAI_REQUIRED")
     private Boolean trangThaiHoatDong;
 }
