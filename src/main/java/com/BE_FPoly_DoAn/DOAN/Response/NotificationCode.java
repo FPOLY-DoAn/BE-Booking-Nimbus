@@ -29,6 +29,13 @@ public enum NotificationCode {
     DOCTOR_DELETE_SUCCESS("DOC_001", "Xóa bác sĩ thành công"),
     DOCTOR_DELETE_FAIL("DOC_002", "Xóa bác sĩ thất bại"),
     DOCTOR_NOT_FOUND("DOC_003", "Không tìm thấy bác sĩ"),
+    CERTIFICATE_APPROVED("DOC_004", "Phê duyệt chứng chỉ thành công"),
+    CERTIFICATE_APPROVE_FAIL("DOC_005", "Phê duyệt chứng chỉ thất bại"),
+    CERTIFICATE_REJECTED("DOC_006", "Từ chối cập nhật chứng chỉ thành công"),
+    CERTIFICATE_REJECT_FAIL("DOC_007", "Từ chối cập nhật chứng chỉ thất bại"),
+    CERTIFICATE_REQUEST_SUBMITTED("DOC_008", "Gửi yêu cầu cập nhật chứng chỉ thành công"),
+    CERTIFICATE_REQUEST_FAIL("DOC_009", "Gửi yêu cầu cập nhật chứng chỉ thất bại"),
+    WAITING_LIST("DOC_010", "Hiển thị danh sách chờ duyệt thành công"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
@@ -57,6 +64,8 @@ public enum NotificationCode {
     VALIDATION_NGAYTUYEN_PAST("VAL_023", "Ngày tuyển dụng không được là ngày trong tương lai"),
     VALIDATION_PASSWORD_REQUIRED("VAL_024", "Mật khẩu không được để trống"),
     VALIDATION_CHUCVU_TOO_LONG("VAL_025", "Chức vụ không được vượt quá số ký tự cho phép"),
+    VALIDATION_DOCTOR_ID_REQUIRED("VAL_026", "ID bác sĩ không được để trống"),
+
     // ===== SYSTEM =====
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),
     SERVICE_UNAVAILABLE("SYS_503", "Dịch vụ tạm thời không khả dụng");
