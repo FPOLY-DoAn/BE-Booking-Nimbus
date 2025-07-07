@@ -23,10 +23,6 @@ public class DichVu {
     @Column(name = "dichvu_id", columnDefinition = "INT")
     private Integer dichVuId;
 
-    @ManyToOne
-    @JoinColumn(name = "benhan_id", referencedColumnName = "benhan_id", columnDefinition = "INT", nullable = false)
-    private BenhAn benhAn;
-
     @Column(name = "ten_dich_vu", length = 100, columnDefinition = "NVARCHAR(100)")
     @NotBlank(message = "Tên dịch vụ không được để trống")
     private String tenDichVu;

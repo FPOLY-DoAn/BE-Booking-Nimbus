@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.DTO.Doctor;
+package com.BE_FPoly_DoAn.DOAN.DTO.BacSi;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-public class CertificateRequestResponseDto {
+public class DuyetChungChiDto {
     private Integer id;
     private String doctorName;
     private String doctorEmail;

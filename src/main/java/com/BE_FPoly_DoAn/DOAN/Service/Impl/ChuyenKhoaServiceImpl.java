@@ -28,14 +28,12 @@ public class ChuyenKhoaServiceImpl implements InterfaceService<ChuyenKhoa> {
     }
 
     @Override
-    public ChuyenKhoa save(ChuyenKhoa ChuyenKhoa) {
-        return chuyenKhoaRepository.save(ChuyenKhoa);
+    public ChuyenKhoa save(ChuyenKhoa chuyenKhoa) {
+        return chuyenKhoaRepository.save(chuyenKhoa);
     }
 
     @Override
     public void delete(ChuyenKhoa chuyenKhoa) {
-        chuyenKhoaRepository.findById(chuyenKhoa.getChuyenKhoaId()).ifPresent(chuyenKhoaRepository::delete);
+        chuyenKhoaRepository.deleteById(chuyenKhoa.getChuyenKhoaId());
     }
-
-
 }

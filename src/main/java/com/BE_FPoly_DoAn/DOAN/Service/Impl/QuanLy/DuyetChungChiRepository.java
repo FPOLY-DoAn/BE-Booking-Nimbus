@@ -1,11 +1,9 @@
-package com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor;
+package com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.CertificateRequestResponseDto;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.DuyetChungChiDto;
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
-import com.BE_FPoly_DoAn.DOAN.Dao.CertificateUpdateRequestRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
-import com.BE_FPoly_DoAn.DOAN.Entity.CertificateUpdateRequest;
-import com.BE_FPoly_DoAn.DOAN.Service.Doctor.CertificateUpdateRequestService;
+import com.BE_FPoly_DoAn.DOAN.Entity.DuyetChungChi;
 import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 import java.util.List;
@@ -13,29 +11,29 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CertificateUpdateRequestServiceImpl implements CertificateUpdateRequestService {
+public class DuyetChungChiRepository implements com.BE_FPoly_DoAn.DOAN.Dao.DuyetChungChiRepository {
 
-    private final CertificateUpdateRequestRepository requestRepo;
+    private final com.BE_FPoly_DoAn.DOAN.Dao.YeuCauChungChiRepository requestRepo;
     private final BacSiRepository bacSiRepo;
 
-    public CertificateUpdateRequestServiceImpl(CertificateUpdateRequestRepository requestRepo,
-                                               BacSiRepository bacSiRepo) {
+    public DuyetChungChiRepository(com.BE_FPoly_DoAn.DOAN.Dao.YeuCauChungChiRepository requestRepo,
+                                   BacSiRepository bacSiRepo) {
         this.requestRepo = requestRepo;
         this.bacSiRepo = bacSiRepo;
     }
 
     @Override
     public boolean approveRequest(Integer requestId) {
-        Optional<CertificateUpdateRequest> opt = requestRepo.findById(requestId);
+        Optional<DuyetChungChi> opt = requestRepo.findById(requestId);
         if (opt.isEmpty()) return false;
 
-        CertificateUpdateRequest req = opt.get();
-        if (req.getStatus() != CertificateUpdateRequest.Status.PENDING) return false;
+        DuyetChungChi req = opt.get();
+        if (req.getStatus() != DuyetChungChi.Status.PENDING) return false;
 
         BacSi doctor = req.getBacSi();
         doctor.setChungChi(req.getNewCertificate());
 
-        req.setStatus(CertificateUpdateRequest.Status.APPROVED);
+        req.setStatus(DuyetChungChi.Status.APPROVED);
         req.setApprovedAt(LocalDateTime.now());
 
         bacSiRepo.save(doctor);
@@ -45,13 +43,13 @@ public class CertificateUpdateRequestServiceImpl implements CertificateUpdateReq
 
     @Override
     public boolean rejectRequest(Integer requestId, String reason) {
-        Optional<CertificateUpdateRequest> opt = requestRepo.findById(requestId);
+        Optional<DuyetChungChi> opt = requestRepo.findById(requestId);
         if (opt.isEmpty()) return false;
 
-        CertificateUpdateRequest req = opt.get();
-        if (req.getStatus() != CertificateUpdateRequest.Status.PENDING) return false;
+        DuyetChungChi req = opt.get();
+        if (req.getStatus() != DuyetChungChi.Status.PENDING) return false;
 
-        req.setStatus(CertificateUpdateRequest.Status.REJECTED);
+        req.setStatus(DuyetChungChi.Status.REJECTED);
         req.setReason(reason);
         requestRepo.save(req);
         return true;
@@ -62,21 +60,21 @@ public class CertificateUpdateRequestServiceImpl implements CertificateUpdateReq
         Optional<BacSi> doctor = bacSiRepo.findByNguoiDung_Email(email);
         if (doctor.isEmpty()) return false;
 
-        CertificateUpdateRequest request = new CertificateUpdateRequest();
+        DuyetChungChi request = new DuyetChungChi();
         request.setBacSi(doctor.get());
         request.setNewCertificate(newCertificate);
         request.setReason(reason);
-        request.setStatus(CertificateUpdateRequest.Status.PENDING);
+        request.setStatus(DuyetChungChi.Status.PENDING);
         request.setRequestedAt(LocalDateTime.now());
 
         requestRepo.save(request);
         return true;
     }
 
-    public List<CertificateRequestResponseDto> getPendingRequests() {
-        return requestRepo.findByStatus(CertificateUpdateRequest.Status.PENDING)
+    public List<DuyetChungChiDto> getPendingRequests() {
+        return requestRepo.findByStatus(DuyetChungChi.Status.PENDING)
                 .stream()
-                .map(req -> CertificateRequestResponseDto.builder()
+                .map(req -> DuyetChungChiDto.builder()
                         .id(req.getId())
                         .doctorName(req.getBacSi().getNguoiDung().getHoTen())
                         .doctorEmail(req.getBacSi().getNguoiDung().getEmail())

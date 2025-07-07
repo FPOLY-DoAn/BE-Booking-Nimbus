@@ -1,9 +1,9 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.Doctor.CertificateRequestDto;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.YeuCauChungChiDto;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor.CertificateUpdateRequestServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Dao.DuyetChungChiRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/certificate-requests")
-public class CertificateApprovalController {
+public class DuyetChungChiController {
 
-    private final CertificateUpdateRequestServiceImpl service;
+    private final DuyetChungChiRepository service;
 
-    public CertificateApprovalController(CertificateUpdateRequestServiceImpl service) {
+    public DuyetChungChiController(DuyetChungChiRepository service) {
         this.service = service;
     }
 
@@ -57,7 +57,7 @@ public class CertificateApprovalController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_BACSI')")
-    public ResponseEntity<?> submitRequest(@RequestBody @Valid CertificateRequestDto dto) {
+    public ResponseEntity<?> submitRequest(@RequestBody @Valid YeuCauChungChiDto dto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean success = service.submitRequest(email, dto.getNewCertificate(), dto.getReason());
 

@@ -44,6 +44,7 @@ build/
 # ========================
 # SENSITIVE FILES
 # ========================
+db/
 .env
 src/main/resources/application.properties
 

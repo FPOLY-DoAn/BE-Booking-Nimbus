@@ -37,6 +37,17 @@ public enum NotificationCode {
     CERTIFICATE_REQUEST_FAIL("DOC_009", "Gửi yêu cầu cập nhật chứng chỉ thất bại"),
     WAITING_LIST("DOC_010", "Hiển thị danh sách chờ duyệt thành công"),
 
+    // ===== SERVICE (DỊCH VỤ) =====
+    SERVICE_CREATE_SUCCESS("SVC_001", "Tạo dịch vụ thành công"),
+    SERVICE_CREATE_FAIL   ("SVC_002", "Tạo dịch vụ thất bại"),
+    SERVICE_UPDATE_SUCCESS("SVC_003", "Cập nhật dịch vụ thành công"),
+    SERVICE_UPDATE_FAIL   ("SVC_004", "Cập nhật dịch vụ thất bại"),
+    SERVICE_DELETE_SUCCESS("SVC_005", "Xóa dịch vụ thành công"),
+    SERVICE_DELETE_FAIL   ("SVC_006", "Xóa dịch vụ thất bại"),
+    SERVICE_NOT_FOUND     ("SVC_007", "Không tìm thấy dịch vụ"),
+    SERVICE_LIST("SVC_008", "Hiển thị danh sách dịch vụ thành công"),
+    SERVICE_ID("SVC_009", "Hiển thị dịch vụ thành công"),
+
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
     VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),

@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor;
+package com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSiDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;

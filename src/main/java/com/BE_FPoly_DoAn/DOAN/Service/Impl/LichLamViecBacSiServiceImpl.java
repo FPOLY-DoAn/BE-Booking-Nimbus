@@ -8,34 +8,32 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("lichLamViecCrudService") // để phân biệt với service nghiệp vụ
 public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViecBacSi> {
 
-    private final LichLamViecBacSiRepository lichLamViecBacSiRepository;
+    private final LichLamViecBacSiRepository repository;
 
-    public LichLamViecBacSiServiceImpl(LichLamViecBacSiRepository lichLamViecBacSiRepository) {
-        this.lichLamViecBacSiRepository = lichLamViecBacSiRepository;
+    public LichLamViecBacSiServiceImpl(LichLamViecBacSiRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public List<LichLamViecBacSi> getAll() {
-        return lichLamViecBacSiRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public Optional<LichLamViecBacSi> getById(Integer id) {
-        return lichLamViecBacSiRepository.findById(id);
+        return repository.findById(id);
     }
 
     @Override
-    public LichLamViecBacSi save(LichLamViecBacSi lichLamViecBacSi) {
-        return lichLamViecBacSiRepository.save(lichLamViecBacSi);
+    public LichLamViecBacSi save(LichLamViecBacSi entity) {
+        return repository.save(entity);
     }
 
     @Override
-    public void delete(LichLamViecBacSi id) {
-
+    public void delete(LichLamViecBacSi entity) {
+        repository.delete(entity);
     }
-
-
 }

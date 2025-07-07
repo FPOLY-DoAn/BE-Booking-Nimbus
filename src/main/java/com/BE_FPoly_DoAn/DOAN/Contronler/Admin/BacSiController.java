@@ -7,7 +7,7 @@ import com.BE_FPoly_DoAn.DOAN.Entity.ChuyenKhoa;
 import com.BE_FPoly_DoAn.DOAN.Mapper.BacSiMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor.BacSiServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi.BacSiServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bac-si")
-public class DoctorController {
+public class BacSiController {
 
     private final BacSiServiceImpl bacSiService;
     private final ChuyenKhoaRepository chuyenKhoaRepository;
 
-    public DoctorController(BacSiServiceImpl bacSiService,
+    public BacSiController(BacSiServiceImpl bacSiService,
                             ChuyenKhoaRepository chuyenKhoaRepository) {
         this.bacSiService = bacSiService;
         this.chuyenKhoaRepository = chuyenKhoaRepository;

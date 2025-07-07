@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CertificateUpdateRequest {
+public class DuyetChungChi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

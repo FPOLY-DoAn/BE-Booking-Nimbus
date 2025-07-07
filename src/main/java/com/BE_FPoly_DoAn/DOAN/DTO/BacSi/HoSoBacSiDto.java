@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.DTO.Doctor;
+package com.BE_FPoly_DoAn.DOAN.DTO.BacSi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DoctorProfileDto {
+public class HoSoBacSiDto {
     private String chungChi;
     private String trinhDo;
     private Integer kinhNghiem;

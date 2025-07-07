@@ -1,9 +1,9 @@
-package com.BE_FPoly_DoAn.DOAN.Contronler.QuanLy;
+package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSiDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.LeTanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.QuanLyDTO;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.Doctor.BacSiServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi.BacSiServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LeTan.LeTanServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy.QuanLyServiceImpl;
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 
