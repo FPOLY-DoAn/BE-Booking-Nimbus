@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -50,6 +51,12 @@ public class LichKham {
 
     @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
     private String ghiChu;
+
+    @Column(name = "ngay_kham")
+    private LocalDate ngayKham;
+
+    @Column(name = "ca_kham")
+    private String caKham;
 
     @CreationTimestamp
     @Column(name = "ngay_tao", columnDefinition = "DATETIME", nullable = false, updatable = false)

@@ -48,6 +48,17 @@ public enum NotificationCode {
     SERVICE_LIST("SVC_008", "Hiển thị danh sách dịch vụ thành công"),
     SERVICE_ID("SVC_009", "Hiển thị dịch vụ thành công"),
 
+    // ===== DON NGHI PHEP =====
+    DON_INVALID_DATE("DON_001", "Ngày bắt đầu không được sau ngày kết thúc"),
+    DON_IN_PAST("DON_002", "Không thể đăng ký nghỉ với ngày bắt đầu trong quá khứ"),
+    DON_CONFLICT("DON_003", "Lịch nghỉ bị trùng với lịch làm việc đã đăng ký"),
+    DON_REGISTER_SUCCESS("DON_004", "Đăng ký nghỉ phép thành công"),
+    DON_REGISTER_FAIL("DON_101", "Đăng ký nghỉ phép thất bại"),
+    DON_OVERLAP("DON_102", "Lịch nghỉ bị trùng với lịch làm việc"),
+    DON_NOT_FOUND("DON103", "Không tìm thấy bất kì đơn nghỉ phép nào"),
+    DON_APPROVED_SUCCESS("DON104", "Duyệt đơn nghỉ phép thành công"),
+    DON_ALREADY_PROCESSED("DON105", "Đơn đã được xử lý"),
+    DON_REJECTED_SUCCESS("DON106", "Đơn đã bị từ chối"),
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
     VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),
@@ -76,6 +87,8 @@ public enum NotificationCode {
     VALIDATION_PASSWORD_REQUIRED("VAL_024", "Mật khẩu không được để trống"),
     VALIDATION_CHUCVU_TOO_LONG("VAL_025", "Chức vụ không được vượt quá số ký tự cho phép"),
     VALIDATION_DOCTOR_ID_REQUIRED("VAL_026", "ID bác sĩ không được để trống"),
+    VALIDATION_REJECT_REASON_REQUIRED("VAL_027", "Lý do từ chối không được để trống"),
+    INVALID_TRANG_THAI("VAL_028", "Trạng thái không hợp lệ"),
 
     // ===== SYSTEM =====
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),

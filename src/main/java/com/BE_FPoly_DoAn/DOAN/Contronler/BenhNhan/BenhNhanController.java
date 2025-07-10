@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("nguoi_dung")
+@RequestMapping("api/nguoi_dung")
 public class BenhNhanController {
 
     private NguoiDungServiceImpl nguoiDungService;
@@ -20,7 +20,6 @@ public class BenhNhanController {
     @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
     @GetMapping("infor/{benhNhanId}")
     public ResponseEntity<?> getNguoiDung(@PathVariable Integer benhNhanId) {
-        System.out.println("id"+ benhNhanId);
         Optional<NguoiDung> nguoiDung = nguoiDungService.getById(benhNhanId);
 
         if (nguoiDung.isPresent()) {
