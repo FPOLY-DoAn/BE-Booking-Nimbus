@@ -1,6 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDto;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.LichLamViecBacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichLamViecBacSi;
@@ -8,7 +8,7 @@ import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.stereotype.Service;
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDto;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
 import com.BE_FPoly_DoAn.DOAN.Mapper.LichLamViecMapper;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
         repository.delete(entity);
     }
 
-    public ServiceResponse<?> dangKyNghi(Integer bacSiId, LichLamViecDto dto) {
+    public ServiceResponse<?> dangKyNghi(Integer bacSiId, LichLamViecDTO dto) {
         try {
             LichLamViecBacSi entity = new LichLamViecBacSi();
             entity.setBacSi(BacSi.builder().bacSiId(bacSiId).build());
@@ -58,7 +58,7 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
 
     public ServiceResponse<?> getLichLamViecByBacSi(Integer bacSiId) {
         try {
-            List<LichLamViecResponseDto> list = repository.findByBacSi_BacSiId(bacSiId)
+            List<LichLamViecResponseDTO> list = repository.findByBacSi_BacSiId(bacSiId)
                     .stream()
                     .map(LichLamViecMapper::toDto)
                     .toList();
@@ -69,7 +69,7 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
         }
     }
 
-    public ServiceResponse<?> suaLichLamViec(Integer lichId, LichLamViecDto dto) {
+    public ServiceResponse<?> suaLichLamViec(Integer lichId, LichLamViecDTO dto) {
         Optional<LichLamViecBacSi> optional = repository.findById(lichId);
         if (optional.isEmpty()) {
             return ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND);

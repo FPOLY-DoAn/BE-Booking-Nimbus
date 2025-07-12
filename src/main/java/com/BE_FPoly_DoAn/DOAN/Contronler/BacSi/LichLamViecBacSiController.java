@@ -1,7 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BacSi;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDto;
-import com.BE_FPoly_DoAn.DOAN.Entity.LichLamViecBacSi;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichLamViecBacSiServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

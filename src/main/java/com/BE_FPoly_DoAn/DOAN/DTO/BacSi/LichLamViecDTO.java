@@ -1,15 +1,15 @@
 package com.BE_FPoly_DoAn.DOAN.DTO.BacSi;
 
 import lombok.*;
+
 import java.time.LocalDate;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class LichLamViecResponseDto {
-    private Integer lichId;
+public class LichLamViecDTO {
     private LocalDate ngay;
     private String caTruc;
     private String lyDoNghi;

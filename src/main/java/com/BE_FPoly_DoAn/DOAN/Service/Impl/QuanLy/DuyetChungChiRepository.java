@@ -1,6 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.DuyetChungChiDto;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.DuyetChungChiDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Entity.DuyetChungChi;
@@ -71,10 +71,10 @@ public class DuyetChungChiRepository implements com.BE_FPoly_DoAn.DOAN.Dao.Duyet
         return true;
     }
 
-    public List<DuyetChungChiDto> getPendingRequests() {
+    public List<DuyetChungChiDTO> getPendingRequests() {
         return requestRepo.findByStatus(DuyetChungChi.Status.PENDING)
                 .stream()
-                .map(req -> DuyetChungChiDto.builder()
+                .map(req -> DuyetChungChiDTO.builder()
                         .id(req.getId())
                         .doctorName(req.getBacSi().getNguoiDung().getHoTen())
                         .doctorEmail(req.getBacSi().getNguoiDung().getEmail())

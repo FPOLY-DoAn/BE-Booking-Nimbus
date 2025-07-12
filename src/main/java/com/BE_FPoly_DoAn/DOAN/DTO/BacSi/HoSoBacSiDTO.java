@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class HoSoBacSiDto {
+public class HoSoBacSiDTO {
     private String chungChi;
     private String trinhDo;
     private Integer kinhNghiem;

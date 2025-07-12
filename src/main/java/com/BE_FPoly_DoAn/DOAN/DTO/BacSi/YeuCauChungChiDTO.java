@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class YeuCauChungChiDto {
+public class YeuCauChungChiDTO {
 
     @NotBlank(message = "VALIDATION_CHUNGCHI_REQUIRED")
     private String newCertificate;

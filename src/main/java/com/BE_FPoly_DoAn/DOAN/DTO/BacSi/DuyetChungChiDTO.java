@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-public class DuyetChungChiDto {
+public class DuyetChungChiDTO {
     private Integer id;
     private String doctorName;
     private String doctorEmail;

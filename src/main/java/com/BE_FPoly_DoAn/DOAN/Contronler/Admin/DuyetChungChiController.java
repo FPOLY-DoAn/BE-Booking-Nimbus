@@ -1,6 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.YeuCauChungChiDto;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.YeuCauChungChiDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Dao.DuyetChungChiRepository;
@@ -57,7 +57,7 @@ public class DuyetChungChiController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_BACSI')")
-    public ResponseEntity<?> submitRequest(@RequestBody @Valid YeuCauChungChiDto dto) {
+    public ResponseEntity<?> submitRequest(@RequestBody @Valid YeuCauChungChiDTO dto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean success = service.submitRequest(email, dto.getNewCertificate(), dto.getReason());
 
