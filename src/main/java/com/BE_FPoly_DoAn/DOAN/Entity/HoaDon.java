@@ -2,10 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -53,4 +50,12 @@ public class HoaDon {
 
     @OneToMany(mappedBy = "hoaDon", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<ThanhToan> thanhToans;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "trang_thai", length = 20, columnDefinition = "VARCHAR(20)")
+    private TrangThaiHoaDon trangThai;
+
+    public enum TrangThaiHoaDon {
+        CHUA_THANH_TOAN, DA_THANH_TOAN, HUY
+    }
 }

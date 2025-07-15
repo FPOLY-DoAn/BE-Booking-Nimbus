@@ -115,7 +115,6 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
 
             BenhNhan benhNhan = optionalBenhNhan.get();
 
-            // Cập nhật NguoiDung nếu có field nào khác null
             if (benhNhanDTO.getEmail() != null) {
                 nguoiDung.setEmail(benhNhanDTO.getEmail());
             }
@@ -143,7 +142,7 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             return Optional.of(nguoiDung);
 
         } catch (Exception e) {
-            e.printStackTrace(); // Log ra lỗi cho dễ debug
+            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -234,4 +233,62 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         return ServiceResponse.success();
     }
 
+    public ServiceResponse<?> getCurrentUserInfo(Integer nguoiDungId) {
+        return nguoiDungRepository.findById(nguoiDungId)
+                .map(user -> {
+                    NguoiDungDTO dto = new NguoiDungDTO(
+                            user.getHoTen(),
+                            user.getGioiTinh(),
+                            user.getEmail(),
+                            user.getSoDienThoai(),
+                            user.getMatKhau()
+//                            ,
+//                            null,
+//                            null
+                    );
+                    return ServiceResponse.success(NotificationCode.USER_INFO, dto);
+                })
+                .orElse(ServiceResponse.error(NotificationCode.USER_NOT_FOUND));
+    }
+
+    @Transactional
+    public ServiceResponse<?> updateCurrentUserInfo(Integer nguoiDungId, NguoiDungDTO dto) {
+        Optional<NguoiDung> optional = nguoiDungRepository.findById(nguoiDungId);
+        if (optional.isEmpty()) {
+            return ServiceResponse.error(NotificationCode.USER_NOT_FOUND);
+        }
+
+        NguoiDung user = optional.get();
+        user.setHoTen(dto.getHoTen());
+        user.setGioiTinh(dto.getGioiTinh());
+        user.setSoDienThoai(dto.getSoDienThoai());
+        user.setEmail(dto.getEmail());
+        nguoiDungRepository.save(user);
+
+        return ServiceResponse.success(NotificationCode.USER_UPDATE_SUCCESS);
+    }
+
+    @Transactional
+    public ServiceResponse<?> changePassword(Integer nguoiDungId, String oldPassword, String newPassword) {
+        Optional<NguoiDung> optional = nguoiDungRepository.findById(nguoiDungId);
+        if (optional.isEmpty()) {
+            return ServiceResponse.error(NotificationCode.USER_NOT_FOUND);
+        }
+
+        NguoiDung user = optional.get();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (!encoder.matches(oldPassword, user.getMatKhau())) {
+            return ServiceResponse.error(NotificationCode.PASSWORD_INCORRECT);
+        }
+
+        user.setMatKhau(encoder.encode(newPassword));
+        nguoiDungRepository.save(user);
+        return ServiceResponse.success(NotificationCode.PASSWORD_CHANGE_SUCCESS);
+    }
+
+
+    public Optional<NguoiDung> getByEmailOptional(String email) {
+        return nguoiDungRepository.findByEmail(email);
+    }
 }

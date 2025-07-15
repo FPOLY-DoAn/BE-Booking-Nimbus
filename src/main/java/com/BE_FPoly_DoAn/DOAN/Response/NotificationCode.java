@@ -11,6 +11,11 @@ public enum NotificationCode {
     USER_NOT_FOUND("USR_007", "Người dùng không tồn tại"),
     USER_UPDATE_SUCCESS("USR_008", "Cập nhật thông tin người dùng thành công"),
     USER_UPDATE_FAIL("USR_009", "Cập nhật thông tin người dùng thất bại"),
+    PASSWORD_INCORRECT("USR_010", "Mật khẩu khng chính xác"),
+    PASSWORD_CHANGE_SUCCESS("USR_011", "Thay đổi mật khẩu thành công"),
+    USER_INFO("USR_012", "Hiển thị thông tin người dùng thành công"),
+    USER_OLD_PASSWORD_INVALID("USR_013", "Mật khẩu cũ không đúng"),
+    USER_PASSWORD_CHANGE_SUCCESS("USR_014", "Thay đổi mật khẩu thành công"),
 
     // ===== OTP =====
     OTP("OTP_000", "Mã OTP đã gửi tới email của bạn"),
@@ -25,7 +30,7 @@ public enum NotificationCode {
     AUTH_ACCESS_DENIED("AUTH_004", "Không có quyền truy cập chức năng này"),
     AUTH_LOGOUT_SUCCESS("AUTH_005", "Đăng xuất thành công"),
 
-    // ===== DOCTOR =====
+    // ===== BACSI =====
     DOCTOR_DELETE_SUCCESS("DOC_001", "Xóa bác sĩ thành công"),
     DOCTOR_DELETE_FAIL("DOC_002", "Xóa bác sĩ thất bại"),
     DOCTOR_NOT_FOUND("DOC_003", "Không tìm thấy bác sĩ"),
@@ -37,7 +42,7 @@ public enum NotificationCode {
     CERTIFICATE_REQUEST_FAIL("DOC_009", "Gửi yêu cầu cập nhật chứng chỉ thất bại"),
     WAITING_LIST("DOC_010", "Hiển thị danh sách chờ duyệt thành công"),
 
-    // ===== SERVICE (DỊCH VỤ) =====
+    // ===== DỊCH VỤ =====
     SERVICE_CREATE_SUCCESS("SVC_001", "Tạo dịch vụ thành công"),
     SERVICE_CREATE_FAIL   ("SVC_002", "Tạo dịch vụ thất bại"),
     SERVICE_UPDATE_SUCCESS("SVC_003", "Cập nhật dịch vụ thành công"),
@@ -59,6 +64,53 @@ public enum NotificationCode {
     DON_APPROVED_SUCCESS("DON104", "Duyệt đơn nghỉ phép thành công"),
     DON_ALREADY_PROCESSED("DON105", "Đơn đã được xử lý"),
     DON_REJECTED_SUCCESS("DON106", "Đơn đã bị từ chối"),
+
+    // ===== BỆNH NHÂN =====
+    PATIENT_CREATE_SUCCESS("PAT_001", "Tạo bệnh nhân thành công"),
+    PATIENT_CREATE_FAIL("PAT_002", "Tạo bệnh nhân thất bại"),
+    PATIENT_UPDATE_SUCCESS("PAT_003", "Cập nhật bệnh nhân thành công"),
+    PATIENT_UPDATE_FAIL("PAT_004", "Cập nhật bệnh nhân thất bại"),
+    PATIENT_DELETE_SUCCESS("PAT_005", "Xóa bệnh nhân thành công"),
+    PATIENT_DELETE_FAIL("PAT_006", "Xóa bệnh nhân thất bại"),
+    PATIENT_LIST_SUCCESS("PAT_007", "Lấy danh sách bệnh nhân thành công"),
+    PATIENT_DETAIL_SUCCESS("PAT_008", "Lấy chi tiết bệnh nhân thành công"),
+    PATIENT_NOT_FOUND("PAT_009", "Không tìm thấy bệnh nhân"),
+
+    // ===== BỆNH ÁN =====
+    MEDICAL_RECORD_UPDATE_SUCCESS("MED_002", "Cập nhật bệnh án thành công"),
+    MEDICAL_RECORD_UPDATE_FAIL("MED_003", "Cập nhật bệnh án thất bại"),
+    MEDICAL_RECORD_LIST("MED_004", "Lấy danh sách bệnh án thành công"),
+    MEDICAL_RECORD_DETAIL("MED_005", "Chi tiết bệnh án"),
+    MEDICAL_RECORD_NOT_FOUND("MED_006", "Không tìm thấy bệnh án"),
+    MEDICAL_RECORD_DELETE_SUCCESS("MED_007", "Xóa bệnh án thành công"),
+    MEDICAL_RECORD_DELETE_FAIL("MED_008", "Xóa bệnh án thất bại"),
+    MEDICAL_RECORD_DETAIL_SUCCESS("MR_009", "Hiển thị chi tiết hồ sơ bệnh án thành công"),
+
+    // ==== THANH TOAN =====
+    PAYMENT_SUCCESS("PAY_001", "Thanh toán thành công"),
+    PAYMENT_FAIL("PAY_002", "Thanh toán thất bại"),
+    PAYMENT_LIST("PAY_003", "Hiển thị danh sách thanh toán thành công"),
+    PAYMENT_DETAIL("PAY_004", "Hiển thị chi tiết thanh toán thành công"),
+    PAYMENT_NOT_FOUND("PAY_005", "Không tìm thấy thông tin thanh toán"),
+    PAYMENT_INVALID("PAY_006", "Thông tin thanh toán không hợp lệ"),
+    PAYMENT_UNAUTHORIZED("PAY_007", "Không có quyền thanh toán"),
+    PAYMENT_DUPLICATE("PAY_008", "Giao dịch đã được thanh toán"),
+    PAYMENT_EMAIL_SENT("PAY_009", "Đã gửi email xác nhận thanh toán thành công"),
+    PAYMENT_EMAIL_FAIL("PAY_010", "Gửi email xác nhận thanh toán thất bại"),
+
+    // ===== LỊCH KHÁM =====
+    APPOINTMENT_CREATE_SUCCESS("APP_001", "Tạo lịch khám thành công"),
+    APPOINTMENT_CREATE_FAIL("APP_002", "Tạo lịch khám thất bại"),
+    APPOINTMENT_UPDATE_SUCCESS("APP_003", "Cập nhật lịch khám thành công"),
+    APPOINTMENT_UPDATE_FAIL("APP_004", "Cập nhật lịch khám thất bại"),
+    APPOINTMENT_DELETE_SUCCESS("APP_005", "Xóa lịch khám thành công"),
+    APPOINTMENT_DELETE_FAIL("APP_006", "Xóa lịch khám thất bại"),
+    APPOINTMENT_LIST_SUCCESS("APP_007", "Lấy danh sách lịch khám thành công"),
+    APPOINTMENT_DETAIL_SUCCESS("APP_008", "Lấy chi tiết lịch khám thành công"),
+    APPOINTMENT_NOT_FOUND("APP_009", "Không tìm thấy lịch khám"),
+    APPOINTMENT_DUPLICATE("APP_010", "Lịch khám bị trùng"),
+    APPOINTMENT_STATUS_INVALID("APP_011", "Trạng thái lịch khám không hợp lệ"),
+
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
     VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),

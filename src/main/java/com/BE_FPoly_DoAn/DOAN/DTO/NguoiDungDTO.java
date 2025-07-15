@@ -26,10 +26,9 @@ public class NguoiDungDTO {
     @Size(max = 15, message = "VALIDATION_PHONE_TOO_LONG")
     private String soDienThoai;
 
-    @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
     private String matKhau;
 
-    private String baoHiem;
-
-    private String lienHeKhanCap;
+//    private String baoHiem;
+//
+//    private String lienHeKhanCap;
 }

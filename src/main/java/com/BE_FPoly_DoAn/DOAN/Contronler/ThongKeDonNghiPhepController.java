@@ -1,7 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.ThongKeDonNghiPhepService;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.ThongKeDonNghiPhepService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

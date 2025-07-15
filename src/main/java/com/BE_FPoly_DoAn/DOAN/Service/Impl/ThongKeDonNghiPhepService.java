@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Service;
+package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.ThongKeNgayNghiDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;

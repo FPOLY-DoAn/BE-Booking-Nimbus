@@ -1,48 +1,78 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
+import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.BenhNhan;
-import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
+import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
+import com.BE_FPoly_DoAn.DOAN.Mapper.BenhNhanMapper;
+import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
+import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class BenhNhanServiceImpl implements InterfaceService<BenhNhan> {
+@RequiredArgsConstructor
+public class BenhNhanServiceImpl {
 
-    private final BenhNhanRepository benhNhanRepository;
+    private final BenhNhanRepository benhNhanRepo;
+    private final NguoiDungRepository nguoiDungRepo;
 
-    public BenhNhanServiceImpl(BenhNhanRepository benhNhanRepository) {
-        this.benhNhanRepository = benhNhanRepository;
+    @Transactional
+    public ServiceResponse<?> create(Integer nguoiDungId, BenhNhanDTO dto) {
+        try {
+            NguoiDung nguoiDung = nguoiDungRepo.findById(nguoiDungId)
+                    .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+            BenhNhan entity = BenhNhanMapper.toEntity(dto, nguoiDung);
+            benhNhanRepo.save(entity);
+            return ServiceResponse.success(NotificationCode.PATIENT_CREATE_SUCCESS);
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.PATIENT_CREATE_FAIL, e.getMessage());
+        }
     }
 
-    @Override
-    public List<BenhNhan> getAll() {
-        return benhNhanRepository.findAll();
+    public ServiceResponse<?> getAll() {
+        List<BenhNhanDTO> list = benhNhanRepo.findAll().stream()
+                .map(BenhNhanMapper::toDTO)
+                .toList();
+        return ServiceResponse.success(NotificationCode.PATIENT_LIST_SUCCESS, list);
     }
 
-    @Override
-    public Optional<BenhNhan> getById(Integer id) {
-        System.out.println("id "+ id);
-
-        return benhNhanRepository.findById(id);
+    public ServiceResponse<?> getById(Integer id) {
+        return benhNhanRepo.findById(id)
+                .map(bn -> ServiceResponse.success(NotificationCode.PATIENT_DETAIL_SUCCESS, BenhNhanMapper.toDTO(bn)))
+                .orElseGet(() -> ServiceResponse.error(NotificationCode.PATIENT_NOT_FOUND));
     }
 
-    @Override
-    public BenhNhan save(BenhNhan BenhNhan) {
-        return benhNhanRepository.save(BenhNhan);
+    @Transactional
+    public ServiceResponse<?> update(Integer id, BenhNhanDTO dto) {
+        try {
+            BenhNhan benhNhan = benhNhanRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy bệnh nhân"));
+
+            benhNhan.setBaoHiem(dto.getBaoHiem());
+            benhNhan.setLienHeKhanCap(dto.getLienHeKhanCap());
+
+            benhNhanRepo.save(benhNhan);
+            return ServiceResponse.success(NotificationCode.PATIENT_UPDATE_SUCCESS);
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.PATIENT_UPDATE_FAIL, e.getMessage());
+        }
     }
 
-    @Override
-    public void delete(BenhNhan id) {
-
+    @Transactional
+    public ServiceResponse<?> delete(Integer id) {
+        try {
+            BenhNhan bn = benhNhanRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy bệnh nhân"));
+            benhNhanRepo.delete(bn);
+            return ServiceResponse.success(NotificationCode.PATIENT_DELETE_SUCCESS);
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.PATIENT_DELETE_FAIL, e.getMessage());
+        }
     }
-
-
-    public BenhNhan update(BenhNhan benhNhan) {
-        return benhNhanRepository.save(benhNhan);
-    }
-
-
 }
