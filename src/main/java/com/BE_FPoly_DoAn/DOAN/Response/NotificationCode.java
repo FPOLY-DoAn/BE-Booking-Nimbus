@@ -37,6 +37,7 @@ public enum NotificationCode {
     DOCTOR_NOT_FOUND("DOC_003", "Không tìm thấy bác sĩ"),
     CERTIFICATE_APPROVED("DOC_004", "Phê duyệt chứng chỉ thành công"),
     CERTIFICATE_APPROVE_FAIL("DOC_005", "Phê duyệt chứng chỉ thất bại"),
+
     CERTIFICATE_REJECTED("DOC_006", "Từ chối phê duệt chứng chỉ thành công"),
     CERTIFICATE_REJECT_FAIL("DOC_007", "Từ chối phê duệt chứng chỉ thất bại"),
     CERTIFICATE_REQUEST_SUBMITTED("DOC_008", "Gửi yêu cầu phê duệt chứng chỉ thành công"),
@@ -133,6 +134,7 @@ public enum NotificationCode {
     STATISTICS_DOCTOR("STAT_002", "Thống kê theo bác sĩ thành công"),
     STATISTICS_EMPTY("STAT_003", "Không có dữ liệu thống kê trong khoảng thời gian này"),
 
+
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
     VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),
@@ -163,6 +165,7 @@ public enum NotificationCode {
     VALIDATION_DOCTOR_ID_REQUIRED("VAL_026", "ID bác sĩ không được để trống"),
     VALIDATION_REJECT_REASON_REQUIRED("VAL_027", "Lý do từ chối không được để trống"),
     INVALID_TRANG_THAI("VAL_028", "Trạng thái không hợp lệ"),
+
 
     // ===== SYSTEM =====
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),

@@ -1,7 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.DangKyBenhNhanDTO;
-import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
