@@ -7,6 +7,7 @@ public class BacSiMapper {
 
     public static BacSiDTO toDto(BacSi entity) {
         BacSiDTO dto = new BacSiDTO();
+        dto.setBacsi_id(String.valueOf(entity.getBacSiId()));
 
         NguoiDung nd = entity.getNguoiDung();
         if (nd != null) {
@@ -14,7 +15,7 @@ public class BacSiMapper {
             dto.setGioiTinh(nd.getGioiTinh());
             dto.setEmail(nd.getEmail());
             dto.setSoDienThoai(nd.getSoDienThoai());
-            dto.setMatKhau(nd.getMatKhau());
+//            dto.setMatKhau(nd.getMatKhau());
         }
 
         dto.setChuyenKhoaId(entity.getChuyenKhoa() != null
@@ -25,6 +26,11 @@ public class BacSiMapper {
         dto.setNgayTuyenDung(entity.getNgayTuyenDung());
         dto.setGhiChu(entity.getGhiChu());
         dto.setTrangThaiHoatDong(entity.getTrangThaiHoatDong());
+        dto.setTrangThaiHoatDongText(
+                Boolean.TRUE.equals(entity.getTrangThaiHoatDong())
+                        ? "Đang hoạt động"
+                        : "Đã bị vô hiệu hóa"
+        );
 
         return dto;
     }
@@ -36,7 +42,7 @@ public class BacSiMapper {
                 .gioiTinh(dto.getGioiTinh())
                 .email(dto.getEmail())
                 .soDienThoai(dto.getSoDienThoai())
-                .matKhau(dto.getMatKhau())
+//                .matKhau(dto.getMatKhau())
                 .build();
 
         return BacSi.builder()
@@ -58,7 +64,7 @@ public class BacSiMapper {
         nd.setGioiTinh(dto.getGioiTinh());
         nd.setEmail(dto.getEmail());
         nd.setSoDienThoai(dto.getSoDienThoai());
-        nd.setMatKhau(dto.getMatKhau());
+//        nd.setMatKhau(dto.getMatKhau());
 
         entity.setChuyenKhoa(ck);
         entity.setChungChi(dto.getChungChi());

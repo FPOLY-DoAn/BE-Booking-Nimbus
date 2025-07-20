@@ -16,7 +16,7 @@ public class NguoiDungDTO {
     @Size(max = 50, message = "VALIDATION_NAME_TOO_LONG")
     private String hoTen;
 
-    private char gioiTinh;
+    private String gioiTinh;
 
     @NotBlank(message = "VALIDATION_EMAIL_REQUIRED")
     @Email(message = "VALIDATION_EMAIL_INVALID")

@@ -11,11 +11,12 @@ public enum NotificationCode {
     USER_NOT_FOUND("USR_007", "Người dùng không tồn tại"),
     USER_UPDATE_SUCCESS("USR_008", "Cập nhật thông tin người dùng thành công"),
     USER_UPDATE_FAIL("USR_009", "Cập nhật thông tin người dùng thất bại"),
-    PASSWORD_INCORRECT("USR_010", "Mật khẩu khng chính xác"),
+    PASSWORD_INCORRECT("USR_010", "Mật khẩu không chính xác"),
     PASSWORD_CHANGE_SUCCESS("USR_011", "Thay đổi mật khẩu thành công"),
     USER_INFO("USR_012", "Hiển thị thông tin người dùng thành công"),
     USER_OLD_PASSWORD_INVALID("USR_013", "Mật khẩu cũ không đúng"),
     USER_PASSWORD_CHANGE_SUCCESS("USR_014", "Thay đổi mật khẩu thành công"),
+    USER_LIST_SUCCESS("USR_015", "Lấy danh sách người dùng thành công"),
 
     // ===== OTP =====
     OTP("OTP_000", "Mã OTP đã gửi tới email của bạn"),
@@ -36,11 +37,18 @@ public enum NotificationCode {
     DOCTOR_NOT_FOUND("DOC_003", "Không tìm thấy bác sĩ"),
     CERTIFICATE_APPROVED("DOC_004", "Phê duyệt chứng chỉ thành công"),
     CERTIFICATE_APPROVE_FAIL("DOC_005", "Phê duyệt chứng chỉ thất bại"),
-    CERTIFICATE_REJECTED("DOC_006", "Từ chối cập nhật chứng chỉ thành công"),
-    CERTIFICATE_REJECT_FAIL("DOC_007", "Từ chối cập nhật chứng chỉ thất bại"),
-    CERTIFICATE_REQUEST_SUBMITTED("DOC_008", "Gửi yêu cầu cập nhật chứng chỉ thành công"),
-    CERTIFICATE_REQUEST_FAIL("DOC_009", "Gửi yêu cầu cập nhật chứng chỉ thất bại"),
+    CERTIFICATE_REJECTED("DOC_006", "Từ chối phê duệt chứng chỉ thành công"),
+    CERTIFICATE_REJECT_FAIL("DOC_007", "Từ chối phê duệt chứng chỉ thất bại"),
+    CERTIFICATE_REQUEST_SUBMITTED("DOC_008", "Gửi yêu cầu phê duệt chứng chỉ thành công"),
+    CERTIFICATE_REQUEST_FAIL("DOC_009", "Gửi yêu cầu phê duệt chứng chỉ thất bại"),
     WAITING_LIST("DOC_010", "Hiển thị danh sách chờ duyệt thành công"),
+    NO_PENDING_REQUESTS("DOC_011", "Không có yêu cầu chứng chỉ nào đang chờ duyệt"),
+    CERTIFICATE_REQUEST_DUPLICATE("DOC_012", "Bạn đã gửi yêu cầu chứng chỉ rồi, vui lòng chờ xử lý"),
+    CERTIFICATE_REQUEST_NOT_FOUND_OR_PROCESSED("DOC_013", "Yêu cầu không tồn tại hoặc đã được xử lý"),
+    DOCTOR_CREATE_SUCCESS("DOC_014", "Tạo bác sĩ thành công"),
+    DOCTOR_UPDATE_SUCCESS("DOC_015", "Cập nhật bác sĩ thành công"),
+    DOCTOR_FOUND("DOC_016", "Lấy chi tiết bác sĩ thành công"),
+    DOCTOR_LIST_SUCCESS("DOC_017", "Lấy danh sách bác sĩ thành công"),
 
     // ===== DỊCH VỤ =====
     SERVICE_CREATE_SUCCESS("SVC_001", "Tạo dịch vụ thành công"),
@@ -52,6 +60,7 @@ public enum NotificationCode {
     SERVICE_NOT_FOUND     ("SVC_007", "Không tìm thấy dịch vụ"),
     SERVICE_LIST("SVC_008", "Hiển thị danh sách dịch vụ thành công"),
     SERVICE_ID("SVC_009", "Hiển thị dịch vụ thành công"),
+    SERVICE_DUPLICATE("SVC_010", "Tên dịch vụ đã tồn tại"),
 
     // ===== DON NGHI PHEP =====
     DON_INVALID_DATE("DON_001", "Ngày bắt đầu không được sau ngày kết thúc"),
@@ -64,6 +73,18 @@ public enum NotificationCode {
     DON_APPROVED_SUCCESS("DON104", "Duyệt đơn nghỉ phép thành công"),
     DON_ALREADY_PROCESSED("DON105", "Đơn đã được xử lý"),
     DON_REJECTED_SUCCESS("DON106", "Đơn đã bị từ chối"),
+
+    // ==== CHUYÊN KHOA ====
+    SPECIALTY_CREATE_SUCCESS("SPC_001", "Tạo chuyên khoa thành công"),
+    SPECIALTY_CREATE_FAIL("SPC_002", "Tạo chuyên khoa thất bại"),
+    SPECIALTY_UPDATE_SUCCESS("SPC_003", "Cập nhật chuyên khoa thành công"),
+    SPECIALTY_UPDATE_FAIL("SPC_004", "Cập nhật chuyên khoa thất bại"),
+    SPECIALTY_DELETE_SUCCESS("SPC_005", "Xóa chuyên khoa thành công"),
+    SPECIALTY_DELETE_FAIL("SPC_006", "Xóa chuyên khoa thất bại"),
+    SPECIALTY_NOT_FOUND("SPC_007", "Không tìm thấy chuyên khoa"),
+    SPECIALTY_LIST("SPC_008", "Hiển thị danh sách chuyên khoa thành công"),
+    SPECIALTY_DETAIL("SPC_009", "Hiển thị chi tiết chuyên khoa thành công"),
+    SPECIALTY_DUPLICATE("SPC_010", "Tên chuyên khoa đã tồn tại"),
 
     // ===== BỆNH NHÂN =====
     PATIENT_CREATE_SUCCESS("PAT_001", "Tạo bệnh nhân thành công"),
@@ -110,6 +131,15 @@ public enum NotificationCode {
     APPOINTMENT_NOT_FOUND("APP_009", "Không tìm thấy lịch khám"),
     APPOINTMENT_DUPLICATE("APP_010", "Lịch khám bị trùng"),
     APPOINTMENT_STATUS_INVALID("APP_011", "Trạng thái lịch khám không hợp lệ"),
+    APPOINTMENT_CONFLICT("APP_012", "Lịch khám trùng giờ với bác sĩ khác"),
+    APPOINTMENT_INVALID_TIME("APP_013", "Thời gian khám không hợp lệ"),
+    APPOINTMENT_NO_AVAILABLE_SLOTS("APP_014", "Không còn khung giờ trống trong ca này"),
+
+
+    // === THỐNG KÊ ====
+    STATISTICS_MONTHLY("STAT_001", "Thống kê theo tháng thành công"),
+    STATISTICS_DOCTOR("STAT_002", "Thống kê theo bác sĩ thành công"),
+    STATISTICS_EMPTY("STAT_003", "Không có dữ liệu thống kê trong khoảng thời gian này"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),

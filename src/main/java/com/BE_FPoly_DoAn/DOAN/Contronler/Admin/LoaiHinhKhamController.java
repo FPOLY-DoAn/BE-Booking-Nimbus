@@ -7,7 +7,6 @@ import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LoaiHinhKhamServiceImpl;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/dich-vu")
+@PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class LoaiHinhKhamController {
 
     private final LoaiHinhKhamServiceImpl service;
@@ -25,7 +25,7 @@ public class LoaiHinhKhamController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/LayDanhSachDichVu")
     public ResponseEntity<ServiceResponse<List<LoaiHinhKhamDTO>>> getAll() {
         List<LoaiHinhKhamDTO> list = service.getAll()
                 .stream()
@@ -34,50 +34,55 @@ public class LoaiHinhKhamController {
         return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_LIST, list));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/LayDichVuTheoId/{id}")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> getById(@PathVariable Integer id) {
         return service.getById(id)
                 .map(dv -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_ID, DichVuMapper.toDto(dv))))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND)));
+                .orElse(ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND)));
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @PostMapping("/TaoMoiDichVu")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> create(@RequestBody @Valid LoaiHinhKhamDTO dto) {
-        DichVu saved = service.save(DichVuMapper.toEntity(dto));
-        return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_CREATE_SUCCESS, DichVuMapper.toDto(saved)));
+        if (service.existsByTenDichVu(dto.getTenDichVu())) {
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_DUPLICATE));
+        }
+
+        try {
+            DichVu saved = service.save(DichVuMapper.toEntity(dto));
+            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_CREATE_SUCCESS, DichVuMapper.toDto(saved)));
+        } catch (Exception e) {
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_CREATE_FAIL));
+        }
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @PutMapping("/CapNhatDichVu/{id}")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> update(@PathVariable Integer id,
                                                                    @RequestBody @Valid LoaiHinhKhamDTO dto) {
         Optional<DichVu> opt = service.getById(id);
         if (opt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND));
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND));
         }
-        DichVu entity = opt.get();
-        DichVuMapper.updateEntity(entity, dto);
-        DichVu saved = service.save(entity);
-        return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_UPDATE_SUCCESS, DichVuMapper.toDto(saved)));
+        try {
+            DichVu entity = opt.get();
+            DichVuMapper.updateEntity(entity, dto);
+            DichVu saved = service.save(entity);
+            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_UPDATE_SUCCESS, DichVuMapper.toDto(saved)));
+        } catch (Exception e) {
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_UPDATE_FAIL));
+        }
     }
 
-//    @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+//    @DeleteMapping("/XoaDichVu/{id}")
 //    public ResponseEntity<ServiceResponse<?>> delete(@PathVariable Integer id) {
 //        Optional<DichVu> opt = service.getById(id);
 //        if (opt.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body(ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND));
+//            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_NOT_FOUND));
 //        }
 //        try {
 //            service.delete(opt.get());
 //            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_DELETE_SUCCESS));
 //        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(ServiceResponse.error(NotificationCode.SERVICE_DELETE_FAIL));
+//            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_DELETE_FAIL));
 //        }
 //    }
 }

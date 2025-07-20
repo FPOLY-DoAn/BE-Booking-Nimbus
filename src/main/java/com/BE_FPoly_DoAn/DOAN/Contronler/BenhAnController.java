@@ -5,43 +5,41 @@ import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhAnServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/benh-an")
+@PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
 @RequiredArgsConstructor
 public class BenhAnController {
 
     private final BenhAnServiceImpl benhAnService;
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
-    public ServiceResponse<?> taoBenhAn(@Valid @RequestBody BenhAnDTO dto) {
-        return benhAnService.createBenhAn(dto);
+    @PostMapping("/TaoBenhAn")
+    public ResponseEntity<ServiceResponse<?>> create(@Valid @RequestBody BenhAnDTO dto) {
+        return ResponseEntity.ok(benhAnService.create(dto));
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
-    public ServiceResponse<?> getAllBenhAn() {
-        return benhAnService.getAllBenhAn();
+    @GetMapping("/LayDanhSachBenhAn")
+    public ResponseEntity<ServiceResponse<?>> getAll() {
+        return ResponseEntity.ok(benhAnService.getAll());
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
-    public ServiceResponse<?> getBenhAnById(@PathVariable Integer id) {
-        return benhAnService.getBenhAnById(id);
+    @GetMapping("/LayBenhAnTheoId/{id}")
+    public ResponseEntity<ServiceResponse<?>> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(benhAnService.getById(id));
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI', 'ROLE_QUANLY')")
-    public ServiceResponse<?> updateBenhAn(@PathVariable Integer id, @Valid @RequestBody BenhAnDTO dto) {
-        return benhAnService.updateBenhAn(id, dto);
+    @PutMapping("/CapNhatBenhAn/{id}")
+    public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id, @Valid @RequestBody BenhAnDTO dto) {
+        return ResponseEntity.ok(benhAnService.update(id, dto));
     }
 
-//    @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_QUANLY)")
-//    public ServiceResponse<?> deleteBenhAn(@PathVariable Integer id) {
-//        return benhAnService.deleteBenhAn(id);
-//    }
+    // @DeleteMapping("/XoaBenhAn/{id}")
+    // @PreAuthorize("hasRole('ROLE_QUANLY')")
+    // public ResponseEntity<ServiceResponse<?>> delete(@PathVariable Integer id) {
+    //     return ResponseEntity.ok(benhAnService.delete(id));
+    // }
 }

@@ -32,8 +32,8 @@ public class NguoiDung {
     @Size(max = 50, message = "Họ tên không vượt quá 50 ký tự")
     private String hoTen;
 
-    @Column(name = "gioi_tinh", length = 1, columnDefinition = "CHAR(1)")
-    private Character gioiTinh;
+    @Column(name = "gioi_tinh", length = 10, columnDefinition = "NVARCHAR(10)")
+    private String gioiTinh;
 
     @Column(name = "email", length = 50, columnDefinition = "NVARCHAR(50)")
     @Email(message = "Email không hợp lệ")

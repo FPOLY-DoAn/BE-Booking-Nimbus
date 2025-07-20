@@ -42,7 +42,7 @@ public class BenhAnServiceImpl {
     }
 
     @Transactional
-    public ServiceResponse<?> createBenhAn(BenhAnDTO dto) {
+    public ServiceResponse<?> create(BenhAnDTO dto) {
         try {
             LichKham lichKham = lichKhamRepo.findById(dto.getLichKhamId())
                     .orElseThrow(() -> new RuntimeException("Lịch khám không tồn tại"));
@@ -74,7 +74,7 @@ public class BenhAnServiceImpl {
     }
 
     @Transactional
-    public ServiceResponse<?> updateBenhAn(Integer id, @Valid BenhAnDTO dto) {
+    public ServiceResponse<?> update(Integer id, @Valid BenhAnDTO dto) {
         try {
             BenhAn existing = benhAnRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Bệnh án không tồn tại"));
@@ -116,7 +116,7 @@ public class BenhAnServiceImpl {
         }
     }
 
-    public ServiceResponse<?> getAllBenhAn() {
+    public ServiceResponse<?> getAll() {
         try {
             List<BenhAn> danhSach = benhAnRepo.findAll();
 
@@ -143,7 +143,7 @@ public class BenhAnServiceImpl {
         }
     }
 
-    public ServiceResponse<?> getBenhAnById(Integer id) {
+    public ServiceResponse<?> getById(Integer id) {
         try {
             Optional<BenhAn> optional = benhAnRepo.findById(id);
             if (optional.isEmpty()) {
@@ -173,7 +173,7 @@ public class BenhAnServiceImpl {
     }
 
     @Transactional
-    public ServiceResponse<?> deleteBenhAn(Integer id) {
+    public ServiceResponse<?> delete(Integer id) {
         try {
             BenhAn benhAn = benhAnRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Bệnh án không tồn tại"));

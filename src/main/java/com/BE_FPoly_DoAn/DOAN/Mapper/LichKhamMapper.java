@@ -33,6 +33,7 @@ public class LichKhamMapper {
         dto.setGhiChu(entity.getGhiChu());
         dto.setNgayKham(entity.getNgayKham());
         dto.setCaKham(entity.getCaKham());
+        dto.setNgayCapNhat(entity.getNgayCapNhat());
         return dto;
     }
 
@@ -43,7 +44,7 @@ public class LichKhamMapper {
                 .lichkhamId(entity.getLichkhamId())
                 .bacSiId(entity.getBacSi().getBacSiId())
                 .thoiGianHen(entity.getThoiGianHen())
-                .trangThai(entity.getTrangThai().name())
+                .trangThai(entity.getTrangThai())
                 .ngayKham(entity.getNgayKham())
                 .build();
     }

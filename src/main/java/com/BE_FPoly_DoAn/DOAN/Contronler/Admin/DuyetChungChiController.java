@@ -1,16 +1,16 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.DuyetChungChiDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.YeuCauChungChiDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Dao.DuyetChungChiRepository;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,7 +23,21 @@ public class DuyetChungChiController {
         this.service = service;
     }
 
-    @PutMapping("/{id}/approve")
+    @PostMapping("/NopYeuCauChungChi")
+    @PreAuthorize("hasAuthority('ROLE_BACSI')")
+    public ResponseEntity<?> submitRequest(@RequestBody @Valid YeuCauChungChiDTO dto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        boolean success = service.submitRequest(email, dto.getNewCertificate(), dto.getReason());
+
+        if (success) {
+            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.CERTIFICATE_REQUEST_SUBMITTED));
+        } else {
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.CERTIFICATE_REQUEST_DUPLICATE));
+        }
+    }
+
+    @PutMapping("/DuyetYeuCauChungChi/{id}")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> approve(@PathVariable Integer id) {
         boolean result = service.approveRequest(id);
@@ -31,12 +45,11 @@ public class DuyetChungChiController {
         if (result) {
             return ResponseEntity.ok(ServiceResponse.success(NotificationCode.CERTIFICATE_APPROVED));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ServiceResponse.error(NotificationCode.CERTIFICATE_APPROVE_FAIL));
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.CERTIFICATE_REQUEST_NOT_FOUND_OR_PROCESSED));
         }
     }
 
-    @PutMapping("/{id}/reject")
+    @PutMapping("/TuChoiYeuCauChungChi/{id}")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> reject(@PathVariable Integer id, @RequestBody Map<String, String> body) {
         String reason = body.get("reason");
@@ -50,30 +63,23 @@ public class DuyetChungChiController {
         if (result) {
             return ResponseEntity.ok(ServiceResponse.success(NotificationCode.CERTIFICATE_REJECTED));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ServiceResponse.error(NotificationCode.CERTIFICATE_REJECT_FAIL));
+            return ResponseEntity.ok(ServiceResponse.error(NotificationCode.CERTIFICATE_REQUEST_NOT_FOUND_OR_PROCESSED));
         }
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_BACSI')")
-    public ResponseEntity<?> submitRequest(@RequestBody @Valid YeuCauChungChiDTO dto) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        boolean success = service.submitRequest(email, dto.getNewCertificate(), dto.getReason());
-
-        if (success) {
-            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.CERTIFICATE_REQUEST_SUBMITTED));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ServiceResponse.error(NotificationCode.CERTIFICATE_REQUEST_FAIL));
-        }
-    }
-
-    @GetMapping("/pending")
+    @GetMapping("/LayDanhSachYeuCauChoDuyet")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> getPendingRequests() {
+        List<DuyetChungChiDTO> pendingRequests = service.getPendingRequests();
+
+        if (pendingRequests == null || pendingRequests.isEmpty()) {
+            return ResponseEntity.ok(
+                    ServiceResponse.success(NotificationCode.NO_PENDING_REQUESTS, List.of())
+            );
+        }
+
         return ResponseEntity.ok(
-                ServiceResponse.success(NotificationCode.WAITING_LIST, service.getPendingRequests())
+                ServiceResponse.success(NotificationCode.WAITING_LIST, pendingRequests)
         );
     }
 }

@@ -36,4 +36,8 @@ public class LoaiHinhKhamServiceImpl implements InterfaceService<DichVu> {
     public void delete(DichVu entity) {
         repo.deleteById(entity.getDichVuId());
     }
+
+    public boolean existsByTenDichVu(String tenDichVu) {
+        return repo.existsByTenDichVu(tenDichVu);
+    }
 }

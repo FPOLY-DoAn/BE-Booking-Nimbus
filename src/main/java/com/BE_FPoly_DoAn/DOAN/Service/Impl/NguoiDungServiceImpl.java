@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.BE_FPoly_DoAn.DOAN.Mapper.NguoiDungMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -128,7 +129,7 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             }
 
             if (benhNhanDTO.getGioiTinh() != null && !benhNhanDTO.getGioiTinh().isEmpty()) {
-                nguoiDung.setGioiTinh(benhNhanDTO.getGioiTinh().charAt(0));
+                nguoiDung.setGioiTinh(benhNhanDTO.getGioiTinh());
             }
 
             nguoiDungRepository.save(nguoiDung);
@@ -221,7 +222,8 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
 
     public ServiceResponse<?> checkAccountRegister(NguoiDungDTO nguoiDung) {
         if (nguoiDung.getHoTen() == null || nguoiDung.getEmail() == null ||
-                nguoiDung.getGioiTinh() == ' ' || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
+                nguoiDung.getGioiTinh() == null || nguoiDung.getGioiTinh().isBlank()
+                || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
             return ServiceResponse.error(NotificationCode.USER_REGISTER_NOT_ENGOUGH.code(), NotificationCode.USER_REGISTER_NOT_ENGOUGH.message());
         } else if (nguoiDungRepository.existsByEmail(nguoiDung.getEmail())) {
 
@@ -279,16 +281,22 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if (!encoder.matches(oldPassword, user.getMatKhau())) {
-            return ServiceResponse.error(NotificationCode.PASSWORD_INCORRECT);
+            return ServiceResponse.error(NotificationCode.USER_OLD_PASSWORD_INVALID);
         }
 
         user.setMatKhau(encoder.encode(newPassword));
         nguoiDungRepository.save(user);
-        return ServiceResponse.success(NotificationCode.PASSWORD_CHANGE_SUCCESS);
+        return ServiceResponse.success(NotificationCode.USER_PASSWORD_CHANGE_SUCCESS);
     }
-
 
     public Optional<NguoiDung> getByEmailOptional(String email) {
         return nguoiDungRepository.findByEmail(email);
+    }
+
+    public List<NguoiDungDTO> getAllUsers() {
+        return nguoiDungRepository.findAll()
+                .stream()
+                .map(NguoiDungMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

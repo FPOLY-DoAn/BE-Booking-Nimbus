@@ -57,6 +57,10 @@ public class DuyetChungChiRepository implements com.BE_FPoly_DoAn.DOAN.Dao.Duyet
 
     @Override
     public boolean submitRequest(String email, String newCertificate, String reason) {
+        if (requestRepo.existsByBacSi_NguoiDung_EmailAndStatus(email, DuyetChungChi.Status.PENDING)) {
+            return false;
+        }
+
         Optional<BacSi> doctor = bacSiRepo.findByNguoiDung_Email(email);
         if (doctor.isEmpty()) return false;
 

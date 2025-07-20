@@ -15,5 +15,5 @@ import java.time.LocalDate;
 public class LichKhamFilterDTO {
     private LocalDate ngayKham;
     private Integer bacSiId;
-    private LichKham.TrangThaiLichKham trangThai;
+    private String trangThai;
 }

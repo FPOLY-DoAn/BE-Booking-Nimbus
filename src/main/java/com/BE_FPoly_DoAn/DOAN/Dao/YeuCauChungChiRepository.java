@@ -8,4 +8,5 @@ import java.util.List;
 public interface YeuCauChungChiRepository  extends JpaRepository<DuyetChungChi, Integer> {
     List<DuyetChungChi> findByStatus(DuyetChungChi.Status status);
     List<DuyetChungChi> findByBacSi_BacSiId(Integer bacSiId);
+    boolean existsByBacSi_NguoiDung_EmailAndStatus(String email, DuyetChungChi.Status status);
 }

@@ -39,15 +39,15 @@ public class LichKham {
     @Column(name = "thoi_gian_den", columnDefinition = "DATETIME")
     private LocalDateTime thoiGianDen;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "kieu_lich_kham", length = 1, columnDefinition = "CHAR(1)", nullable = false)
-    @NotNull(message = "Kiểu lịch khám không được để trống")
-    private KieuLichKham kieuLichKham;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "kieu_lich_kham", length = 1, columnDefinition = "CHAR(1)", nullable = false)
+//    @NotNull(message = "Kiểu lịch khám không được để trống")
+//    private KieuLichKham kieuLichKham;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)", nullable = false)
-    @NotNull(message = "Trạng thái không được để trống")
-    private TrangThaiLichKham trangThai;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)", nullable = false)
+//    @NotNull(message = "Trạng thái không được để trống")
+//    private TrangThaiLichKham trangThai;
 
     @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
     private String ghiChu;
@@ -69,11 +69,17 @@ public class LichKham {
     @OneToOne(mappedBy = "lichKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private BenhAn benhAn;
 
-    public enum KieuLichKham {
-        H, T, D
-    }
+    @Column(name = "kieu_lich_kham", columnDefinition = "NVARCHAR(50)")
+    private String kieuLichKham;
 
-    public enum TrangThaiLichKham {
-        A, C, P
-    }
+    @Column(name = "trang_thai", columnDefinition = "NVARCHAR(50)")
+    private String trangThai;
+
+//    public enum KieuLichKham {
+//        H, T, D
+//    }
+//
+//    public enum TrangThaiLichKham {
+//        A, C, P
+//    }
 }

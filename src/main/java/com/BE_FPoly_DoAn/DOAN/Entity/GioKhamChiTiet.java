@@ -28,4 +28,5 @@ public class GioKhamChiTiet {
 
     @Column(name = "trang_thai", columnDefinition = "BIT")
     private Boolean trangThai;
+
 }
