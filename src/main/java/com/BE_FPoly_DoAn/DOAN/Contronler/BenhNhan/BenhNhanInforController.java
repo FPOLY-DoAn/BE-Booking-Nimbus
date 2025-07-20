@@ -4,24 +4,40 @@ import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
+import com.sun.security.auth.UserPrincipal;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Security;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("nguoi_dung")
-public class BenhNhanController {
+public class BenhNhanInforController {
 
     private NguoiDungServiceImpl nguoiDungService;
+    private JwtService jwtService;
+    public BenhNhanInforController(NguoiDungServiceImpl nguoiDungService, JwtService jwtService) {
+        this.nguoiDungService = nguoiDungService;
+        this.jwtService = jwtService;
+    }
 
     @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
-    @GetMapping("infor/{benhNhanId}")
-    public ResponseEntity<?> getNguoiDung(@PathVariable Integer benhNhanId) {
-        System.out.println("id"+ benhNhanId);
-        Optional<NguoiDung> nguoiDung = nguoiDungService.getById(benhNhanId);
+    @GetMapping("infor")
+    public ResponseEntity<?> getNguoiDung(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        Claims claims = jwtService.extractAllClaims(token);
+        Integer id = claims.get("id", Integer.class);
+
+        Optional<NguoiDung> nguoiDung = nguoiDungService.getById(id);
 
         if (nguoiDung.isPresent()) {
             BenhNhanDTO benhNhanDTO = BenhNhanDTO.builder().hoTen(nguoiDung.get().getHoTen())
