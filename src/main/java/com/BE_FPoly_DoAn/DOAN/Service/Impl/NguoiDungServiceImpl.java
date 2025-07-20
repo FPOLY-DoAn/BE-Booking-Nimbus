@@ -1,6 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.DangKyBenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
@@ -11,7 +10,6 @@ import com.BE_FPoly_DoAn.DOAN.Entity.*;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
-import com.BE_FPoly_DoAn.DOAN.Utils.StringUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.BE_FPoly_DoAn.DOAN.Mapper.NguoiDungMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -100,7 +99,6 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
 
     }
 
-
     public Optional<NguoiDung> updateNguoiDung_BenhNhan(BenhNhanDTO benhNhanDTO) {
         try {
             Optional<NguoiDung> optionalNguoiDung = nguoiDungRepository.findByEmail(benhNhanDTO.getEmail());
@@ -118,7 +116,6 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
 
             BenhNhan benhNhan = optionalBenhNhan.get();
 
-            // Cập nhật NguoiDung nếu có field nào khác null
             if (benhNhanDTO.getEmail() != null) {
                 nguoiDung.setEmail(benhNhanDTO.getEmail());
             }
@@ -146,7 +143,7 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             return Optional.of(nguoiDung);
 
         } catch (Exception e) {
-            e.printStackTrace(); // Log ra lỗi cho dễ debug
+            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -156,7 +153,7 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
     }
 
     @Transactional
-    public int save(String otpCode, DangKyBenhNhanDTO dto) {
+    public int save(String otpCode) {
         try {
             Optional<OTP_NguoiDung> otpNguoiDungOpt = otpRepository.findByOtpCode(otpCode);
             if (otpNguoiDungOpt.isEmpty()) return -1;
@@ -176,15 +173,6 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
 
             VaiTro vaiTro = vaiTroRepository.findById(2)
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
-
-            BenhNhan benhNhan = BenhNhan.builder()
-                    .nguoiDung(nguoiDung)
-                    .baoHiem(StringUtil.defaultIfBlank(dto.getBaoHiem(), "Chưa cập nhật"))
-                    .lienHeKhanCap(StringUtil.defaultIfBlank(dto.getLienHeKhanCap(), "Chưa cập nhật"))
-                    .ngayTao(LocalDate.now())
-                    .ngayCapNhat(LocalDate.now())
-                    .build();
-            benhNhanRepository.save(benhNhan);
 
             phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
 
@@ -246,4 +234,65 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         return ServiceResponse.success();
     }
 
+    public ServiceResponse<?> getCurrentUserInfo(Integer nguoiDungId) {
+        return nguoiDungRepository.findById(nguoiDungId)
+                .map(user -> {
+                    NguoiDungDTO dto = new NguoiDungDTO(
+                            user.getHoTen(),
+                            user.getGioiTinh(),
+                            user.getEmail(),
+                            user.getSoDienThoai(),
+                            user.getMatKhau()
+                    );
+                    return ServiceResponse.success(NotificationCode.USER_INFO, dto);
+                })
+                .orElse(ServiceResponse.error(NotificationCode.USER_NOT_FOUND));
+    }
+
+    @Transactional
+    public ServiceResponse<?> updateCurrentUserInfo(Integer nguoiDungId, NguoiDungDTO dto) {
+        Optional<NguoiDung> optional = nguoiDungRepository.findById(nguoiDungId);
+        if (optional.isEmpty()) {
+            return ServiceResponse.error(NotificationCode.USER_NOT_FOUND);
+        }
+
+        NguoiDung user = optional.get();
+        user.setHoTen(dto.getHoTen());
+        user.setGioiTinh(dto.getGioiTinh());
+        user.setSoDienThoai(dto.getSoDienThoai());
+        user.setEmail(dto.getEmail());
+        nguoiDungRepository.save(user);
+
+        return ServiceResponse.success(NotificationCode.USER_UPDATE_SUCCESS);
+    }
+
+    @Transactional
+    public ServiceResponse<?> changePassword(Integer nguoiDungId, String oldPassword, String newPassword) {
+        Optional<NguoiDung> optional = nguoiDungRepository.findById(nguoiDungId);
+        if (optional.isEmpty()) {
+            return ServiceResponse.error(NotificationCode.USER_NOT_FOUND);
+        }
+
+        NguoiDung user = optional.get();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (!encoder.matches(oldPassword, user.getMatKhau())) {
+            return ServiceResponse.error(NotificationCode.USER_OLD_PASSWORD_INVALID);
+        }
+
+        user.setMatKhau(encoder.encode(newPassword));
+        nguoiDungRepository.save(user);
+        return ServiceResponse.success(NotificationCode.USER_PASSWORD_CHANGE_SUCCESS);
+    }
+
+    public Optional<NguoiDung> getByEmailOptional(String email) {
+        return nguoiDungRepository.findByEmail(email);
+    }
+
+    public List<NguoiDungDTO> getAllUsers() {
+        return nguoiDungRepository.findAll()
+                .stream()
+                .map(NguoiDungMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

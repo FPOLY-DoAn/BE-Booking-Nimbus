@@ -37,5 +37,8 @@ public class ChuyenKhoaServiceImpl implements InterfaceService<ChuyenKhoa> {
         chuyenKhoaRepository.findById(chuyenKhoa.getChuyenKhoaId()).ifPresent(chuyenKhoaRepository::delete);
     }
 
+    public boolean existsByTen(String tenKhoa) {
+        return chuyenKhoaRepository.existsByTenKhoaIgnoreCase(tenKhoa);
+    }
 
 }

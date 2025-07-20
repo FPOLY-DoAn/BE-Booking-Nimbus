@@ -36,8 +36,7 @@ public class UserAuthenticate {
         this.nguoiDungServicel = nguoiDungServicel;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.blackListService = blackListService;
-    }
+        this.blackListService = blackListService;}
 
     @PostMapping("/login")
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {
@@ -109,9 +108,9 @@ public class UserAuthenticate {
     }
 
     @PostMapping("/confirm_OTP")
-    public ResponseEntity<?> confirmOTP(@RequestParam String otp, @RequestBody DangKyBenhNhanDTO dto) {
+    public ResponseEntity<?> confirmOTP(@RequestParam String otp) {
         try {
-            int result = nguoiDungServicel.save(otp, dto);
+            int result = nguoiDungServicel.save(otp);
             return switch (result) {
                 case 1 -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS));
                 case -1 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)

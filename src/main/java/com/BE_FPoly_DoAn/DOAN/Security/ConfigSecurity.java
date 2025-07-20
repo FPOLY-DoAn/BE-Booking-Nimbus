@@ -57,7 +57,7 @@ public class ConfigSecurity {
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/*").permitAll()
-                .anyRequest().authenticated());
+                 .anyRequest().authenticated());
         http.cors(
                         cors -> {
                             cors.configurationSource(

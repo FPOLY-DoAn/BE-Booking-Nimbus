@@ -67,6 +67,6 @@ public class LichKham {
     }
 
     public enum TrangThaiLichKham {
-        A, C, P
+        X, C, P
     }
 }

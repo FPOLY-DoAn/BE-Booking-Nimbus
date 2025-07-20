@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +72,7 @@ public class JwtService {
         claims.put("isBenhNhan", isBenhNhan);
         claims.put("hoten", newNguoiDung.getHoTen());
         claims.put("soDienThoai", newNguoiDung.getSoDienThoai());
+        claims.put("id", newNguoiDung.getNguoiDungId());
 
         return createToken(claims, newNguoiDung.getEmail());
     }
@@ -122,6 +124,21 @@ public class JwtService {
     public long getExpired(String token) {
         Claims claims = extractAllClaims(token);
         return claims.getExpiration().getTime();
+    }
+
+    public Integer extractUserIdFromRequest(HttpServletRequest request) {
+        String tokenHeader = request.getHeader("Authorization");
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token không hợp lệ hoặc thiếu.");
+        }
+
+        String token = tokenHeader.substring(7);
+        String email = extractUserEmail(token);
+        Optional<NguoiDung> optional = nguoiDungService.getByEmailOptional(email);
+
+        return optional
+                .map(NguoiDung::getNguoiDungId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với email: " + email));
     }
 
 

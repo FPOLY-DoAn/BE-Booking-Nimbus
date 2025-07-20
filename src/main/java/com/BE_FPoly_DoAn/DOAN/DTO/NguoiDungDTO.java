@@ -1,16 +1,14 @@
 package com.BE_FPoly_DoAn.DOAN.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import jakarta.validation.constraints.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class NguoiDungDTO {
+@Builder
+public class NguoiDungDTO<T>{
 
     @NotBlank(message = "VALIDATION_NAME_REQUIRED")
     @Size(max = 50, message = "VALIDATION_NAME_TOO_LONG")
@@ -29,7 +27,4 @@ public class NguoiDungDTO {
     @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
     private String matKhau;
 
-    private String baoHiem;
-
-    private String lienHeKhanCap;
 }
