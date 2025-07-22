@@ -37,5 +37,4 @@ public class PhongKhamServiceImpl implements InterfaceService<PhongKham> {
 
     }
 
-
 }

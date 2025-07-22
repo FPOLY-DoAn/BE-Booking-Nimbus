@@ -18,7 +18,6 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class LichKhamServiceImpl {
@@ -260,9 +259,9 @@ public class LichKhamServiceImpl {
         return false;
     }
 
-    public List<GioKhamChiTietDto> getKhungGioRanh(Integer bacSiId, LocalDate ngay, String caKham) {
+    public List<GioKhamChiTietDto> getKhungGioRanh(Integer bacSiId, LocalDate ngayKham, String caKham) {
         List<GioKhamChiTiet> list = gioKhamChiTietRepo
-                .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(bacSiId, ngay, caKham)
+                .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(bacSiId, ngayKham, caKham)
                 .stream()
                 .filter(GioKhamChiTiet::getTrangThai)
                 .toList();

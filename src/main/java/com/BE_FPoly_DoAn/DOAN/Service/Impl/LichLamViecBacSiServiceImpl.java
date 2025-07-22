@@ -1,15 +1,15 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.LichLamViecBacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichLamViecBacSi;
+import com.BE_FPoly_DoAn.DOAN.Mapper.LichLamViecMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.stereotype.Service;
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
-import com.BE_FPoly_DoAn.DOAN.Mapper.LichLamViecMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,11 +48,13 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
             LichLamViecBacSi entity = new LichLamViecBacSi();
             entity.setBacSi(BacSi.builder().bacSiId(bacSiId).build());
             entity.setNgay(dto.getNgay());
+            entity.setCaTruc(dto.getCaTruc());
+            entity.setLyDoNghi(dto.getLyDoNghi());
 
             repository.save(entity);
-            return ServiceResponse.success(NotificationCode.SERVICE_CREATE_SUCCESS);
+            return ServiceResponse.success(NotificationCode.WORK_SCHEDULE_DETAILS_CUSSCESS);
         } catch (Exception e) {
-            return ServiceResponse.error(NotificationCode.SERVICE_CREATE_FAIL);
+            return ServiceResponse.error(NotificationCode.WORK_SCHEDULE_DETAILS_FAIL);
         }
     }
 
@@ -78,6 +80,8 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
         try {
             LichLamViecBacSi entity = optional.get();
             entity.setNgay(dto.getNgay());
+            entity.setCaTruc(dto.getCaTruc());
+            entity.setLyDoNghi(dto.getLyDoNghi());
             repository.save(entity);
             return ServiceResponse.success(NotificationCode.SERVICE_UPDATE_SUCCESS);
         } catch (Exception e) {
@@ -96,6 +100,22 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
             return ServiceResponse.success(NotificationCode.SERVICE_DELETE_SUCCESS);
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.SERVICE_DELETE_FAIL);
+        }
+    }
+
+    public ServiceResponse<?> taoLichLamViec(Integer bacSiId, LichLamViecDTO dto) {
+        try {
+            LichLamViecBacSi entity = LichLamViecBacSi.builder()
+                    .bacSi(BacSi.builder().bacSiId(bacSiId).build())
+                    .ngay(dto.getNgay())
+                    .caTruc(dto.getCaTruc())
+                    .lyDoNghi(dto.getLyDoNghi())
+                    .build();
+
+            repository.save(entity);
+            return ServiceResponse.success(NotificationCode.WORK_SCHEDULE_CREATE_SUCCESS);
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.WORK_SCHEDULE_CREATE_FAIL);
         }
     }
 }

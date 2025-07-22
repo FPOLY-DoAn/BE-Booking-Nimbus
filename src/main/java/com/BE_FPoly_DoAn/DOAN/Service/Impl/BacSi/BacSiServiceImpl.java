@@ -91,4 +91,8 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
         }
         return ServiceResponse.success(NotificationCode.USER_REGISTER_SUCCESS.code(),NotificationCode.USER_REGISTER_SUCCESS.message());
     }
+
+    public Optional<BacSi> getByNguoiDungId(Integer nguoiDungId) {
+        return bacSiRepository.findByNguoiDungId(nguoiDungId);
+    }
 }

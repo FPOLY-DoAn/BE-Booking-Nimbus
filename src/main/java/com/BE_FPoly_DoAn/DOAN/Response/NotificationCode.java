@@ -136,6 +136,12 @@ public enum NotificationCode {
     APPOINTMENT_NO_AVAILABLE_SLOTS("APP_014", "Không còn khung giờ trống trong ca này"),
 
 
+    // === LỊCH LÀM VIỆC BÁC SĨ
+    WORK_SCHEDULE_DETAILS_CUSSCESS("SCE_001", "Hiển thị chi tiết ngày làm việc của bác sĩ thành công"),
+    WORK_SCHEDULE_DETAILS_FAIL("SCE_002", "Hiển thị chi tiết ngày làm việc của bác sĩ thất bại"),
+    WORK_SCHEDULE_CREATE_SUCCESS("SEC_003", "Tạo lịch làm việc cho bác sĩ thành công"),
+    WORK_SCHEDULE_CREATE_FAIL("SEC_004", "Tạo lịch làm việc cho bác sĩ thất bại"),
+
     // === THỐNG KÊ ====
     STATISTICS_MONTHLY("STAT_001", "Thống kê theo tháng thành công"),
     STATISTICS_DOCTOR("STAT_002", "Thống kê theo bác sĩ thành công"),

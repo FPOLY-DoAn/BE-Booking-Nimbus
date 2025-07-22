@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @Builder
 public class LichLamViecDTO {
+    private Integer lichlvId;
     private LocalDate ngay;
     private String caTruc;
     private String lyDoNghi;
