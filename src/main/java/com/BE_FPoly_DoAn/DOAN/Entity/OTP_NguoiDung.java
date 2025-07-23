@@ -24,13 +24,13 @@ public class OTP_NguoiDung {
     private String email;
     @Column(name = "ho_ten", columnDefinition = "NVARCHAR(50)")
     private String hoTen;
-    private char gioiTinh;
+    private String gioiTinh;
     private String soDienThoai;
     private String matKhau;
     private LocalDateTime createdAt;
     private LocalDateTime expireAt;
 
-    public OTP_NguoiDung(String otpCode, String email, String hoTen, char gioiTinh, String soDienThoai, String matKhau) {
+    public OTP_NguoiDung(String otpCode, String email, String hoTen, String gioiTinh, String soDienThoai, String matKhau) {
         this.otpCode = otpCode;
         this.email = email;
         this.hoTen = hoTen;

@@ -18,7 +18,7 @@ public class LeTanDTO {
         private String hoTen;
 
         @NotNull(message = "VALIDATION_GENDER_REQUIRED")
-        private Character gioiTinh;
+        private String gioiTinh;
 
         @NotBlank(message = "VALIDATION_EMAIL_REQUIRED")
         @Email(message = "VALIDATION_EMAIL_INVALID")

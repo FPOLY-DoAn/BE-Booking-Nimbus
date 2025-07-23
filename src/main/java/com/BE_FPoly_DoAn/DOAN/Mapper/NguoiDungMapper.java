@@ -11,7 +11,8 @@ public class NguoiDungMapper {
         dto.setGioiTinh(entity.getGioiTinh());
         dto.setEmail(entity.getEmail());
         dto.setSoDienThoai(entity.getSoDienThoai());
-        dto.setMatKhau(entity.getMatKhau());
+//        dto.setMatKhau(entity.getMatKhau());
+
         return dto;
     }
 

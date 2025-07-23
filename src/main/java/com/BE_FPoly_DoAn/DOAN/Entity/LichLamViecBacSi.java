@@ -3,10 +3,7 @@ package com.BE_FPoly_DoAn.DOAN.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,6 +15,7 @@ import java.util.List;
 @Table(name = "LICH_LAM_VIEC_BAC_SI")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LichLamViecBacSi {
@@ -47,4 +45,11 @@ public class LichLamViecBacSi {
 
     @OneToMany(mappedBy = "lichLamViecBacSi", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LichPhongKham> lichPhongKhams;
+
+    @Column(name = "ca_truc", columnDefinition = "NVARCHAR(50)")
+    private String caTruc;
+
+    @Column(name = "ly_do_nghi", columnDefinition = "NVARCHAR(255)")
+    private String lyDoNghi;
+
 }

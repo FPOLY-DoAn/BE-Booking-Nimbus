@@ -54,4 +54,9 @@ public class ThanhToan {
     @Column(name = "ghi_chu", length = 100, columnDefinition = "NVARCHAR(100)")
     @Size(max = 100, message = "Ghi chú không được vượt quá 100 ký tự")
     private String ghiChu;
+
+    public enum PhuongThucThanhToan {
+        T, // Tiền mặt
+        M  // MoMo
+    }
 }

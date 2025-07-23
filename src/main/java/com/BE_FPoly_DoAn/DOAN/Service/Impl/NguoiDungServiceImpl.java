@@ -129,7 +129,7 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             }
 
             if (benhNhanDTO.getGioiTinh() != null && !benhNhanDTO.getGioiTinh().isEmpty()) {
-                nguoiDung.setGioiTinh(benhNhanDTO.getGioiTinh().charAt(0));
+                nguoiDung.setGioiTinh(benhNhanDTO.getGioiTinh());
             }
 
             nguoiDungRepository.save(nguoiDung);
@@ -222,7 +222,8 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
 
     public ServiceResponse<?> checkAccountRegister(NguoiDungDTO nguoiDung) {
         if (nguoiDung.getHoTen() == null || nguoiDung.getEmail() == null ||
-                nguoiDung.getGioiTinh() == ' ' || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
+                nguoiDung.getGioiTinh() == null || nguoiDung.getGioiTinh().isBlank()
+                || nguoiDung.getSoDienThoai() == null || nguoiDung.getMatKhau() == null) {
             return ServiceResponse.error(NotificationCode.USER_REGISTER_NOT_ENGOUGH.code(), NotificationCode.USER_REGISTER_NOT_ENGOUGH.message());
         } else if (nguoiDungRepository.existsByEmail(nguoiDung.getEmail())) {
 
@@ -243,6 +244,9 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
                             user.getEmail(),
                             user.getSoDienThoai(),
                             user.getMatKhau()
+//                            ,
+//                            null,
+//                            null
                     );
                     return ServiceResponse.success(NotificationCode.USER_INFO, dto);
                 })

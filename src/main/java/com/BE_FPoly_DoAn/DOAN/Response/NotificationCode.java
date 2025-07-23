@@ -37,7 +37,6 @@ public enum NotificationCode {
     DOCTOR_NOT_FOUND("DOC_003", "Không tìm thấy bác sĩ"),
     CERTIFICATE_APPROVED("DOC_004", "Phê duyệt chứng chỉ thành công"),
     CERTIFICATE_APPROVE_FAIL("DOC_005", "Phê duyệt chứng chỉ thất bại"),
-
     CERTIFICATE_REJECTED("DOC_006", "Từ chối phê duệt chứng chỉ thành công"),
     CERTIFICATE_REJECT_FAIL("DOC_007", "Từ chối phê duệt chứng chỉ thất bại"),
     CERTIFICATE_REQUEST_SUBMITTED("DOC_008", "Gửi yêu cầu phê duệt chứng chỉ thành công"),
@@ -46,6 +45,10 @@ public enum NotificationCode {
     NO_PENDING_REQUESTS("DOC_011", "Không có yêu cầu chứng chỉ nào đang chờ duyệt"),
     CERTIFICATE_REQUEST_DUPLICATE("DOC_012", "Bạn đã gửi yêu cầu chứng chỉ rồi, vui lòng chờ xử lý"),
     CERTIFICATE_REQUEST_NOT_FOUND_OR_PROCESSED("DOC_013", "Yêu cầu không tồn tại hoặc đã được xử lý"),
+    DOCTOR_CREATE_SUCCESS("DOC_014", "Tạo bác sĩ thành công"),
+    DOCTOR_UPDATE_SUCCESS("DOC_015", "Cập nhật bác sĩ thành công"),
+    DOCTOR_FOUND("DOC_016", "Lấy chi tiết bác sĩ thành công"),
+    DOCTOR_LIST_SUCCESS("DOC_017", "Lấy danh sách bác sĩ thành công"),
 
     // ===== DỊCH VỤ =====
     SERVICE_CREATE_SUCCESS("SVC_001", "Tạo dịch vụ thành công"),
@@ -128,12 +131,21 @@ public enum NotificationCode {
     APPOINTMENT_NOT_FOUND("APP_009", "Không tìm thấy lịch khám"),
     APPOINTMENT_DUPLICATE("APP_010", "Lịch khám bị trùng"),
     APPOINTMENT_STATUS_INVALID("APP_011", "Trạng thái lịch khám không hợp lệ"),
+    APPOINTMENT_CONFLICT("APP_012", "Lịch khám trùng giờ với bác sĩ khác"),
+    APPOINTMENT_INVALID_TIME("APP_013", "Thời gian khám không hợp lệ"),
+    APPOINTMENT_NO_AVAILABLE_SLOTS("APP_014", "Không còn khung giờ trống trong ca này"),
+
+
+    // === LỊCH LÀM VIỆC BÁC SĨ
+    WORK_SCHEDULE_DETAILS_CUSSCESS("SCE_001", "Hiển thị chi tiết ngày làm việc của bác sĩ thành công"),
+    WORK_SCHEDULE_DETAILS_FAIL("SCE_002", "Hiển thị chi tiết ngày làm việc của bác sĩ thất bại"),
+    WORK_SCHEDULE_CREATE_SUCCESS("SEC_003", "Tạo lịch làm việc cho bác sĩ thành công"),
+    WORK_SCHEDULE_CREATE_FAIL("SEC_004", "Tạo lịch làm việc cho bác sĩ thất bại"),
 
     // === THỐNG KÊ ====
     STATISTICS_MONTHLY("STAT_001", "Thống kê theo tháng thành công"),
     STATISTICS_DOCTOR("STAT_002", "Thống kê theo bác sĩ thành công"),
     STATISTICS_EMPTY("STAT_003", "Không có dữ liệu thống kê trong khoảng thời gian này"),
-
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
@@ -165,7 +177,6 @@ public enum NotificationCode {
     VALIDATION_DOCTOR_ID_REQUIRED("VAL_026", "ID bác sĩ không được để trống"),
     VALIDATION_REJECT_REASON_REQUIRED("VAL_027", "Lý do từ chối không được để trống"),
     INVALID_TRANG_THAI("VAL_028", "Trạng thái không hợp lệ"),
-
 
     // ===== SYSTEM =====
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),
