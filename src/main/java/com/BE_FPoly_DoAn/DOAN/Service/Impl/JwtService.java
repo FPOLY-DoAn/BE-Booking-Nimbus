@@ -72,6 +72,7 @@ public class JwtService {
         claims.put("isBenhNhan", isBenhNhan);
         claims.put("hoten", newNguoiDung.getHoTen());
         claims.put("soDienThoai", newNguoiDung.getSoDienThoai());
+        claims.put("id", newNguoiDung.getNguoiDungId());
 
         return createToken(claims, newNguoiDung.getEmail());
     }
@@ -139,5 +140,6 @@ public class JwtService {
                 .map(NguoiDung::getNguoiDungId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với email: " + email));
     }
+
 
 }

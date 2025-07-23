@@ -34,8 +34,7 @@ public class UserAuthenticate {
         this.nguoiDungServicel = nguoiDungServicel;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.blackListService = blackListService;
-    }
+        this.blackListService = blackListService;}
 
     @PostMapping("/login")
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {

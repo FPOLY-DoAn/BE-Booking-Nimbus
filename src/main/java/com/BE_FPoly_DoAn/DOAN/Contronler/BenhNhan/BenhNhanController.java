@@ -1,47 +1,46 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BenhNhan;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
+import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
+import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhNhanServiceImpl;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/api/benh-nhan")
-@RequiredArgsConstructor
+@RequestMapping("nguoi_dung")
 public class BenhNhanController {
 
-    private final BenhNhanServiceImpl benhNhanService;
+    private NguoiDungServiceImpl nguoiDungService;
 
-    @PostMapping("/{nguoiDungId}")
-    @PreAuthorize("hasRole('ROLE_LETAN'), 'ROLE_BENHNHAN")
-    public ServiceResponse<?> create(@PathVariable Integer nguoiDungId, @Valid @RequestBody BenhNhanDTO dto) {
-        return benhNhanService.create(nguoiDungId, dto);
+    @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
+    @GetMapping("infor/{benhNhanId}")
+    public ResponseEntity<?> getNguoiDung(@PathVariable Integer benhNhanId) {
+        System.out.println("id"+ benhNhanId);
+        Optional<NguoiDung> nguoiDung = nguoiDungService.getById(benhNhanId);
+
+        if (nguoiDung.isPresent()) {
+            BenhNhanDTO benhNhanDTO = BenhNhanDTO.builder().hoTen(nguoiDung.get().getHoTen())
+                    .email(nguoiDung.get().getEmail())
+                    .gioiTinh(String.valueOf(nguoiDung.get().getGioiTinh()))
+                    .soDienThoai(nguoiDung.get().getSoDienThoai())
+                    .build();
+            return ResponseEntity.ok(benhNhanDTO);
+        }
+        return ResponseEntity.badRequest().body(ServiceResponse.error("500","Không tìm thấy người dùng này"));
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
-    public ServiceResponse<?> getAll() {
-        return benhNhanService.getAll();
-    }
+    @PostMapping("update")
+    public ResponseEntity<?> getNguoiDung(@RequestBody BenhNhanDTO benhNhanDTO) {
+        Optional<NguoiDung> nguoiDung = nguoiDungService.updateNguoiDung_BenhNhan(benhNhanDTO);
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
-    public ServiceResponse<?> getById(@PathVariable Integer id) {
-        return benhNhanService.getById(id);
+        if (nguoiDung.isPresent()) {
+            return ResponseEntity.ok(nguoiDung);
+        }
+        return ResponseEntity.badRequest().body(ServiceResponse.error(NotificationCode.USER_REGISTER_FAIL.code(), NotificationCode.USER_REGISTER_FAIL.code()));
     }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_LETAN')")
-    public ServiceResponse<?> update(@PathVariable Integer id, @Valid @RequestBody BenhNhanDTO dto) {
-        return benhNhanService.update(id, dto);
-    }
-
-//    @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_QUANLY')")
-//    public ServiceResponse<?> delete(@PathVariable Integer id) {
-//        return benhNhanService.delete(id);
-//    }
 }

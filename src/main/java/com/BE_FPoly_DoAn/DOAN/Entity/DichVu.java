@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,11 @@ public class DichVu {
     @Column(name = "dichvu_id", columnDefinition = "INT")
     private Integer dichVuId;
 
+    @ManyToOne
+    @JoinColumn(name = "benhan_id", referencedColumnName = "benhan_id", columnDefinition = "INT", nullable = false)
+    @JsonIgnore
+    private BenhAn benhAn;
+
     @Column(name = "ten_dich_vu", length = 100, columnDefinition = "NVARCHAR(100)")
     @NotBlank(message = "Tên dịch vụ không được để trống")
     private String tenDichVu;
@@ -36,6 +42,8 @@ public class DichVu {
     @DecimalMin(value = "0.0", inclusive = true, message = "Giá phải lớn hơn hoặc bằng 0")
     private BigDecimal gia;
 
+
     @OneToMany(mappedBy = "dichVu", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ChiTietHoaDon> chiTietHoaDons;
 }
