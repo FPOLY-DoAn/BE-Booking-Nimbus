@@ -30,6 +30,9 @@ public class OTP_NguoiDung {
     private LocalDateTime createdAt;
     private LocalDateTime expireAt;
 
+    @Column(name = "is_reset_password")
+    private boolean resetPassword = false;
+
     public OTP_NguoiDung(String otpCode, String email, String hoTen, String gioiTinh, String soDienThoai, String matKhau) {
         this.otpCode = otpCode;
         this.email = email;
