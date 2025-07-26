@@ -299,4 +299,65 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
                 .map(NguoiDungMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public boolean sendResetPasswordOtp(String email) {
+        try {
+            Optional<NguoiDung> optional = nguoiDungRepository.findByEmail(email);
+            if (optional.isEmpty()) return false;
+
+            NguoiDung user = optional.get();
+            String otpCode = generateOtpCode();
+
+            OTP_NguoiDung otp = new OTP_NguoiDung(otpCode,
+                    user.getEmail(), user.getHoTen(),
+                    user.getGioiTinh(), user.getSoDienThoai(),
+                    user.getMatKhau());
+
+            otp.setResetPassword(true);
+            otp.setExpireAt(LocalDateTime.now().plusMinutes(5));
+
+            otpRepository.save(otp);
+
+            String html = """
+            <div style="padding:20px;font-family:sans-serif;">
+                <h3>Yêu cầu đặt lại mật khẩu</h3>
+                <p>Xin chào <strong>%s</strong>,</p>
+                <p>Bạn vừa yêu cầu đặt lại mật khẩu. Mã OTP để xác nhận là:</p>
+                <h2 style="color:#0a5bff;">%s</h2>
+                <p>Mã sẽ hết hạn trong 5 phút.</p>
+            </div>
+            """.formatted(user.getHoTen(), otpCode);
+
+            mailConfig.sendTo("dai582005@gmail.com", user.getEmail(), "Đặt lại mật khẩu", html);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Transactional
+    public int resetPasswordWithOtp(String email, String otpCode, String newPassword) {
+        try {
+            Optional<OTP_NguoiDung> otpOptional = otpRepository.findByOtpCode(otpCode);
+            if (otpOptional.isEmpty()) return -1;
+
+            OTP_NguoiDung otp = otpOptional.get();
+            if (otp.getExpireAt().isBefore(LocalDateTime.now())) return -2;
+            if (!otp.getEmail().equals(email)) return -3;
+
+            Optional<NguoiDung> userOpt = nguoiDungRepository.findByEmail(email);
+            if (userOpt.isEmpty()) return -3;
+
+            NguoiDung user = userOpt.get();
+            user.setMatKhau(new BCryptPasswordEncoder().encode(newPassword));
+            nguoiDungRepository.save(user);
+            otpRepository.delete(otp);
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
