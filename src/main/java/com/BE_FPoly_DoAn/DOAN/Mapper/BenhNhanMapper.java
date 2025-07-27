@@ -19,16 +19,17 @@ public class BenhNhanMapper {
                 .lienHeKhanCap(entity.getLienHeKhanCap())
                 .ngayTao(entity.getNgayTao())
                 .ngayCapNhat(entity.getNgayCapNhat())
-                .lichKhams(entity.getLichKhams() != null
-                        ? entity.getLichKhams().stream()
-                        .map(LichKhamMapper::toShortDTO)
-                        .collect(Collectors.toList())
-                        : null)
-                .hoaDons(entity.getHoaDons() != null
-                        ? entity.getHoaDons().stream()
-                        .map(HoaDonMapper::toShortDTO)
-                        .collect(Collectors.toList())
-                        : null)
+                .diaChi(entity.getDiaChi())
+//                .lichKhams(entity.getLichKhams() != null
+//                        ? entity.getLichKhams().stream()
+//                        .map(LichKhamMapper::toShortDTO)
+//                        .collect(Collectors.toList())
+//                        : null)
+//                .hoaDons(entity.getHoaDons() != null
+//                        ? entity.getHoaDons().stream()
+//                        .map(HoaDonMapper::toShortDTO)
+//                        .collect(Collectors.toList())
+//                        : null)
                 .build();
     }
 

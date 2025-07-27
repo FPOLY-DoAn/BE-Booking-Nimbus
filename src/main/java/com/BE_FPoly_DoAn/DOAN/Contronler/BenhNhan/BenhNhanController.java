@@ -1,46 +1,42 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BenhNhan;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
-import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
-import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhNhanServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("nguoi_dung")
+@RequestMapping("/api/benh-nhan")
+@PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class BenhNhanController {
 
-    private NguoiDungServiceImpl nguoiDungService;
+    private final BenhNhanServiceImpl service;
 
-    @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
-    @GetMapping("infor/{benhNhanId}")
-    public ResponseEntity<?> getNguoiDung(@PathVariable Integer benhNhanId) {
-        System.out.println("id"+ benhNhanId);
-        Optional<NguoiDung> nguoiDung = nguoiDungService.getById(benhNhanId);
-
-        if (nguoiDung.isPresent()) {
-            BenhNhanDTO benhNhanDTO = BenhNhanDTO.builder().hoTen(nguoiDung.get().getHoTen())
-                    .email(nguoiDung.get().getEmail())
-                    .gioiTinh(String.valueOf(nguoiDung.get().getGioiTinh()))
-                    .soDienThoai(nguoiDung.get().getSoDienThoai())
-                    .build();
-            return ResponseEntity.ok(benhNhanDTO);
-        }
-        return ResponseEntity.badRequest().body(ServiceResponse.error("500","Không tìm thấy người dùng này"));
+    public BenhNhanController(BenhNhanServiceImpl service) {
+        this.service = service;
     }
 
-    @PostMapping("update")
-    public ResponseEntity<?> getNguoiDung(@RequestBody BenhNhanDTO benhNhanDTO) {
-        Optional<NguoiDung> nguoiDung = nguoiDungService.updateNguoiDung_BenhNhan(benhNhanDTO);
-
-        if (nguoiDung.isPresent()) {
-            return ResponseEntity.ok(nguoiDung);
-        }
-        return ResponseEntity.badRequest().body(ServiceResponse.error(NotificationCode.USER_REGISTER_FAIL.code(), NotificationCode.USER_REGISTER_FAIL.code()));
+    @GetMapping("/LayDanhSachBenhNhan")
+    public ResponseEntity<ServiceResponse<?>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
+
+    @GetMapping("/LayBenhNhanTheoId/{id}")
+    public ResponseEntity<ServiceResponse<?>> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getById(id));
+    }
+
+    @PutMapping("/CapNhatBenhNhan/{id}")
+    public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id,
+                                                     @RequestBody @Valid BenhNhanDTO dto) {
+        return ResponseEntity.ok(service.update(id, dto));
+    }
+
+//    @DeleteMapping("/XoaBenhNhan/{id}")
+//    public ResponseEntity<ServiceResponse<?>> delete(@PathVariable Integer id) {
+//        return ResponseEntity.ok(service.delete(id));
+//    }
 }
