@@ -98,6 +98,7 @@ public enum NotificationCode {
     PATIENT_NOT_FOUND("PAT_009", "Không tìm thấy bệnh nhân"),
 
     // ===== BỆNH ÁN =====
+    MEDICAL_RECORD_CREATE_SUCCESS("MED_001", "Tạo bệnh án thành công"),
     MEDICAL_RECORD_UPDATE_SUCCESS("MED_002", "Cập nhật bệnh án thành công"),
     MEDICAL_RECORD_UPDATE_FAIL("MED_003", "Cập nhật bệnh án thất bại"),
     MEDICAL_RECORD_LIST("MED_004", "Lấy danh sách bệnh án thành công"),
@@ -106,6 +107,8 @@ public enum NotificationCode {
     MEDICAL_RECORD_DELETE_SUCCESS("MED_007", "Xóa bệnh án thành công"),
     MEDICAL_RECORD_DELETE_FAIL("MED_008", "Xóa bệnh án thất bại"),
     MEDICAL_RECORD_DETAIL_SUCCESS("MR_009", "Hiển thị chi tiết hồ sơ bệnh án thành công"),
+    MEDICAL_RECORD_CREATE_FAIL("MEO_010", "Tạo bệnh án thất bại"),
+    MEDICAL_RECORD_ALREADY_EXISTS("MED_010", "Lịch khám này đã có bệnh án, không thể tạo thêm"),
 
     // ==== THANH TOAN =====
     PAYMENT_SUCCESS("PAY_001", "Thanh toán thành công"),
@@ -177,6 +180,14 @@ public enum NotificationCode {
     VALIDATION_DOCTOR_ID_REQUIRED("VAL_026", "ID bác sĩ không được để trống"),
     VALIDATION_REJECT_REASON_REQUIRED("VAL_027", "Lý do từ chối không được để trống"),
     INVALID_TRANG_THAI("VAL_028", "Trạng thái không hợp lệ"),
+    VALIDATION_BENHAN_THOI_GIAN_REQUIRED("VAL_BA_001", "Thời gian khám không được để trống"),
+    VALIDATION_BENHAN_TOMTAT_REQUIRED("VAL_BA_002", "Tóm tắt bệnh án không được để trống"),
+    VALIDATION_BENHAN_KETLUAN_REQUIRED("VAL_BA_003", "Kết luận không được để trống"),
+    VALIDATION_BENHAN_LICHKHAM_REQUIRED("VAL_BA_004", "ID lịch khám không được để trống"),
+    VALIDATION_BENHAN_BACSI_REQUIRED("VAL_BA_005", "ID bác sĩ kết luận không được để trống"),
+    VALIDATION_BENHAN_DICHVU_REQUIRED("VAL_BA_006", "ID dịch vụ không được để trống"),
+    VALIDATION_BENHAN_BENHIDS_REQUIRED("VAL_BA_007", "Danh sách bệnh không được để trống"),
+    VALIDATION_BENHAN_BENHIDS_EMPTY("VAL_BA_008", "Danh sách bệnh không được rỗng"),
 
     // ===== SYSTEM =====
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),
