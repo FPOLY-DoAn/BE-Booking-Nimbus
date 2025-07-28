@@ -360,4 +360,35 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             return 0;
         }
     }
+
+    public boolean resendOtpForRegistration(String email) {
+        Optional<OTP_NguoiDung> optional = otpRepository.findByEmail(email);
+        if (optional.isEmpty()) return false;
+
+        OTP_NguoiDung oldOtp = optional.get();
+
+        String newOtp = generateOtpCode();
+        oldOtp.setOtpCode(newOtp);
+        oldOtp.setCreatedAt(LocalDateTime.now());
+        oldOtp.setExpireAt(LocalDateTime.now().plusMinutes(5));
+        otpRepository.save(oldOtp);
+
+        String html = """
+            <div style="font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f6f8fc; color: #333;">
+                <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h2 style="text-align: center; color: #0a5bff;">Nimbus - Gửi lại mã xác nhận</h2>
+                    <p>Xin chào <strong>%s</strong>,</p>
+                    <p>Bạn vừa yêu cầu gửi lại mã xác nhận tài khoản tại <strong>Nimbus</strong>.</p>
+                    <p>Mã xác nhận mới của bạn là:</p>
+                    <div style="font-size: 24px; font-weight: bold; text-align: center; letter-spacing: 5px; background: #f0f3ff; padding: 15px; border-radius: 8px; color: #0a5bff;">
+                        %s
+                    </div>
+                    <p style="margin-top: 30px;">Mã này sẽ hết hạn sau 5 phút.</p>
+                </div>
+            </div>
+            """.formatted(oldOtp.getHoTen(), newOtp);
+
+        mailConfig.sendTo("dai582005@gmail.com", email, "Gửi lại mã xác nhận tài khoản", html);
+        return true;
+    }
 }

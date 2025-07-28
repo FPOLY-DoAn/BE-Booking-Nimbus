@@ -159,4 +159,13 @@ public class UserAuthenticate {
         };
     }
 
+    @GetMapping("/resend-otp")
+    public ResponseEntity<?> resendOTP(@RequestParam String email) {
+        boolean result = nguoiDungServicel.resendOtpForRegistration(email);
+        if (result) {
+            return ResponseEntity.ok(ServiceResponse.success("RESEND_OTP_SUCCESS", "Mã xác nhận mới đã được gửi đến email."));
+        } else {
+            return ResponseEntity.badRequest().body(ServiceResponse.error("RESEND_OTP_FAILED", "Không thể gửi lại OTP. Email chưa đăng ký hoặc đã xác nhận."));
+        }
+    }
 }
