@@ -144,6 +144,9 @@ public enum NotificationCode {
     WORK_SCHEDULE_DETAILS_FAIL("SCE_002", "Hiển thị chi tiết ngày làm việc của bác sĩ thất bại"),
     WORK_SCHEDULE_CREATE_SUCCESS("SEC_003", "Tạo lịch làm việc cho bác sĩ thành công"),
     WORK_SCHEDULE_CREATE_FAIL("SEC_004", "Tạo lịch làm việc cho bác sĩ thất bại"),
+    CREATED_SUCCESS("SEC_005", "Tạo giờ khám chi tiết thành công"),
+    CREATE_FAIL("SEC_006", "Tạo giờ khám chi tiết không thành công"),
+    NOT_FOUND("SEC_007", "Không tìm thấy lịch làm việc"),
 
     // === THỐNG KÊ ====
     STATISTICS_MONTHLY("STAT_001", "Thống kê theo tháng thành công"),
