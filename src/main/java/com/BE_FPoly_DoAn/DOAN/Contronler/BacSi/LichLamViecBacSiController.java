@@ -40,8 +40,8 @@ public class LichLamViecBacSiController {
         return ResponseEntity.ok(lichLamViecService.suaLichLamViec(lichId, dto));
     }
 
-    @DeleteMapping("/{lichId}")
-    public ResponseEntity<?> xoaLichLamViec(@PathVariable Integer lichId) {
-        return ResponseEntity.ok(lichLamViecService.xoaLichLamViec(lichId));
-    }
+//    @DeleteMapping("/{lichId}")
+//    public ResponseEntity<?> xoaLichLamViec(@PathVariable Integer lichId) {
+//        return ResponseEntity.ok(lichLamViecService.xoaLichLamViec(lichId));
+//    }
 }
