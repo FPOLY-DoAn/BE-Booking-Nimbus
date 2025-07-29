@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/lich-kham")
-@PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
 @RequiredArgsConstructor
 public class LichKhamController {
 
@@ -28,6 +27,7 @@ public class LichKhamController {
      * @param dto Dữ liệu lịch khám cần tạo
      * @return ResponseEntity chứa kết quả tạo lịch khám
      */
+    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
     @PostMapping("/TaoLichKham")
     public ResponseEntity<ServiceResponse<?>> create(@Valid @RequestBody LichKhamDTO dto) {
         return ResponseEntity.ok(lichKhamService.create(dto));
@@ -39,6 +39,7 @@ public class LichKhamController {
      * @return ResponseEntity chứa danh sách lịch khám
      */
     @GetMapping("/LayDanhSachLichKham")
+    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_QUANLY')")
     public ResponseEntity<ServiceResponse<?>> getAll() {
         return ResponseEntity.ok(lichKhamService.getAll());
     }
@@ -50,6 +51,7 @@ public class LichKhamController {
      * @return ResponseEntity chứa thông tin lịch khám nếu tìm thấy
      */
     @GetMapping("/LayLichKhamTheoId/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
     public ResponseEntity<ServiceResponse<?>> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(lichKhamService.getById(id));
     }
@@ -62,6 +64,7 @@ public class LichKhamController {
      * @return ResponseEntity chứa kết quả cập nhật
      */
     @PutMapping("/CapNhatLichKham/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
     public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id, @Valid @RequestBody LichKhamDTO dto) {
         return ResponseEntity.ok(lichKhamService.update(id, dto));
     }
@@ -72,7 +75,9 @@ public class LichKhamController {
      * @param filter Điều kiện tìm kiếm (theo ngày, bác sĩ, ca, trạng thái, ...)
      * @return ResponseEntity chứa danh sách lịch khám thỏa điều kiện
      */
+
     @PostMapping("/TimKiemLichKham")
+    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
     public ResponseEntity<ServiceResponse<?>> search(@RequestBody LichKhamFilterDTO filter) {
         return ResponseEntity.ok(lichKhamService.searchLichKham(filter));
     }

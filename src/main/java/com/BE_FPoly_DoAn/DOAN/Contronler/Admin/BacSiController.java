@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/bac-si")
-@PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class BacSiController {
 
     private final BacSiServiceImpl bacSiService;
@@ -30,6 +29,7 @@ public class BacSiController {
     }
 
     @GetMapping("/LayDanhSachBacSi")
+    @PreAuthorize("hasAuthority('ROLE_BENHNHAN', 'ROLE_QUANLY')")
     public ResponseEntity<?> getAll() {
         List<BacSiDTO> list = bacSiService.getAll()
                 .stream()
@@ -40,6 +40,7 @@ public class BacSiController {
     }
 
     @GetMapping("/LayBacSiTheoId/{id}")
+    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         return bacSiService.getById(id)
                 .map(BacSiMapper::toDto)
@@ -49,6 +50,7 @@ public class BacSiController {
     }
 
     @PostMapping("/TaoMoiBacSi")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> create(@RequestBody @Valid BacSiDTO dto) {
         try {
             ChuyenKhoa ck = chuyenKhoaRepository
@@ -67,6 +69,7 @@ public class BacSiController {
     }
 
     @PutMapping("/CapNhatBacSi/{id}")
+    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
     public ResponseEntity<?> update(@PathVariable Integer id,
                                     @RequestBody @Valid BacSiDTO dto) {
         return bacSiService.getById(id).map(entity -> {

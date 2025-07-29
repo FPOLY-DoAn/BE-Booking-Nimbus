@@ -53,7 +53,8 @@ public class ConfigSecurity {
                         "/swagger-ui.html",
                         "/v3/api-docs/**",
                         "/swagger-resources/**",
-                        "/webjars/**"
+                        "/webjars/**",
+                        "/account/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/*").permitAll()
