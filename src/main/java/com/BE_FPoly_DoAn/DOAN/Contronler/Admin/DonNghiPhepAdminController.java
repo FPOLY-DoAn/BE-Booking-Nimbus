@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/don-nghi-phep")
+@RequestMapping("/admin/don-nghi-phep")
 public class DonNghiPhepAdminController {
 
     private final DonNghiPhepServiceImpl donNghiPhepService;

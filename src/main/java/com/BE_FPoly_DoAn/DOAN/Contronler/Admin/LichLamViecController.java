@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/lich-lam-viec")
+@RequestMapping("/admin/lich-lam-viec")
 @PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class LichLamViecController {
 

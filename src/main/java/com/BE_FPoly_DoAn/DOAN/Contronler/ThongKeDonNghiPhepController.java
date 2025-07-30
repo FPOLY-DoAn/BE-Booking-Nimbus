@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/thong-ke-ngay-nghi")
+@RequestMapping("/thong-ke-ngay-nghi")
 public class ThongKeDonNghiPhepController {
 
     private final ThongKeDonNghiPhepService service;

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/chuyen-khoa")
+@RequestMapping("/chuyen-khoa")
 public class ChuyenKhoaController {
 
     private final ChuyenKhoaServiceImpl chuyenKhoaService;

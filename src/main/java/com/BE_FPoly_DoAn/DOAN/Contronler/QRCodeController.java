@@ -18,7 +18,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 @RestController
-@RequestMapping("/api/qr")
+@RequestMapping("/qr")
 @PreAuthorize("hasAnyRole('ROLE_BENHNHAN', 'ROLE_LETAN')")
 public class QRCodeController {
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/don-nghi-phep")
+@RequestMapping("/don-nghi-phep")
 @PreAuthorize("hasAuthority('ROLE_BACSI')")
 public class DonNghiPhepController {
 

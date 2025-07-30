@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bac-si")
+@RequestMapping("/bac-si")
 public class BacSiController {
 
     private final BacSiServiceImpl bacSiService;
