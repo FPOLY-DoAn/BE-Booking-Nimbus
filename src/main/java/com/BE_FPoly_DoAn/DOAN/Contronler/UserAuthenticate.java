@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
+import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -121,6 +123,49 @@ public class UserAuthenticate {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ServiceResponse.error(NotificationCode.SERVER_ERROR));
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+        Optional<NguoiDung> optional = nguoiDungServicel.getByEmailOptional(email);
+        if (optional.isEmpty()) {
+            return ResponseEntity.badRequest().body(ServiceResponse.error("EMAIL_NOT_FOUND", "Email không tồn tại trong hệ thống."));
+        }
+
+        boolean sent = nguoiDungServicel.sendResetPasswordOtp(email);
+        if (sent) {
+            return ResponseEntity.ok(ServiceResponse.success("OTP_SENT", "Mã OTP đã được gửi về email."));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ServiceResponse.error("OTP_SEND_FAIL", "Không thể gửi OTP. Vui lòng thử lại."));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(
+            @RequestParam String email,
+            @RequestParam String otp,
+            @RequestParam String newPassword) {
+
+        int result = nguoiDungServicel.resetPasswordWithOtp(email, otp, newPassword);
+        return switch (result) {
+            case 1 -> ResponseEntity.ok(ServiceResponse.success("RESET_SUCCESS", "Mật khẩu đã được cập nhật."));
+            case -1 -> ResponseEntity.badRequest().body(ServiceResponse.error("OTP_INVALID", "Mã OTP không đúng."));
+            case -2 -> ResponseEntity.badRequest().body(ServiceResponse.error("OTP_EXPIRED", "Mã OTP đã hết hạn."));
+            case -3 -> ResponseEntity.badRequest().body(ServiceResponse.error("EMAIL_NOT_FOUND", "Email không đúng."));
+            default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ServiceResponse.error("RESET_FAIL", "Không thể đặt lại mật khẩu."));
+        };
+    }
+
+    @GetMapping("/resend-otp")
+    public ResponseEntity<?> resendOTP(@RequestParam String email) {
+        boolean result = nguoiDungServicel.resendOtpForRegistration(email);
+        if (result) {
+            return ResponseEntity.ok(ServiceResponse.success("RESEND_OTP_SUCCESS", "Mã xác nhận mới đã được gửi đến email."));
+        } else {
+            return ResponseEntity.badRequest().body(ServiceResponse.error("RESEND_OTP_FAILED", "Không thể gửi lại OTP. Email chưa đăng ký hoặc đã xác nhận."));
         }
     }
 }

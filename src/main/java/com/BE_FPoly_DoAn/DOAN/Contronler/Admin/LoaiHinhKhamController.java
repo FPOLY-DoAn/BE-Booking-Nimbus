@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/dich-vu")
+@RequestMapping("/dich-vu")
 @PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class LoaiHinhKhamController {
 
@@ -26,6 +26,7 @@ public class LoaiHinhKhamController {
     }
 
     @GetMapping("/LayDanhSachDichVu")
+    @PreAuthorize("hasAuthority('ROLE_BACSI','ROLE_QUANLY',ROLE_BENHNHAN,'ROLE_LETAN')")
     public ResponseEntity<ServiceResponse<List<LoaiHinhKhamDTO>>> getAll() {
         List<LoaiHinhKhamDTO> list = service.getAll()
                 .stream()
@@ -35,6 +36,7 @@ public class LoaiHinhKhamController {
     }
 
     @GetMapping("/LayDichVuTheoId/{id}")
+    @PreAuthorize("hasAuthority('ROLE_BACSI','ROLE_QUANLY',ROLE_BENHNHAN,'ROLE_LETAN')")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> getById(@PathVariable Integer id) {
         return service.getById(id)
                 .map(dv -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_ID, DichVuMapper.toDto(dv))))
@@ -42,6 +44,7 @@ public class LoaiHinhKhamController {
     }
 
     @PostMapping("/TaoMoiDichVu")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> create(@RequestBody @Valid LoaiHinhKhamDTO dto) {
         if (service.existsByTenDichVu(dto.getTenDichVu())) {
             return ResponseEntity.ok(ServiceResponse.error(NotificationCode.SERVICE_DUPLICATE));
@@ -56,6 +59,7 @@ public class LoaiHinhKhamController {
     }
 
     @PutMapping("/CapNhatDichVu/{id}")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> update(@PathVariable Integer id,
                                                                    @RequestBody @Valid LoaiHinhKhamDTO dto) {
         Optional<DichVu> opt = service.getById(id);

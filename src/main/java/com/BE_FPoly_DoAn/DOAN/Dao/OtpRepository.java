@@ -12,4 +12,5 @@ public interface OtpRepository extends JpaRepository<OTP_NguoiDung, Long > {
     void deleteAllByOtpCode(String otpCode);
     void deleteByExpireAtBefore(LocalDateTime time);
 
+    Optional<OTP_NguoiDung> findByEmail(String email);
 }

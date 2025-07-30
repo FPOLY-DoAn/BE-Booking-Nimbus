@@ -35,6 +35,10 @@ public class BenhNhan {
     @JsonBackReference
     private NguoiDung nguoiDung;
 
+    @Column(name = "dia_chi", length = 225, columnDefinition = "NVARCHAR(225)")
+    @Schema(hidden = true)
+    private String diaChi;
+
     @Column(name = "bao_hiem", length = 25, columnDefinition = "NVARCHAR(25)")
     @Schema(hidden = true)
     private String baoHiem;

@@ -9,6 +9,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Entity đại diện cho bảng LIC_HKHAM trong cơ sở dữ liệu.
+ * Lưu trữ thông tin chi tiết về các lịch hẹn khám giữa bệnh nhân và bác sĩ.
+ */
 @Entity
 @Table(name = "LICH_KHAM")
 @Getter

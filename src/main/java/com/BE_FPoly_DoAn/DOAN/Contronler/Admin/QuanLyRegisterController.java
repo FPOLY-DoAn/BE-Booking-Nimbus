@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("quanly")
+@RequestMapping("/quanly")
 public class QuanLyRegisterController {
     private final LeTanServiceImpl leTanService;
     private final BacSiServiceImpl bacSiService;

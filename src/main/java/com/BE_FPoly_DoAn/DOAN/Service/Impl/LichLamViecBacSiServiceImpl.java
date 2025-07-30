@@ -105,6 +105,11 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
 
     public ServiceResponse<?> taoLichLamViec(Integer bacSiId, LichLamViecDTO dto) {
         try {
+            boolean isExist = repository.existsByBacSi_BacSiIdAndNgayAndCaTruc(bacSiId, dto.getNgay(), dto.getCaTruc());
+            if (isExist) {
+                return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Bác sĩ đã có lịch làm việc trong ca này");
+            }
+
             LichLamViecBacSi entity = LichLamViecBacSi.builder()
                     .bacSi(BacSi.builder().bacSiId(bacSiId).build())
                     .ngay(dto.getNgay())

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/certificate-requests")
+@RequestMapping("/certificate-requests")
 public class DuyetChungChiController {
 
     private final DuyetChungChiRepository service;

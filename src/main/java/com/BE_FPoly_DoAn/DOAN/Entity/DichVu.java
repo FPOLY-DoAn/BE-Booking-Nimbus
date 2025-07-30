@@ -37,8 +37,6 @@ public class DichVu {
     @DecimalMin(value = "0.0", inclusive = true, message = "Giá phải lớn hơn hoặc bằng 0")
     private BigDecimal gia;
 
-
     @OneToMany(mappedBy = "dichVu", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<ChiTietHoaDon> chiTietHoaDons;
 }

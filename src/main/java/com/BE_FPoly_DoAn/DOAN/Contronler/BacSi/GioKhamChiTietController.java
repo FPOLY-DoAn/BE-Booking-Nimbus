@@ -1,34 +1,33 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BacSi;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
-import com.BE_FPoly_DoAn.DOAN.Dao.GioKhamChiTietRepository;
-import com.BE_FPoly_DoAn.DOAN.Entity.GioKhamChiTiet;
-import com.BE_FPoly_DoAn.DOAN.Mapper.GioKhamChiTietMapper;
-import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
-import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioTuDongDTO;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.GioKhamChiTietServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/gio-kham")
-@PreAuthorize("hasAnyAuthority('ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY', 'ROLE_LETAN')")
+@RequestMapping("/gio-kham")
 public class GioKhamChiTietController {
 
-    private final GioKhamChiTietRepository repository;
+    private final GioKhamChiTietServiceImpl gioKhamChiTietService;
 
-    public GioKhamChiTietController(GioKhamChiTietRepository repository) {
-        this.repository = repository;
+    public GioKhamChiTietController(GioKhamChiTietServiceImpl gioKhamChiTietService) {
+        this.gioKhamChiTietService = gioKhamChiTietService;
     }
 
     @GetMapping("/{lichId}")
     public ResponseEntity<?> getSlotsByLich(@PathVariable Integer lichId) {
-        List<GioKhamChiTiet> list = repository.findByLichLamViecBacSi_LichlvId(lichId);
-        List<GioKhamChiTietDto> dtoList = list.stream()
-                .map(GioKhamChiTietMapper::toDto)
-                .toList();
-        return ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_ID, dtoList));
+        return ResponseEntity.ok(gioKhamChiTietService.getByLichId(lichId));
+    }
+
+    @PostMapping("/TaoGioKhamChiTiet")
+    public ResponseEntity<?> createGioKhamChiTiet(@RequestBody GioKhamChiTietDto dto) {
+        return ResponseEntity.ok(gioKhamChiTietService.create(dto));
+    }
+
+    @PostMapping("/TaoGioKhamChiTietTuDong")
+    public ResponseEntity<?> generateGioKham(@RequestBody TaoGioTuDongDTO req) {
+        return ResponseEntity.ok(gioKhamChiTietService.generate(req));
     }
 }

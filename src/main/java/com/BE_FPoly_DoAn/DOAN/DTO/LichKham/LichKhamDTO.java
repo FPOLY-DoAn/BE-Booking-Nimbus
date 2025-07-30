@@ -6,11 +6,16 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * DTO chính dùng để tạo và cập nhật lịch khám.
+ * Ánh xạ dữ liệu giữa client và backend.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LichKhamDTO {
+
     private Integer lichkhamId;
 
     @NotNull(message = "ID bác sĩ không được để trống")

@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/benh-an")
+@RequestMapping("/benh-an")
 @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
 @RequiredArgsConstructor
 public class BenhAnController {
@@ -35,6 +35,11 @@ public class BenhAnController {
     @PutMapping("/CapNhatBenhAn/{id}")
     public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id, @Valid @RequestBody BenhAnDTO dto) {
         return ResponseEntity.ok(benhAnService.update(id, dto));
+    }
+
+    @GetMapping("/LayBenhAnTheoBenhNhan/{benhNhanId}")
+    public ResponseEntity<ServiceResponse<?>> getByBenhNhanId(@PathVariable Integer benhNhanId) {
+        return ResponseEntity.ok(benhAnService.getByBenhNhanId(benhNhanId));
     }
 
     // @DeleteMapping("/XoaBenhAn/{id}")

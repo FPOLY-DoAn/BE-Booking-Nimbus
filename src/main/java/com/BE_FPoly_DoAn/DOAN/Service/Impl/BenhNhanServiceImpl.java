@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,13 +52,63 @@ public class BenhNhanServiceImpl {
     @Transactional
     public ServiceResponse<?> update(Integer id, BenhNhanDTO dto) {
         try {
-            BenhNhan benhNhan = benhNhanRepo.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Không tìm thấy bệnh nhân"));
+            Optional<BenhNhan> optional = benhNhanRepo.findById(id);
+            if (optional.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.PATIENT_NOT_FOUND);
+            }
+
+            if (dto.getHoTen() == null || dto.getHoTen().isBlank()) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_NAME_REQUIRED);
+            }
+
+            if (dto.getEmail() == null || dto.getEmail().isBlank()) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_EMAIL_REQUIRED);
+            }
+
+            if (!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_EMAIL_INVALID);
+            }
+
+            if (dto.getSoDienThoai() == null || dto.getSoDienThoai().isBlank()) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_PHONE_REQUIRED);
+            }
+
+            if (!dto.getSoDienThoai().matches("^\\d{10,15}$")) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_PHONE_INVALID);
+            }
+
+            if (dto.getGioiTinh() == null || dto.getGioiTinh().isBlank()) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_GENDER_REQUIRED);
+            }
+
+            if (dto.getBaoHiem() == null || dto.getBaoHiem().isBlank()) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_BAOHIEM_REQUIRED);
+            }
+
+            if (dto.getLienHeKhanCap() == null || dto.getLienHeKhanCap().isBlank()) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_KHANCAP_REQUIRED);
+            }
+
+            if (!dto.getLienHeKhanCap().matches("^\\d{10,15}$")) {
+                return ServiceResponse.error(NotificationCode.VALIDATION_KHANCAP_INVALID);
+            }
+
+            BenhNhan benhNhan = optional.get();
 
             benhNhan.setBaoHiem(dto.getBaoHiem());
             benhNhan.setLienHeKhanCap(dto.getLienHeKhanCap());
+            benhNhan.setDiaChi(dto.getDiaChi());
+
+            NguoiDung nguoiDung = benhNhan.getNguoiDung();
+            if (nguoiDung != null) {
+                nguoiDung.setHoTen(dto.getHoTen());
+                nguoiDung.setEmail(dto.getEmail());
+                nguoiDung.setSoDienThoai(dto.getSoDienThoai());
+                nguoiDung.setGioiTinh(dto.getGioiTinh());
+            }
 
             benhNhanRepo.save(benhNhan);
+
             return ServiceResponse.success(NotificationCode.PATIENT_UPDATE_SUCCESS);
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.PATIENT_UPDATE_FAIL, e.getMessage());

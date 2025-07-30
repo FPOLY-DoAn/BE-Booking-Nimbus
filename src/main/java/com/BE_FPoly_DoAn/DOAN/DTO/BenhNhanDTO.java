@@ -21,8 +21,9 @@ public class BenhNhanDTO {
     private String soDienThoai;
     private String baoHiem;
     private String lienHeKhanCap;
+    private String diaChi;
     private LocalDate ngayTao;
     private LocalDate ngayCapNhat;
-    private List<LichKhamShortDTO> lichKhams;
-    private List<HoaDonShortDTO> hoaDons;
+//    private List<LichKhamShortDTO> lichKhams;
+//    private List<HoaDonShortDTO> hoaDons;
 }

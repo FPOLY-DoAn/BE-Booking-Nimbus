@@ -299,4 +299,96 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
                 .map(NguoiDungMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public boolean sendResetPasswordOtp(String email) {
+        try {
+            Optional<NguoiDung> optional = nguoiDungRepository.findByEmail(email);
+            if (optional.isEmpty()) return false;
+
+            NguoiDung user = optional.get();
+            String otpCode = generateOtpCode();
+
+            OTP_NguoiDung otp = new OTP_NguoiDung(otpCode,
+                    user.getEmail(), user.getHoTen(),
+                    user.getGioiTinh(), user.getSoDienThoai(),
+                    user.getMatKhau());
+
+            otp.setResetPassword(true);
+            otp.setExpireAt(LocalDateTime.now().plusMinutes(5));
+
+            otpRepository.save(otp);
+
+            String html = """
+            <div style="padding:20px;font-family:sans-serif;">
+                <h3>Yêu cầu đặt lại mật khẩu</h3>
+                <p>Xin chào <strong>%s</strong>,</p>
+                <p>Bạn vừa yêu cầu đặt lại mật khẩu. Mã OTP để xác nhận là:</p>
+                <h2 style="color:#0a5bff;">%s</h2>
+                <p>Mã sẽ hết hạn trong 5 phút.</p>
+            </div>
+            """.formatted(user.getHoTen(), otpCode);
+
+            mailConfig.sendTo("dai582005@gmail.com", user.getEmail(), "Đặt lại mật khẩu", html);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Transactional
+    public int resetPasswordWithOtp(String email, String otpCode, String newPassword) {
+        try {
+            Optional<OTP_NguoiDung> otpOptional = otpRepository.findByOtpCode(otpCode);
+            if (otpOptional.isEmpty()) return -1;
+
+            OTP_NguoiDung otp = otpOptional.get();
+            if (otp.getExpireAt().isBefore(LocalDateTime.now())) return -2;
+            if (!otp.getEmail().equals(email)) return -3;
+
+            Optional<NguoiDung> userOpt = nguoiDungRepository.findByEmail(email);
+            if (userOpt.isEmpty()) return -3;
+
+            NguoiDung user = userOpt.get();
+            user.setMatKhau(new BCryptPasswordEncoder().encode(newPassword));
+            nguoiDungRepository.save(user);
+            otpRepository.delete(otp);
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public boolean resendOtpForRegistration(String email) {
+        Optional<OTP_NguoiDung> optional = otpRepository.findByEmail(email);
+        if (optional.isEmpty()) return false;
+
+        OTP_NguoiDung oldOtp = optional.get();
+
+        String newOtp = generateOtpCode();
+        oldOtp.setOtpCode(newOtp);
+        oldOtp.setCreatedAt(LocalDateTime.now());
+        oldOtp.setExpireAt(LocalDateTime.now().plusMinutes(5));
+        otpRepository.save(oldOtp);
+
+        String html = """
+            <div style="font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f6f8fc; color: #333;">
+                <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h2 style="text-align: center; color: #0a5bff;">Nimbus - Gửi lại mã xác nhận</h2>
+                    <p>Xin chào <strong>%s</strong>,</p>
+                    <p>Bạn vừa yêu cầu gửi lại mã xác nhận tài khoản tại <strong>Nimbus</strong>.</p>
+                    <p>Mã xác nhận mới của bạn là:</p>
+                    <div style="font-size: 24px; font-weight: bold; text-align: center; letter-spacing: 5px; background: #f0f3ff; padding: 15px; border-radius: 8px; color: #0a5bff;">
+                        %s
+                    </div>
+                    <p style="margin-top: 30px;">Mã này sẽ hết hạn sau 5 phút.</p>
+                </div>
+            </div>
+            """.formatted(oldOtp.getHoTen(), newOtp);
+
+        mailConfig.sendTo("dai582005@gmail.com", email, "Gửi lại mã xác nhận tài khoản", html);
+        return true;
+    }
 }

@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/bac-si/lich-lam-viec")
+@RequestMapping("/bac-si/lich-lam-viec")
 @PreAuthorize("hasAuthority('ROLE_BACSI')")
 public class LichLamViecBacSiController {
 
@@ -40,8 +40,8 @@ public class LichLamViecBacSiController {
         return ResponseEntity.ok(lichLamViecService.suaLichLamViec(lichId, dto));
     }
 
-    @DeleteMapping("/{lichId}")
-    public ResponseEntity<?> xoaLichLamViec(@PathVariable Integer lichId) {
-        return ResponseEntity.ok(lichLamViecService.xoaLichLamViec(lichId));
-    }
+//    @DeleteMapping("/{lichId}")
+//    public ResponseEntity<?> xoaLichLamViec(@PathVariable Integer lichId) {
+//        return ResponseEntity.ok(lichLamViecService.xoaLichLamViec(lichId));
+//    }
 }
