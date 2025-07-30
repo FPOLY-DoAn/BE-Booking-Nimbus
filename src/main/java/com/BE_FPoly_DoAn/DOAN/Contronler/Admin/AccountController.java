@@ -1,4 +1,4 @@
-package com.BE_FPoly_DoAn.DOAN.Contronler;
+package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.DoiMatKhauDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;

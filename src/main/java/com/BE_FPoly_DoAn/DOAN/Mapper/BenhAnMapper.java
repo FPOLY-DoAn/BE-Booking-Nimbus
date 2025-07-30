@@ -12,7 +12,6 @@ public class BenhAnMapper {
         entity.setBenhAnId(dto.getBenhAnId());
         entity.setLichKham(lichKham);
         entity.setBacSiKetLuan(bacSi);
-        entity.setDichVu(dichVu);
         entity.setTomTat(dto.getTomTat());
         entity.setKetLuan(dto.getKetLuan());
         entity.setGhiChu(dto.getGhiChu());
@@ -26,7 +25,6 @@ public class BenhAnMapper {
         dto.setBenhAnId(entity.getBenhAnId());
         dto.setLichKhamId(entity.getLichKham().getLichkhamId());
         dto.setBacSiKetLuanId(entity.getBacSiKetLuan().getBacSiId());
-        dto.setDichVuId(entity.getDichVu().getDichVuId());
         dto.setTomTat(entity.getTomTat());
         dto.setKetLuan(entity.getKetLuan());
         dto.setGhiChu(entity.getGhiChu());
