@@ -122,7 +122,6 @@ public class BenhAnServiceImpl {
 
             existing.setLichKham(lichKham);
             existing.setBacSiKetLuan(bacSi);
-            existing.setDichVu(dichVu);
             existing.setTomTat(dto.getTomTat());
             existing.setKetLuan(dto.getKetLuan());
             existing.setGhiChu(dto.getGhiChu());

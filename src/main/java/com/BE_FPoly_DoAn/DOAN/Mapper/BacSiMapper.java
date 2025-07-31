@@ -7,7 +7,6 @@ public class BacSiMapper {
 
     public static BacSiDTO toDto(BacSi entity) {
         BacSiDTO dto = new BacSiDTO();
-        dto.setBacsi_id(String.valueOf(entity.getBacSiId()));
 
         NguoiDung nd = entity.getNguoiDung();
         if (nd != null) {
@@ -26,11 +25,7 @@ public class BacSiMapper {
         dto.setNgayTuyenDung(entity.getNgayTuyenDung());
         dto.setGhiChu(entity.getGhiChu());
         dto.setTrangThaiHoatDong(entity.getTrangThaiHoatDong());
-        dto.setTrangThaiHoatDongText(
-                Boolean.TRUE.equals(entity.getTrangThaiHoatDong())
-                        ? "Đang hoạt động"
-                        : "Đã bị vô hiệu hóa"
-        );
+
 
         return dto;
     }

@@ -34,11 +34,6 @@ public class BenhAn {
     @NotNull(message = "Bác sĩ kết luận không được để trống")
     private BacSi bacSiKetLuan;
 
-    @ManyToOne
-    @JoinColumn(name = "dichvu_id", referencedColumnName = "dichvu_id", columnDefinition = "INT")
-    @NotNull(message = "Dịch vụ không được để trống")
-    private DichVu dichVu;
-
     @Column(name = "tom_tat", length = 100, columnDefinition = "NVARCHAR(100)")
     @NotBlank(message = "Tóm tắt không được để trống")
     private String tomTat;

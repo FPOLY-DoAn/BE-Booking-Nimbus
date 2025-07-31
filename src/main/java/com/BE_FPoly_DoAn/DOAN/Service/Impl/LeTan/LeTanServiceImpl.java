@@ -1,7 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.LeTan;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.LeTanDTO;
-import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.LeTanRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
@@ -10,7 +9,6 @@ import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Entity.PhanQuyen;
 import com.BE_FPoly_DoAn.DOAN.Entity.VaiTro;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.PhanQuyenServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

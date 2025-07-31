@@ -57,10 +57,9 @@ public class BacSiController {
                     .findById(dto.getChuyenKhoaId())
                     .orElseThrow(() -> new IllegalArgumentException("Chuyên khoa không tồn tại"));
 
-            BacSi entity = BacSiMapper.toEntity(dto, ck);
-            BacSi saved = bacSiService.save(entity);
+            ServiceResponse<?> saved = bacSiService.createNguoiDungAndBacSi(dto);
 
-            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.DOCTOR_CREATE_SUCCESS, BacSiMapper.toDto(saved)));
+            return ResponseEntity.ok(ServiceResponse.success(NotificationCode.DOCTOR_CREATE_SUCCESS));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(ServiceResponse.error(NotificationCode.SPECIALTY_NOT_FOUND));
         } catch (Exception e) {
