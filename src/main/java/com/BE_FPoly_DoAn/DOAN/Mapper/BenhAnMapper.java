@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Mapper;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhAn.BenhAnDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhAn.BenhInfoDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.*;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class BenhAnMapper {
         return entity;
     }
 
-    public static BenhAnDTO toDTO(BenhAn entity, List<Integer> benhIds) {
+    public static BenhAnDTO toDTO(BenhAn entity, List<BenhInfoDTO> benhInfoList) {
         BenhAnDTO dto = new BenhAnDTO();
         dto.setBenhAnId(entity.getBenhAnId());
         dto.setLichKhamId(entity.getLichKham().getLichkhamId());
@@ -28,7 +29,15 @@ public class BenhAnMapper {
         dto.setKetLuan(entity.getKetLuan());
         dto.setGhiChu(entity.getGhiChu());
         dto.setThoiGian(entity.getThoiGian());
-        dto.setBenhIds(benhIds);
+        // List<Integer> benhIds = benhInfoList.stream()
+        //         .map(BenhInfoDTO::getBenhId)
+        //         .toList();
+        List<String> benhTenList = benhInfoList.stream()
+                .map(BenhInfoDTO::getTenBenh)
+                .toList();
+        // dto.setBenhIds(benhIds); // FE không cần trả về danh sách id bệnh
+        dto.setBenhTenList(benhTenList);
+        // dto.setBenhInfoList(benhInfoList); // FE không cần object chi tiết bệnh
         return dto;
     }
 }

@@ -54,9 +54,7 @@ public class BenhAnServiceImpl {
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_KETLUAN_REQUIRED);
         if (dto.getThoiGian() == null)
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_THOI_GIAN_REQUIRED);
-        if (dto.getBenhIds() == null)
-            return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_BENHIDS_REQUIRED);
-        if (dto.getBenhIds().isEmpty())
+        if (dto.getBenhIds() == null || dto.getBenhIds().isEmpty())
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_BENHIDS_EMPTY);
 
         try {
@@ -105,9 +103,7 @@ public class BenhAnServiceImpl {
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_KETLUAN_REQUIRED);
         if (dto.getThoiGian() == null)
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_THOI_GIAN_REQUIRED);
-        if (dto.getBenhIds() == null)
-            return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_BENHIDS_REQUIRED);
-        if (dto.getBenhIds().isEmpty())
+        if (dto.getBenhIds() == null || dto.getBenhIds().isEmpty())
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_BENHIDS_EMPTY);
 
         try {
@@ -128,7 +124,6 @@ public class BenhAnServiceImpl {
             existing.setThoiGian(dto.getThoiGian());
 
             benhAnRepo.save(existing);
-
             hoSoRepo.deleteAll(existing.getHoSoBenhAns());
 
             List<HoSoBenhAn> hoSoList = new ArrayList<>();
@@ -154,10 +149,7 @@ public class BenhAnServiceImpl {
                 List<BenhInfoDTO> benhInfoList = benhAn.getHoSoBenhAns().stream()
                         .map(hoso -> new BenhInfoDTO(hoso.getBenh().getBenhId(), hoso.getBenh().getTenBenh()))
                         .toList();
-                List<Integer> benhIds = benhInfoList.stream().map(BenhInfoDTO::getBenhId).toList();
-                BenhAnDTO dto = BenhAnMapper.toDTO(benhAn, benhIds);
-                dto.setBenhInfoList(benhInfoList);
-                return dto;
+                return BenhAnMapper.toDTO(benhAn, benhInfoList);
             }).toList();
 
             return ServiceResponse.success(NotificationCode.MEDICAL_RECORD_LIST, dtoList);
@@ -177,9 +169,7 @@ public class BenhAnServiceImpl {
             List<BenhInfoDTO> benhInfoList = benhAn.getHoSoBenhAns().stream()
                     .map(hoso -> new BenhInfoDTO(hoso.getBenh().getBenhId(), hoso.getBenh().getTenBenh()))
                     .toList();
-            List<Integer> benhIds = benhInfoList.stream().map(BenhInfoDTO::getBenhId).toList();
-            BenhAnDTO dto = BenhAnMapper.toDTO(benhAn, benhIds);
-            dto.setBenhInfoList(benhInfoList);
+            BenhAnDTO dto = BenhAnMapper.toDTO(benhAn, benhInfoList);
 
             return ServiceResponse.success(NotificationCode.MEDICAL_RECORD_DETAIL, dto);
         } catch (Exception e) {
@@ -208,10 +198,7 @@ public class BenhAnServiceImpl {
                 List<BenhInfoDTO> benhInfoList = benhAn.getHoSoBenhAns().stream()
                         .map(hoso -> new BenhInfoDTO(hoso.getBenh().getBenhId(), hoso.getBenh().getTenBenh()))
                         .toList();
-                List<Integer> benhIds = benhInfoList.stream().map(BenhInfoDTO::getBenhId).toList();
-                BenhAnDTO dto = BenhAnMapper.toDTO(benhAn, benhIds);
-                dto.setBenhInfoList(benhInfoList);
-                return dto;
+                return BenhAnMapper.toDTO(benhAn, benhInfoList);
             }).toList();
 
             return ServiceResponse.success(NotificationCode.MEDICAL_RECORD_LIST, dtoList);

@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,8 +36,11 @@ public class BacSiDTO {
 
     // ============ Thông tin riêng của bác sĩ ============
 
+    @JsonIgnore
     @NotNull(message = "VALIDATION_CHUYENKHOA_REQUIRED")
     private Integer chuyenKhoaId;
+
+    private String tenKhoa;
 
     @NotBlank(message = "VALIDATION_CHUNGCHI_REQUIRED")
     private String chungChi;

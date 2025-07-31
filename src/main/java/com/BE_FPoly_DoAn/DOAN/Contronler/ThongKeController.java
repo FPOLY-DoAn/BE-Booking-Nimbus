@@ -2,6 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichKhamServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy.ThongKeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ThongKeController {
 
+    private final ThongKeServiceImpl thongKeService;
     private final LichKhamServiceImpl lichKhamService;
 
     @GetMapping("/ThongKeTheoThang")
@@ -24,5 +26,30 @@ public class ThongKeController {
     @GetMapping("/ThongKeTheoBacSi")
     public ResponseEntity<ServiceResponse<?>> thongKeTheoBacSi() {
         return ResponseEntity.ok(lichKhamService.thongKeTheoBacSi());
+    }
+
+    @GetMapping("/ThongKeBenhNhanTheoGioiTinh")
+    public ResponseEntity<ServiceResponse<?>> thongKeBenhNhanTheoGioiTinh() {
+        return ResponseEntity.ok(thongKeService.thongKeBenhNhanTheoGioiTinh());
+    }
+
+    @GetMapping("/ThongKeDoanhThuTheoThang")
+    public ResponseEntity<ServiceResponse<?>> thongKeDoanhThuTheoThang() {
+        return ResponseEntity.ok(thongKeService.thongKeDoanhThuTheoThang());
+    }
+
+    @GetMapping("/ThongKeDonThuocTheoThang")
+    public ResponseEntity<ServiceResponse<?>> thongKeDonThuocTheoThang() {
+        return ResponseEntity.ok(thongKeService.thongKeDonThuocTheoThang());
+    }
+
+    @GetMapping("/ThongKeBenhTheoTen")
+    public ResponseEntity<ServiceResponse<?>> thongKeSoLuongBenhTheoTen() {
+        return ResponseEntity.ok(thongKeService.thongKeSoLuongBenhTheoTen());
+    }
+
+    @GetMapping("/ThongKeHoaDonTheoDichVu")
+    public ResponseEntity<ServiceResponse<?>> thongKeHoaDonTheoDichVu() {
+        return ResponseEntity.ok(thongKeService.thongKeHoaDonTheoDichVu());
     }
 }

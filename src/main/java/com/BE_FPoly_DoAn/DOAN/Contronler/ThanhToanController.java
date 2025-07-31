@@ -16,7 +16,7 @@ public class ThanhToanController {
     private final ThanhToanServiceImpl thanhToanService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_BENHNHAN', 'ROLE_LETAN')")
+    @PreAuthorize("hasAnyRole('ROLE_BENHNHAN', 'ROLE_LETAN', 'ROLE_BACSI', 'ROLE_QUANLY')")
     public ServiceResponse<?> create(@Valid @RequestBody ThanhToanDTO dto) {
         return thanhToanService.create(dto);
     }
