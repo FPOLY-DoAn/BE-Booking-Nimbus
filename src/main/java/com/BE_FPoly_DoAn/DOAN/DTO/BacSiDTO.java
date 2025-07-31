@@ -15,8 +15,6 @@ public class BacSiDTO {
 
     // ============ Thông tin người dùng chung ============
 
-    private String bacsi_id;
-
     @NotBlank(message = "VALIDATION_NAME_REQUIRED")
     @Size(max = 50, message = "VALIDATION_NAME_TOO_LONG")
     private String hoTen;
@@ -32,8 +30,8 @@ public class BacSiDTO {
     @Size(max = 15, message = "VALIDATION_PHONE_TOO_LONG")
     private String soDienThoai;
 
-//    @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
-//    private String matKhau;
+    @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
+    private String matKhau;
 
     // ============ Thông tin riêng của bác sĩ ============
 
@@ -59,6 +57,4 @@ public class BacSiDTO {
 
     @NotNull(message = "VALIDATION_TRANGTHAI_REQUIRED")
     private Boolean trangThaiHoatDong;
-
-    private String trangThaiHoatDongText;
 }

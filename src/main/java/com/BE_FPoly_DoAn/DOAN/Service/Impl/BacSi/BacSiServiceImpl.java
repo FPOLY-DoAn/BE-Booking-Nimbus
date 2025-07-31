@@ -71,6 +71,7 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
         try {
             NguoiDung nguoiDung = NguoiDung.builder().hoTen(bacSiDTO.getHoTen())
                     .email(bacSiDTO.getEmail()).soDienThoai(bacSiDTO.getSoDienThoai())
+                    .matKhau(new BCryptPasswordEncoder().encode(bacSiDTO.getMatKhau()))
                     .gioiTinh(bacSiDTO.getGioiTinh()).build();
             nguoiDungService.save(nguoiDung);
             BacSi bacSi = BacSi.builder().nguoiDung(nguoiDung).
