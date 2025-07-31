@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/dich-vu")
+@RequestMapping("/dich-vu")
 @PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class LoaiHinhKhamController {
 

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/gio-kham")
+@RequestMapping("/gio-kham")
 public class GioKhamChiTietController {
 
     private final GioKhamChiTietServiceImpl gioKhamChiTietService;

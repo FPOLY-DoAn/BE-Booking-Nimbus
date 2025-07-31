@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/benh-nhan")
+@RequestMapping("/benh-nhan")
 @PreAuthorize("hasAuthority('ROLE_QUANLY')")
 public class BenhNhanController {
 

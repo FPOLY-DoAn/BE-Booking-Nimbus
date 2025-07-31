@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Chỉ các tài khoản có vai trò 'LỄ TÂN' hoặc 'BÁC SĨ' mới được truy cập.
  */
 @RestController
-@RequestMapping("/api/lich-kham")
+@RequestMapping("/lich-kham")
 @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
 @RequiredArgsConstructor
 public class LichKhamController {

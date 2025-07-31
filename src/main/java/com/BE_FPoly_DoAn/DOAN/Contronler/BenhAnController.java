@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/benh-an")
+@RequestMapping("/benh-an")
 @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
 @RequiredArgsConstructor
 public class BenhAnController {
