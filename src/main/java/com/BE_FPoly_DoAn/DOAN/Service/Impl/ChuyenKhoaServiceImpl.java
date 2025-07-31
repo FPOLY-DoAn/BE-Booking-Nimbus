@@ -40,4 +40,8 @@ public class ChuyenKhoaServiceImpl implements InterfaceService<ChuyenKhoa> {
     public boolean existsByTen(String tenKhoa) {
         return chuyenKhoaRepository.existsByTenKhoaIgnoreCase(tenKhoa);
     }
+
+    public Optional<ChuyenKhoa> getByTen(String tenKhoa) {
+        return chuyenKhoaRepository.findByTenKhoaIgnoreCase(tenKhoa);
+    }
 }
