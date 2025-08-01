@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.DTO.BenhAn;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,8 +38,11 @@ public class BenhAnDTO {
     @NotNull(message = "Thời gian không được để trống")
     private LocalDateTime thoiGian;
 
+    @JsonIgnore
     @NotEmpty(message = "Danh sách bệnh không được để trống")
     private List<Integer> benhIds;
 
-    private List<BenhInfoDTO> benhInfoList;
+//    private List<BenhInfoDTO> benhInfoList;
+
+    private List<String> benhTenList;
 }

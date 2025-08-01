@@ -152,6 +152,11 @@ public enum NotificationCode {
     STATISTICS_MONTHLY("STAT_001", "Thống kê theo tháng thành công"),
     STATISTICS_DOCTOR("STAT_002", "Thống kê theo bác sĩ thành công"),
     STATISTICS_EMPTY("STAT_003", "Không có dữ liệu thống kê trong khoảng thời gian này"),
+    STATISTICS_BY_GENDER("STAT_004", "Thống kê bệnh nhân theo giới tính thành công"),
+    STATISTICS_REVENUE_BY_MONTH("STAT_005", "Thống kê doanh thu theo tháng thành công"),
+    STATISTICS_PRESCRIPTIONS_BY_MONTH("STAT_006", "Thống kê đơn thuốc theo tháng thành công"),
+    STATISTICS_DISEASES("STAT_007", "Thống kê số lượng bệnh theo tên thành công"),
+    STATISTICS_SERVICE_REVENUE("STAT_008", "Thống kê doanh thu theo dịch vụ thành công"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
