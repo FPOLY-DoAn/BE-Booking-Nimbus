@@ -2,6 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichKhamServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy.ThongKeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/thong-ke")
 @PreAuthorize("hasRole('ROLE_QUANLY')")
 @RequiredArgsConstructor
+@Tag(name = "Xem thống kê theo Bác sĩ, Tháng")
 public class ThongKeController {
 
     private final ThongKeServiceImpl thongKeService;

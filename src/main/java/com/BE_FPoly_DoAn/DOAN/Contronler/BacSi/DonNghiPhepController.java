@@ -3,6 +3,7 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.BacSi;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.DonNghiPhepDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.DonNghiPhep;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.DonNghiPhepServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/don-nghi-phep")
 @PreAuthorize("hasAuthority('ROLE_BACSI')")
+@Tag(name = "Quản lý đơn xin nghỉ phép")
 public class DonNghiPhepController {
 
     private final DonNghiPhepServiceImpl donNghiPhepService;

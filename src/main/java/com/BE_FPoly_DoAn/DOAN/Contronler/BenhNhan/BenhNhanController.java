@@ -3,6 +3,7 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.BenhNhan;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhNhanServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/benh-nhan")
 @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+@Tag(name = "Lấy theo ID và danh sách , cập nhật bệnh nhân")
 public class BenhNhanController {
 
     private final BenhNhanServiceImpl service;

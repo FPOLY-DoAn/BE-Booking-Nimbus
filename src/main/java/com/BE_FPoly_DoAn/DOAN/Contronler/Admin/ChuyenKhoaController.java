@@ -6,6 +6,7 @@ import com.BE_FPoly_DoAn.DOAN.Mapper.ChuyenKhoaMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.ChuyenKhoaServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,8 @@ public class ChuyenKhoaController {
     }
 
     @GetMapping("/LayDanhSachChuyenKhoa")
+    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
+    @Operation(summary = "Lấy danh sách bác sĩ")
     public ResponseEntity<ServiceResponse<List<ChuyenKhoaDTO>>> getAll() {
         List<ChuyenKhoaDTO> list = chuyenKhoaService.getAll()
                 .stream()
@@ -35,6 +38,8 @@ public class ChuyenKhoaController {
     }
 
     @GetMapping("/LayChuyenKhoaTheoId/{id}")
+    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
+    @Operation(summary = "Lấy danh sách Chuyên Khoa theo id")
     public ResponseEntity<ServiceResponse<ChuyenKhoaDTO>> getById(@PathVariable Integer id) {
         return chuyenKhoaService.getById(id)
                 .map(ck -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.SPECIALTY_DETAIL, ChuyenKhoaMapper.toDto(ck))))
@@ -43,6 +48,7 @@ public class ChuyenKhoaController {
 
     @PostMapping("/TaoMoiChuyenKhoa")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @Operation(summary = "Tạo mới chuyên khoa")
     public ResponseEntity<ServiceResponse<ChuyenKhoaDTO>> create(@RequestBody @Valid ChuyenKhoaDTO dto) {
         boolean exists = chuyenKhoaService.existsByTen(dto.getTenKhoa());
         if (exists) {
@@ -57,6 +63,7 @@ public class ChuyenKhoaController {
 
     @PutMapping("/CapNhatChuyenKhoa/{id}")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @Operation(summary = "Cập nhật bác sĩ theo ID")
     public ResponseEntity<ServiceResponse<ChuyenKhoaDTO>> update(@PathVariable Integer id,
                                                                  @RequestBody @Valid ChuyenKhoaDTO dto) {
         Optional<ChuyenKhoa> optional = chuyenKhoaService.getById(id);

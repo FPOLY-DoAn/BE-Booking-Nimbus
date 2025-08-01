@@ -33,18 +33,21 @@ public class AccountController {
     }
 
     @GetMapping("/LayThongTin")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
         Integer userId = jwtService.extractUserIdFromRequest(request);
         return ResponseEntity.ok(nguoiDungService.getCurrentUserInfo(userId));
     }
 
     @PutMapping("/CapNhatThongTin")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> updateUser(@Valid @RequestBody NguoiDungDTO dto, HttpServletRequest request) {
         Integer userId = jwtService.extractUserIdFromRequest(request);
         return ResponseEntity.ok(nguoiDungService.updateCurrentUserInfo(userId, dto));
     }
 
     @PutMapping("/DoiMatKhau")
+    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
     public ResponseEntity<?> changePassword(@Valid @RequestBody DoiMatKhauDTO dto, HttpServletRequest request) {
         Integer userId = jwtService.extractUserIdFromRequest(request);
         return ResponseEntity.ok(nguoiDungService.changePassword(userId, dto.getOldPassword(), dto.getNewPassword()));

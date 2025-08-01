@@ -5,6 +5,7 @@ import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi.BacSiServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichLamViecBacSiServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/bac-si/lich-lam-viec")
 @PreAuthorize("hasAuthority('ROLE_BACSI')")
+@Tag(name = "Xem, Sửa lịch làm việc của bác sĩ ")
 public class LichLamViecBacSiController {
 
     private final JwtService jwtService;

@@ -3,11 +3,13 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.BacSi;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
 import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioTuDongDTO;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.GioKhamChiTietServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/gio-kham")
+@Tag(name = "Quản lý giờ khám")
 public class GioKhamChiTietController {
 
     private final GioKhamChiTietServiceImpl gioKhamChiTietService;

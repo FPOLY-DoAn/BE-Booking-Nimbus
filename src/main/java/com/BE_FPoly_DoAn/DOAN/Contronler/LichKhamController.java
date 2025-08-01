@@ -4,6 +4,7 @@ import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamFilterDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichKhamServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/lich-kham")
 @RequiredArgsConstructor
+@Tag(name = "Quản lý lịch khám", description = "CRUD lịch khám, đặt lịch cho bệnh nhân")
 public class LichKhamController {
 
     private final LichKhamServiceImpl lichKhamService;
