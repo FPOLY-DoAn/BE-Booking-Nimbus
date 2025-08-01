@@ -2,12 +2,14 @@ package com.BE_FPoly_DoAn.DOAN.Contronler;
 
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.ThongKeDonNghiPhepService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/thong-ke-ngay-nghi")
+@Tag(name  = "Thống kê theo dơn nghỉ phép")
 public class ThongKeDonNghiPhepController {
 
     private final ThongKeDonNghiPhepService service;

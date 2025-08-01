@@ -5,6 +5,7 @@ import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.YeuCauChungChiDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Dao.DuyetChungChiRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/certificate-requests")
+@Tag(name = "Quản  lý chúng chỉ")
 public class DuyetChungChiController {
 
     private final DuyetChungChiRepository service;

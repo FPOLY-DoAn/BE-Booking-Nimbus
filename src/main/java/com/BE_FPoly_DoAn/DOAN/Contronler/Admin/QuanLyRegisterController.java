@@ -6,7 +6,9 @@ import com.BE_FPoly_DoAn.DOAN.DTO.QuanLyDTO;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi.BacSiServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LeTan.LeTanServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy.QuanLyServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.hibernate.annotations.Type;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/quanly")
+@Tag(name = "Phân vai trò", description = "APIS chỉ có quyền admin")
 public class QuanLyRegisterController {
     private final LeTanServiceImpl leTanService;
     private final BacSiServiceImpl bacSiService;

@@ -3,6 +3,7 @@ package com.BE_FPoly_DoAn.DOAN.Contronler;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhAn.BenhAnDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhAnServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/benh-an")
 @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI')")
+@Tag(name = "Quản lý bệnh án")
 @RequiredArgsConstructor
 public class BenhAnController {
 

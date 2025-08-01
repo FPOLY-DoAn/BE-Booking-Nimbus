@@ -6,6 +6,7 @@ import com.BE_FPoly_DoAn.DOAN.Entity.DonNghiPhep;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.DonNghiPhepServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/don-nghi-phep")
+@Tag(name = "Quản lý đơn xin nghỉ phép")
 public class DonNghiPhepAdminController {
 
     private final DonNghiPhepServiceImpl donNghiPhepService;

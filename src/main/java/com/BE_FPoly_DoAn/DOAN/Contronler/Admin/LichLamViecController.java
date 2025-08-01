@@ -2,6 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Contronler.Admin;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDTO;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichLamViecBacSiServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin/lich-lam-viec")
 @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+@Tag(name = "Tạo lịch làm việc cho bác sĩ")
 public class LichLamViecController {
 
     private final LichLamViecBacSiServiceImpl lichLamViecService;

@@ -8,6 +8,7 @@ import com.BE_FPoly_DoAn.DOAN.Mapper.BacSiMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi.BacSiServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ public class BacSiController {
 
     @GetMapping("/LayDanhSachBacSi")
     @PreAuthorize("hasAuthority('ROLE_BENHNHAN', 'ROLE_QUANLY')")
+    @Operation(summary = "Lấy danh sách tất cả bác sĩ")
     public ResponseEntity<?> getAll() {
         List<BacSiDTO> list = bacSiService.getAll()
                 .stream()
@@ -41,6 +43,7 @@ public class BacSiController {
 
     @GetMapping("/LayBacSiTheoId/{id}")
     @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
+    @Operation(summary = "Lấy bác sĩ theo ID", description = "Dành cho tất cả các role")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         return bacSiService.getById(id)
                 .map(BacSiMapper::toDto)
@@ -51,6 +54,7 @@ public class BacSiController {
 
     @PostMapping("/TaoMoiBacSi")
     @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @Operation(summary = "Tạo tài khoản bác sĩ", description = "Chỉ admin mới được tạo.")
     public ResponseEntity<?> create(@RequestBody @Valid BacSiDTO dto) {
         try {
             ChuyenKhoa ck = chuyenKhoaRepository
@@ -69,6 +73,7 @@ public class BacSiController {
 
     @PutMapping("/CapNhatBacSi/{id}")
     @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
+    @Operation(summary = "Cập nhật bác sĩ theo ID")
     public ResponseEntity<?> update(@PathVariable Integer id,
                                     @RequestBody @Valid BacSiDTO dto) {
         return bacSiService.getById(id).map(entity -> {

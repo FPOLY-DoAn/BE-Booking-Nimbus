@@ -8,6 +8,7 @@ import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BlackListServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Quản lý tài khoản" , description = "Đăng nhập, Đăng kí, Đăng xuất, Quên mật khẩu")
 public class UserAuthenticate {
     private final NguoiDungServiceImpl nguoiDungServicel;
     private final AuthenticationManager authenticationManager;
