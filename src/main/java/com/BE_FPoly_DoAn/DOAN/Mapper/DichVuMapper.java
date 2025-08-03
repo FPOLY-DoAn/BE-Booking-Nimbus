@@ -1,12 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Mapper;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.LoaiHinhKham.LoaiHinhKhamDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.DichVuDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.DichVu;
 
 public class DichVuMapper {
 
-    public static LoaiHinhKhamDTO toDto(DichVu entity) {
-        LoaiHinhKhamDTO dto = new LoaiHinhKhamDTO();
+    public static DichVuDTO toDto(DichVu entity) {
+        DichVuDTO dto = new DichVuDTO();
         dto.setDichVuId(entity.getDichVuId());
         dto.setTenDichVu(entity.getTenDichVu());
         dto.setMoTa(entity.getMoTa());
@@ -14,7 +14,7 @@ public class DichVuMapper {
         return dto;
     }
 
-    public static DichVu toEntity(LoaiHinhKhamDTO dto) {
+    public static DichVu toEntity(DichVuDTO dto) {
         DichVu entity = new DichVu();
         entity.setTenDichVu(dto.getTenDichVu());
         entity.setMoTa(dto.getMoTa());
@@ -22,7 +22,7 @@ public class DichVuMapper {
         return entity;
     }
 
-    public static void updateEntity(DichVu entity, LoaiHinhKhamDTO dto) {
+    public static void updateEntity(DichVu entity, DichVuDTO dto) {
         entity.setTenDichVu(dto.getTenDichVu());
         entity.setMoTa(dto.getMoTa());
         entity.setGia(dto.getGia());

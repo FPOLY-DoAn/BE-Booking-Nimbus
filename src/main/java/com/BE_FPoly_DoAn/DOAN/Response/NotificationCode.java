@@ -158,6 +158,13 @@ public enum NotificationCode {
     STATISTICS_DISEASES("STAT_007", "Thống kê số lượng bệnh theo tên thành công"),
     STATISTICS_SERVICE_REVENUE("STAT_008", "Thống kê doanh thu theo dịch vụ thành công"),
 
+    // ==== GUEST ====
+    SPECIALTY_LIST_SUCCESS("SP01", "Lấy danh sách chuyên khoa thành công"),
+    DOCTOR_LISTS_SUCCESS("BS01", "Lấy danh sách bác sĩ thành công"),
+    WORKING_DAYS_FETCH_SUCCESS("WK01", "Lấy danh sách ngày làm việc thành công"),
+    SHIFT_FETCH_SUCCESS("CA01", "Lấy danh sách ca trực thành công"),
+    AVAILABLE_TIME_FETCH_SUCCESS("GT01", "Lấy giờ trống thành công"),
+
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
     VALIDATION_NAME_REQUIRED("VAL_001", "Họ tên không được để trống"),

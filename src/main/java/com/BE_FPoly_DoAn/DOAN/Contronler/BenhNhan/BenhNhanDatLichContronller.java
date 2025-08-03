@@ -1,7 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BenhNhan;
 
 import com.BE_FPoly_DoAn.DOAN.Entity.DichVu;
-import com.BE_FPoly_DoAn.DOAN.Service.Impl.DichVuServiceImpl;
+import com.BE_FPoly_DoAn.DOAN.Entity.LoaiHinhKham;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.LoaiHinhKhamServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,17 +14,17 @@ import java.util.List;
 @Controller
 @RequestMapping("/benhnhan")
 public class BenhNhanDatLichContronller {
-    private DichVuServiceImpl dichVuService;
+    private final LoaiHinhKhamServiceImpl loaiHinhKhamService;
 
-    public BenhNhanDatLichContronller(DichVuServiceImpl dichVuService) {
-        this.dichVuService = dichVuService;
+    public BenhNhanDatLichContronller(LoaiHinhKhamServiceImpl dichVuService) {
+        this.loaiHinhKhamService = dichVuService;
     }
 
     @GetMapping("/dichvu")
     @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
     public ResponseEntity<?> getDichVu() {
-    List<DichVu> dichVuList = dichVuService.getAll();
-        return ResponseEntity.ok().body(dichVuList);
+    List<LoaiHinhKham> loaiHinhKhamList = loaiHinhKhamService.getAll();
+        return ResponseEntity.ok().body(loaiHinhKhamList);
     }
 
 }

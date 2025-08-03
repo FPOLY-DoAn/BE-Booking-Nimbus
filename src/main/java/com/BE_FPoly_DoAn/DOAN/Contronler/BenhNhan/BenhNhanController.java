@@ -19,6 +19,12 @@ public class BenhNhanController {
         this.service = service;
     }
 
+    @PostMapping("/TaoMoiBenhNhan")
+    public ResponseEntity<ServiceResponse<?>> create(@RequestBody @Valid BenhNhanDTO dto) {
+        Integer id = dto.getNguoiDungId();
+        return ResponseEntity.ok(service.create(id, dto));
+    }
+
     @GetMapping("/LayDanhSachBenhNhan")
     public ResponseEntity<ServiceResponse<?>> getAll() {
         return ResponseEntity.ok(service.getAll());

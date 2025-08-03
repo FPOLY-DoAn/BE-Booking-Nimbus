@@ -56,6 +56,7 @@ public class ConfigSecurity {
                         "/webjars/**",
                         "/account/**"
                 ).permitAll()
+                .requestMatchers("/guest/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/*").permitAll()
                  .anyRequest().authenticated());
