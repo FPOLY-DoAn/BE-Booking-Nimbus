@@ -164,6 +164,8 @@ public enum NotificationCode {
     WORKING_DAYS_FETCH_SUCCESS("WK01", "Lấy danh sách ngày làm việc thành công"),
     SHIFT_FETCH_SUCCESS("CA01", "Lấy danh sách ca trực thành công"),
     AVAILABLE_TIME_FETCH_SUCCESS("GT01", "Lấy giờ trống thành công"),
+    AVAILABLE_TIME_NOT_FOUND("DO_001", "Không có giờ trống trong ca làm việc này"),
+    SHIFT_NOT_FOUND("DO_002", "Bác sĩ không có ca làm việc vào ngày này"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
@@ -203,8 +205,10 @@ public enum NotificationCode {
     VALIDATION_BENHAN_DICHVU_REQUIRED("VAL_BA_006", "ID dịch vụ không được để trống"),
     VALIDATION_BENHAN_BENHIDS_REQUIRED("VAL_BA_007", "Danh sách bệnh không được để trống"),
     VALIDATION_BENHAN_BENHIDS_EMPTY("VAL_BA_008", "Danh sách bệnh không được rỗng"),
+    AUTH_INVALID_TOKEN("VAL_TOKEN_001", "Token không khả dụng"),
 
     // ===== SYSTEM =====
+    ACCESS_DENIED("SYS_403", "Bạn không có quyền truy cập"),
     SERVER_ERROR("SYS_500", "Lỗi hệ thống, vui lòng thử lại sau"),
     SERVICE_UNAVAILABLE("SYS_503", "Dịch vụ tạm thời không khả dụng");
 

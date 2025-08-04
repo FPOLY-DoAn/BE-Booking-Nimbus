@@ -1,6 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.Dao;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 
 import java.time.LocalDate;

@@ -19,7 +19,6 @@ public class BacSiRequestDTO {
     private String email;
     private String soDienThoai;
 
-    @NotBlank(message = "VALIDATION_PASSWORD_REQUIRED")
     private String matKhau;
     private String tenKhoa;
 

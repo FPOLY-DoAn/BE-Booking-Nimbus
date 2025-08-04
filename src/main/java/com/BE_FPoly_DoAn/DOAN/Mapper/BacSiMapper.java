@@ -56,14 +56,17 @@ public class BacSiMapper {
                 .build();
     }
 
-    public static void updateEntity(BacSi entity, BacSiRequestDTO dto, ChuyenKhoa ck) {
+    public static void updateEntity(BacSi entity, BacSiRequestDTO dto, ChuyenKhoa ck, boolean updatePassword) {
         NguoiDung nd = entity.getNguoiDung();
         if (nd != null) {
             nd.setHoTen(dto.getHoTen());
             nd.setGioiTinh(dto.getGioiTinh());
             nd.setEmail(dto.getEmail());
             nd.setSoDienThoai(dto.getSoDienThoai());
-            nd.setMatKhau(dto.getMatKhau());
+
+            if (updatePassword && dto.getMatKhau() != null && !dto.getMatKhau().isBlank()) {
+                nd.setMatKhau(dto.getMatKhau());
+            }
         }
 
         entity.setChuyenKhoa(ck);

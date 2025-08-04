@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.BenhNhanRequestDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
@@ -126,4 +127,32 @@ public class BenhNhanServiceImpl {
             return ServiceResponse.error(NotificationCode.PATIENT_DELETE_FAIL, e.getMessage());
         }
     }
+
+    public ServiceResponse<?> themThongTinBenhNhan(BenhNhanRequestDTO dto, String email) {
+        try {
+            Optional<NguoiDung> optional = nguoiDungRepo.findByEmail(email);
+            if (optional.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AUTH_INVALID_TOKEN, "Không tìm thấy người dùng với email: " + email);
+            }
+
+            NguoiDung nd = optional.get();
+
+            if (!nd.getBenhNhans().isEmpty()) {
+                return ServiceResponse.error(NotificationCode.PATIENT_NOT_FOUND);
+            }
+
+            BenhNhan benhNhan = BenhNhan.builder()
+                    .nguoiDung(nd)
+                    .baoHiem(dto.getBaoHiem())
+                    .diaChi(dto.getDiaChi())
+                    .lienHeKhanCap(dto.getLienHeKhanCap())
+                    .build();
+
+            benhNhanRepo.save(benhNhan);
+            return ServiceResponse.success(NotificationCode.PATIENT_CREATE_SUCCESS);
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.PATIENT_CREATE_FAIL, e.getMessage());
+        }
+    }
+
 }

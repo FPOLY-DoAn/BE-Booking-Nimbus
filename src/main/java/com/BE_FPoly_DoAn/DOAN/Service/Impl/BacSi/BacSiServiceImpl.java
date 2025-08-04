@@ -119,6 +119,10 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
             BacSi saved = bacSiRepository.save(entity);
 
+            VaiTro vaiTro = vaiTroRepository.findById(1)
+                    .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
+            phanQuyenServiceImpl.save(new PhanQuyen(vaiTro, saved.getNguoiDung()));
+
             return ServiceResponse.success(NotificationCode.DOCTOR_CREATE_SUCCESS, BacSiMapper.toResponseDto(saved));
         } catch (IllegalArgumentException e) {
             return ServiceResponse.error(NotificationCode.SPECIALTY_NOT_FOUND);
@@ -135,12 +139,7 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
             ChuyenKhoa ck = chuyenKhoaServiceImpl.getByTen(dto.getTenKhoa())
                     .orElseThrow(() -> new IllegalArgumentException("Chuyên khoa không tồn tại"));
 
-            BacSiMapper.updateEntity(existing, dto, ck);
-
-            if (dto.getMatKhau() != null && !dto.getMatKhau().isBlank()) {
-                String hashedPassword = passwordEncoder.encode(dto.getMatKhau());
-                existing.getNguoiDung().setMatKhau(hashedPassword);
-            }
+            BacSiMapper.updateEntity(existing, dto, ck, false);
 
             BacSi saved = bacSiRepository.save(existing);
 

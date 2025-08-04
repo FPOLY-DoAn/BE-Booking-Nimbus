@@ -1,11 +1,13 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.Guest;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.*;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
 import com.BE_FPoly_DoAn.DOAN.DTO.ChuyenKhoa.ChuyenKhoaDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.Guest.BacSiGuestDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.*;
 import com.BE_FPoly_DoAn.DOAN.Mapper.GioKhamChiTietMapper;
+import com.BE_FPoly_DoAn.DOAN.Mapper.LichLamViecMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Dao.GuestAppointmentService;
@@ -63,10 +65,9 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
     @Override
     public ServiceResponse<?> getNgayLamViec(Integer bacSiId) {
         try {
-            List<LocalDate> list = lichLamViecRepo.findByBacSi_BacSiId(bacSiId).stream()
-                    .map(LichLamViecBacSi::getNgay)
-                    .distinct()
-                    .sorted()
+            List<LichLamViecResponseDTO> list = lichLamViecRepo.findByBacSi_BacSiId(bacSiId)
+                    .stream()
+                    .map(LichLamViecMapper::toDto)
                     .toList();
             return ServiceResponse.success(NotificationCode.WORKING_DAYS_FETCH_SUCCESS, list);
         } catch (Exception e) {
@@ -81,11 +82,17 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
                     .map(LichLamViecBacSi::getCaTruc)
                     .distinct()
                     .toList();
+
+            if (list.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.SHIFT_NOT_FOUND, "Bác sĩ không có ca làm việc vào ngày này.");
+            }
+
             return ServiceResponse.success(NotificationCode.SHIFT_FETCH_SUCCESS, list);
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
         }
     }
+
 
     @Override
     public ServiceResponse<?> getGioTrongTheoCa(Integer bacSiId, LocalDate ngay, String ca) {
@@ -96,6 +103,11 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
                     .filter(GioKhamChiTiet::getTrangThai)
                     .map(GioKhamChiTietMapper::toDto)
                     .toList();
+
+            if (list.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không có giờ trống trong ca làm việc này.");
+            }
+
             return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, list);
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());

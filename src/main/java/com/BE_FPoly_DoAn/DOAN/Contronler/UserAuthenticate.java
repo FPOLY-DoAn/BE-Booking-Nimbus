@@ -1,10 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.BenhNhanRequestDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Model.LoginRequest;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhNhanServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BlackListServiceImpl;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.JwtService;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.NguoiDungServiceImpl;
@@ -30,13 +32,16 @@ public class UserAuthenticate {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final BlackListServiceImpl blackListService;
+    private final BenhNhanServiceImpl benhNhanService;
 
     public UserAuthenticate(NguoiDungServiceImpl nguoiDungServicel, JwtService jwtService,
-                            AuthenticationManager authenticationManager, BlackListServiceImpl blackListService) {
+                            AuthenticationManager authenticationManager, BlackListServiceImpl blackListService, BenhNhanServiceImpl benhNhanService) {
         this.nguoiDungServicel = nguoiDungServicel;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.blackListService = blackListService;}
+        this.blackListService = blackListService;
+        this.benhNhanService = benhNhanService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {
@@ -166,6 +171,32 @@ public class UserAuthenticate {
             return ResponseEntity.ok(ServiceResponse.success("RESEND_OTP_SUCCESS", "Mã xác nhận mới đã được gửi đến email."));
         } else {
             return ResponseEntity.badRequest().body(ServiceResponse.error("RESEND_OTP_FAILED", "Không thể gửi lại OTP. Email chưa đăng ký hoặc đã xác nhận."));
+        }
+    }
+
+    @PostMapping("/thong-tin-bo-sung")
+    public ResponseEntity<?> themThongTinBenhNhan(
+            @RequestBody @Valid BenhNhanRequestDTO dto,
+            HttpServletRequest request) {
+
+        try {
+            String tokenHeader = request.getHeader("Authorization");
+            if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(ServiceResponse.error(NotificationCode.AUTH_INVALID_TOKEN));
+            }
+
+            String token = tokenHeader.replace("Bearer ", "");
+            String email = jwtService.extractUserEmail(token);
+
+            ServiceResponse<?> response = benhNhanService.themThongTinBenhNhan(dto, email);
+
+            return ResponseEntity.status(response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+                    .body(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ServiceResponse.error(NotificationCode.AUTH_INVALID_TOKEN, e.getMessage()));
         }
     }
 }

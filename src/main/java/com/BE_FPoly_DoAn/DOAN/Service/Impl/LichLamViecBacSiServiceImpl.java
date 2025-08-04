@@ -2,6 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
+import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.LichLamViecBacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.BacSi;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichLamViecBacSi;
@@ -18,9 +19,11 @@ import java.util.Optional;
 public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViecBacSi> {
 
     private final LichLamViecBacSiRepository repository;
+    private final BacSiRepository bacSiRepository;
 
-    public LichLamViecBacSiServiceImpl(LichLamViecBacSiRepository repository) {
+    public LichLamViecBacSiServiceImpl(LichLamViecBacSiRepository repository, BacSiRepository bacSiRepository) {
         this.repository = repository;
+        this.bacSiRepository = bacSiRepository;
     }
 
     @Override
@@ -110,17 +113,28 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
                 return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Bác sĩ đã có lịch làm việc trong ca này");
             }
 
+            Optional<BacSi> optional = bacSiRepository.findById(bacSiId);
+            if (optional.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.NOT_FOUND, "Không tìm thấy bác sĩ");
+            }
+
+            BacSi bacSi = optional.get();
+
             LichLamViecBacSi entity = LichLamViecBacSi.builder()
-                    .bacSi(BacSi.builder().bacSiId(bacSiId).build())
+                    .bacSi(bacSi)
                     .ngay(dto.getNgay())
                     .caTruc(dto.getCaTruc())
                     .lyDoNghi(dto.getLyDoNghi())
                     .build();
 
-            repository.save(entity);
-            return ServiceResponse.success(NotificationCode.WORK_SCHEDULE_CREATE_SUCCESS);
+            LichLamViecBacSi saved = repository.save(entity);
+
+            return ServiceResponse.success(
+                    NotificationCode.WORK_SCHEDULE_CREATE_SUCCESS,
+                    LichLamViecMapper.toDto(saved)
+            );
         } catch (Exception e) {
-            return ServiceResponse.error(NotificationCode.WORK_SCHEDULE_CREATE_FAIL);
+            return ServiceResponse.error(NotificationCode.WORK_SCHEDULE_CREATE_FAIL, e.getMessage());
         }
     }
 }
