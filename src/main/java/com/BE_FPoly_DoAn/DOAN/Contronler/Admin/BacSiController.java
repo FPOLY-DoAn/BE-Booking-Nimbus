@@ -4,6 +4,7 @@ import com.BE_FPoly_DoAn.DOAN.DTO.BacSiRequestDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BacSi.BacSiServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +41,11 @@ public class BacSiController {
     }
 
     @PutMapping("/CapNhatBacSi/{id}")
-    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
     @Operation(summary = "Cập nhật bác sĩ theo ID")
     public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id,
                                                      @Valid @RequestBody BacSiRequestDTO dto) {
+        System.out.println("Lưu bác sĩ");
         return ResponseEntity.ok(bacSiService.update(id, dto));
 
     }

@@ -24,7 +24,7 @@ public class BacSi {
     @Column(name = "bacsi_id", columnDefinition = "INT")
     private Integer bacSiId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", columnDefinition = "INT")
     @NotNull(message = "Người dùng không được để trống")
     private NguoiDung nguoiDung;

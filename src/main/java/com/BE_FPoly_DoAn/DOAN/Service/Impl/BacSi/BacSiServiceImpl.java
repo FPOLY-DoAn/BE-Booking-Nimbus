@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
     private final PhanQuyenServiceImpl phanQuyenServiceImpl;
     private final ChuyenKhoaServiceImpl chuyenKhoaServiceImpl;
     private final BCryptPasswordEncoder passwordEncoder;
+
 
     public BacSiServiceImpl(ChuyenKhoaServiceImpl chuyenKhoaServiceImpl,
                             PhanQuyenServiceImpl phanQuyenServiceImpl,
@@ -110,12 +112,7 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
             BacSi entity = BacSiMapper.toEntity(dto, ck);
 
-            if (dto.getMatKhau() != null && !dto.getMatKhau().isBlank()) {
-                String encoded = passwordEncoder.encode(dto.getMatKhau());
-                if (entity.getNguoiDung() != null) {
-                    entity.getNguoiDung().setMatKhau(encoded);
-                }
-            }
+
 
             BacSi saved = bacSiRepository.save(entity);
 
@@ -131,20 +128,25 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
         try {
             BacSi existing = bacSiRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
-
             ChuyenKhoa ck = chuyenKhoaServiceImpl.getByTen(dto.getTenKhoa())
                     .orElseThrow(() -> new IllegalArgumentException("Chuyên khoa không tồn tại"));
+            NguoiDung nd = existing.getNguoiDung();
+            nd.setHoTen(dto.getHoTen());
+            nd.setEmail(dto.getEmail());
+            nd.setGioiTinh(dto.getGioiTinh());
+            nd.setNgayCapNhat(LocalDateTime.now());
+            nd.setSoDienThoai(dto.getSoDienThoai());
 
-            BacSiMapper.updateEntity(existing, dto, ck);
+            nguoiDungService.save(nd);
+            existing.setChuyenKhoa(ck);
+            existing.setTrinhDo(dto.getTrinhDo());
+            existing.setTrangThaiHoatDong(dto.getTrangThaiHoatDong());
+            existing.setChungChi(dto.getChungChi());
+            existing.setKinhNghiem(dto.getKinhNghiem());
+            existing.setGhiChu(dto.getGhiChu());
 
-            if (dto.getMatKhau() != null && !dto.getMatKhau().isBlank()) {
-                String hashedPassword = passwordEncoder.encode(dto.getMatKhau());
-                existing.getNguoiDung().setMatKhau(hashedPassword);
-            }
-
-            BacSi saved = bacSiRepository.save(existing);
-
-            return ServiceResponse.success(NotificationCode.DOCTOR_UPDATE_SUCCESS, BacSiMapper.toResponseDto(saved));
+            bacSiRepository.save(existing);
+            return ServiceResponse.success(NotificationCode.DOCTOR_UPDATE_SUCCESS);
         } catch (IllegalArgumentException e) {
             return ServiceResponse.error(NotificationCode.SPECIALTY_NOT_FOUND);
         } catch (Exception e) {
