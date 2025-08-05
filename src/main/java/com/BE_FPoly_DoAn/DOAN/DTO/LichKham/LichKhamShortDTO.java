@@ -1,9 +1,13 @@
 package com.BE_FPoly_DoAn.DOAN.DTO.LichKham;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * DTO tóm tắt lịch khám - dùng cho hiển thị danh sách rút gọn.
@@ -20,7 +24,9 @@ public class LichKhamShortDTO {
 
     private LocalDate ngayKham;
 
-    private LocalDateTime thoiGianHen;
+    @Schema(type = "string", example = "11:00")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime thoiGianHen;
 
     private String trangThai;
 

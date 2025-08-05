@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -27,19 +28,19 @@ public interface LichKhamRepository extends JpaRepository<LichKham, Integer>, Jp
      * @param excludeId  ID lịch khám muốn loại trừ (dùng khi update, truyền null khi create)
      * @return true nếu có lịch trùng; false nếu không
      */
-    @Query("""
-        SELECT CASE WHEN COUNT(lk) > 0 THEN true ELSE false END
-        FROM LichKham lk
-        WHERE lk.bacSi.id = :bacSiId
-          AND lk.ngayKham = :ngayKham
-          AND (:excludeId IS NULL OR lk.id != :excludeId)
-          AND (:start < lk.thoiGianDen AND :end > lk.thoiGianHen)
-    """)
+    @Query(value = """
+    SELECT CASE WHEN COUNT(*) > 0 THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END
+    FROM LICH_KHAM
+    WHERE bacsi_id = :bacSiId
+    AND ngay_kham = :ngayKham
+    AND (:excludeId IS NULL OR lichkham_id != :excludeId)
+    AND (:start < thoi_gian_den AND :end > thoi_gian_hen)
+    """, nativeQuery = true)
     boolean existsLichKhamTrung(
             @Param("bacSiId") Integer bacSiId,
             @Param("ngayKham") LocalDate ngayKham,
-            @Param("start") LocalDateTime start,
-            @Param("end") LocalDateTime end,
+            @Param("start") LocalTime start,
+            @Param("end") LocalTime end,
             @Param("excludeId") Integer excludeId
     );
 

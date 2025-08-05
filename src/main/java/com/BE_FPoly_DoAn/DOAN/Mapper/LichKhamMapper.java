@@ -4,6 +4,9 @@ import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamShortDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.*;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
+
 /**
  * Mapper hỗ trợ chuyển đổi giữa Entity <-> DTO cho đối tượng LichKham.
  */
@@ -31,6 +34,7 @@ public class LichKhamMapper {
         entity.setCaKham(dto.getCaKham());
         return entity;
     }
+
 
     /**
      * Chuyển từ Entity sang DTO để trả về cho client.

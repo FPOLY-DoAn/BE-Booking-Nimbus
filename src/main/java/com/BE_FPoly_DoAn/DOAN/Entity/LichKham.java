@@ -6,8 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Entity đại diện cho bảng LIC_HKHAM trong cơ sở dữ liệu.
@@ -36,21 +38,11 @@ public class LichKham {
     @NotNull(message = "Bệnh nhân không được để trống")
     private BenhNhan benhNhan;
 
-    @Column(name = "thoi_gian_hen", columnDefinition = "TIME", nullable = false)
-    private LocalDateTime thoiGianHen;
+    @Column(name = "thoi_gian_hen", columnDefinition = "TIME")
+    private LocalTime thoiGianHen;
 
     @Column(name = "thoi_gian_den", columnDefinition = "TIME")
-    private LocalDateTime thoiGianDen;
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "kieu_lich_kham", length = 1, columnDefinition = "CHAR(1)", nullable = false)
-//    @NotNull(message = "Kiểu lịch khám không được để trống")
-//    private KieuLichKham kieuLichKham;
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)", nullable = false)
-//    @NotNull(message = "Trạng thái không được để trống")
-//    private TrangThaiLichKham trangThai;
+    private LocalTime thoiGianDen;
 
     @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
     private String ghiChu;
@@ -77,12 +69,4 @@ public class LichKham {
 
     @Column(name = "trang_thai", columnDefinition = "NVARCHAR(50)")
     private String trangThai;
-
-//    public enum KieuLichKham {
-//        H, T, D
-//    }
-//
-//    public enum TrangThaiLichKham {
-//        A, C, P
-//    }
 }
