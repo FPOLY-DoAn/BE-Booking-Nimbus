@@ -48,6 +48,14 @@ public class BenhNhan {
     @Schema(hidden = true)
     private String lienHeKhanCap;
 
+    @Column(name = "can_cuoc_cong_dan", columnDefinition = "INT")
+    @Schema(hidden = true)
+    private String canCuocCongDan;
+
+    @Column(name = "dan_toc", length = 15, columnDefinition = "NVARCHAR(15)")
+    @Schema(hidden = true)
+    private String danToc;
+
     @CreationTimestamp
     @Column(name = "ngay_tao", columnDefinition = "DATE", updatable = false)
     private LocalDate ngayTao;

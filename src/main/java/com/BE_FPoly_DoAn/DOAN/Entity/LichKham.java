@@ -36,11 +36,10 @@ public class LichKham {
     @NotNull(message = "Bệnh nhân không được để trống")
     private BenhNhan benhNhan;
 
-    @Column(name = "thoi_gian_hen", columnDefinition = "DATETIME", nullable = false)
-    @NotNull(message = "Thời gian hẹn không được để trống")
+    @Column(name = "thoi_gian_hen", columnDefinition = "TIME", nullable = false)
     private LocalDateTime thoiGianHen;
 
-    @Column(name = "thoi_gian_den", columnDefinition = "DATETIME")
+    @Column(name = "thoi_gian_den", columnDefinition = "TIME")
     private LocalDateTime thoiGianDen;
 
 //    @Enumerated(EnumType.STRING)

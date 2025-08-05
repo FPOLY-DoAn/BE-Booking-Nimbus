@@ -17,4 +17,6 @@ public interface BacSiRepository extends JpaRepository<BacSi, Integer> {
     Optional<BacSi> findByNguoiDungId(@Param("userId") Integer userId);
 
     List<BacSi> findByChuyenKhoa_TenKhoa(String tenKhoa);
+
+    Optional<BacSi> findByNguoiDung_NguoiDungId(Integer nguoiDungId);
 }
