@@ -28,7 +28,7 @@ public class LoaiHinhKhamController {
     }
 
     @GetMapping("/LayDanhSachDichVu")
-    @PreAuthorize("hasAuthority('ROLE_BACSI','ROLE_QUANLY',ROLE_BENHNHAN,'ROLE_LETAN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BACSI','ROLE_QUANLY',ROLE_BENHNHAN,'ROLE_LETAN')")
     public ResponseEntity<ServiceResponse<List<LoaiHinhKhamDTO>>> getAll() {
         List<LoaiHinhKhamDTO> list = service.getAll()
                 .stream()
@@ -38,7 +38,7 @@ public class LoaiHinhKhamController {
     }
 
     @GetMapping("/LayDichVuTheoId/{id}")
-    @PreAuthorize("hasAuthority('ROLE_BACSI','ROLE_QUANLY',ROLE_BENHNHAN,'ROLE_LETAN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BACSI','ROLE_QUANLY',ROLE_BENHNHAN,'ROLE_LETAN')")
     public ResponseEntity<ServiceResponse<LoaiHinhKhamDTO>> getById(@PathVariable Integer id) {
         return service.getById(id)
                 .map(dv -> ResponseEntity.ok(ServiceResponse.success(NotificationCode.SERVICE_ID, DichVuMapper.toDto(dv))))

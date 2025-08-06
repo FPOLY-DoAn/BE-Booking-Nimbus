@@ -27,7 +27,7 @@ public class BacSiController {
     }
 
     @GetMapping("/LayBacSiTheoId/{id}")
-    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
     @Operation(summary = "Lấy bác sĩ theo ID", description = "Dành cho tất cả các role")
     public ResponseEntity<ServiceResponse<?>> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(bacSiService.getByIdResponse(id));
