@@ -26,7 +26,7 @@ public class ChuyenKhoaController {
     }
 
     @GetMapping("/LayDanhSachChuyenKhoa")
-    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
     @Operation(summary = "Lấy danh sách bác sĩ")
     public ResponseEntity<ServiceResponse<List<ChuyenKhoaDTO>>> getAll() {
         List<ChuyenKhoaDTO> list = chuyenKhoaService.getAll()
@@ -38,7 +38,7 @@ public class ChuyenKhoaController {
     }
 
     @GetMapping("/LayChuyenKhoaTheoId/{id}")
-    @PreAuthorize("hasAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BACSI', 'ROLE_QUANLY')")
     @Operation(summary = "Lấy danh sách Chuyên Khoa theo id")
     public ResponseEntity<ServiceResponse<ChuyenKhoaDTO>> getById(@PathVariable Integer id) {
         return chuyenKhoaService.getById(id)
