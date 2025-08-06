@@ -45,7 +45,8 @@ public class BacSiController {
     @Operation(summary = "Cập nhật bác sĩ theo ID")
     public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id,
                                                      @Valid @RequestBody BacSiRequestDTO dto) {
-        System.out.println("Lưu bác sĩ");
+        System.out.println("Lưu bác sĩ"+id);
+        System.out.println("BacSiRequestDTO"+ dto.getTenKhoa());
         return ResponseEntity.ok(bacSiService.update(id, dto));
 
     }

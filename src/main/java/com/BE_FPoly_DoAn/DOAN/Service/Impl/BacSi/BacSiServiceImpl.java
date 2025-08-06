@@ -126,10 +126,8 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
     public ServiceResponse<?> update(Integer id, BacSiRequestDTO dto) {
         try {
-            BacSi existing = bacSiRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
-            ChuyenKhoa ck = chuyenKhoaServiceImpl.getByTen(dto.getTenKhoa())
-                    .orElseThrow(() -> new IllegalArgumentException("Chuyên khoa không tồn tại"));
+            BacSi existing = bacSiRepository.findById(id).orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
+            Optional<ChuyenKhoa> ck = chuyenKhoaServiceImpl.getById(Integer.valueOf(dto.getTenKhoa()));
             NguoiDung nd = existing.getNguoiDung();
             nd.setHoTen(dto.getHoTen());
             nd.setEmail(dto.getEmail());
@@ -138,13 +136,12 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
             nd.setSoDienThoai(dto.getSoDienThoai());
 
             nguoiDungService.save(nd);
-            existing.setChuyenKhoa(ck);
+            existing.setChuyenKhoa(ck.get());
             existing.setTrinhDo(dto.getTrinhDo());
             existing.setTrangThaiHoatDong(dto.getTrangThaiHoatDong());
             existing.setChungChi(dto.getChungChi());
             existing.setKinhNghiem(dto.getKinhNghiem());
             existing.setGhiChu(dto.getGhiChu());
-
             bacSiRepository.save(existing);
             return ServiceResponse.success(NotificationCode.DOCTOR_UPDATE_SUCCESS);
         } catch (IllegalArgumentException e) {
