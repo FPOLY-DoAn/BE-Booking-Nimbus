@@ -7,7 +7,7 @@ GO
 INSERT INTO VAI_TRO (ten_vai_tro, mo_ta) VALUES
 (N'Bác sĩ', N'Tài khoản của bác sĩ'),
 (N'Bệnh nhân', N'Tài khoản của bệnh nhân'),
-(N'Quản trị viên', N'Tài khoản có toàn quyền'),
+(N'Quản lý', N'Tài khoản có toàn quyền'),
 (N'Lễ tân', N'Tài khoản của lễ tân');
 GO
 
