@@ -34,7 +34,7 @@ public class BacSi {
     @NotNull(message = "Chuyên khoa không được để trống")
     private ChuyenKhoa chuyenKhoa;
 
-    @Column(name = "chung_chi", length = 200, columnDefinition = "NVARCHAR(200)")
+    @Column(name = "chung_chi", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Chứng chỉ không được để trống")
     private String chungChi;
 
@@ -47,10 +47,10 @@ public class BacSi {
     @Positive(message = "Kinh nghiệm phải là số dương")
     private Integer kinhNghiem;
 
-    @Column(name = "ngay_tuyen_dung")
+    @Column(name = "ngay_tuyen_dung", columnDefinition = "DATE")
     private LocalDate ngayTuyenDung;
 
-    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 
     @Column(name = "trang_thai_hoat_dong")

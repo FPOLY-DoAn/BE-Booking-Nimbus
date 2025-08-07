@@ -48,7 +48,7 @@ public class BenhNhan {
     @Schema(hidden = true)
     private String lienHeKhanCap;
 
-    @Column(name = "can_cuoc_cong_dan", columnDefinition = "INT")
+    @Column(name = "can_cuoc_cong_dan", length = 12, columnDefinition = "VARCHAR(12)")
     @Schema(hidden = true)
     private String canCuocCongDan;
 

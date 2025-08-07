@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
@@ -30,17 +29,19 @@ public class LichKhamServiceImpl {
     private final BenhNhanRepository benhNhanRepo;
     private final LichLamViecBacSiRepository lichLamViecBacSiRepo;
     private final GioKhamChiTietRepository gioKhamChiTietRepo;
+    private final LoaiHinhKhamRepository loaiHinhKhamRepo;
 
     public LichKhamServiceImpl(LichKhamRepository lichKhamRepo,
                                BacSiRepository bacSiRepo,
                                BenhNhanRepository benhNhanRepo,
                                LichLamViecBacSiRepository lichLamViecBacSiRepo,
-                               GioKhamChiTietRepository gioKhamChiTietRepo) {
+                               GioKhamChiTietRepository gioKhamChiTietRepo, LoaiHinhKhamRepository loaiHinhKhamRepo) {
         this.lichKhamRepo = lichKhamRepo;
         this.bacSiRepo = bacSiRepo;
         this.benhNhanRepo = benhNhanRepo;
         this.lichLamViecBacSiRepo = lichLamViecBacSiRepo;
         this.gioKhamChiTietRepo = gioKhamChiTietRepo;
+        this.loaiHinhKhamRepo = loaiHinhKhamRepo;
     }
 
     /**
@@ -57,12 +58,12 @@ public class LichKhamServiceImpl {
     @Transactional
     public ServiceResponse<?> create(LichKhamDTO dto) {
         // ===== 1. Kiểm tra hợp lệ dữ liệu đầu vào =====
-        if (dto.getThoiGianHen() == null || dto.getThoiGianDen() == null || dto.getNgayKham() == null) {
+        if (dto.getThoiGianTu() == null || dto.getThoiGianDen() == null || dto.getNgayKham() == null) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_INVALID_TIME,
                     "Thời gian hẹn hoặc ngày khám không được để trống");
         }
 
-        LocalTime gioHen = dto.getThoiGianHen();
+        LocalTime gioHen = dto.getThoiGianTu();
         LocalTime gioDen = dto.getThoiGianDen();
 
         if (!gioHen.isBefore(gioDen)) {
@@ -119,7 +120,10 @@ public class LichKhamServiceImpl {
             BenhNhan benhNhan = benhNhanRepo.findById(dto.getBenhNhanId())
                     .orElseThrow(() -> new RuntimeException("Bệnh nhân không tồn tại"));
 
-            LichKham lichKham = LichKhamMapper.toEntity(dto, bacSi, benhNhan);
+            LoaiHinhKham loaiHinhKham = loaiHinhKhamRepo.findByTenLoai(dto.getLoaiHinhKham())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy loại hình khám: " + dto.getLoaiHinhKham()));
+
+            LichKham lichKham = LichKhamMapper.toEntity(dto, bacSi, benhNhan, loaiHinhKham);
             lichKhamRepo.save(lichKham);
 
             // ===== 7. Đánh dấu giờ khám chi tiết là đã đặt =====
@@ -181,13 +185,13 @@ public class LichKhamServiceImpl {
      */
     @Transactional
     public ServiceResponse<?> update(Integer id, LichKhamDTO dto) {
-        // ===== 1. Kiểm tra hợp lệ =====
-        if (dto.getThoiGianHen() == null || dto.getThoiGianDen() == null || dto.getNgayKham() == null) {
+
+        if (dto.getThoiGianTu() == null || dto.getThoiGianDen() == null || dto.getNgayKham() == null) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_INVALID_TIME,
                     "Thời gian khám không được để trống");
         }
 
-        LocalTime gioHen = dto.getThoiGianHen();
+        LocalTime gioHen = dto.getThoiGianTu();
         LocalTime gioDen = dto.getThoiGianDen();
 
         if (!gioHen.isBefore(gioDen)) {
@@ -200,7 +204,7 @@ public class LichKhamServiceImpl {
                     "Không thể cập nhật lịch cho ngày đã qua");
         }
 
-        // ===== 2. Kiểm tra bác sĩ có lịch làm việc trong ca đó không =====
+        // ===== 2. Kiểm tra bác sĩ có làm trong ca không =====
         boolean isBacSiRanh = lichLamViecBacSiRepo.existsByBacSi_BacSiIdAndNgayAndCaTruc(
                 dto.getBacSiId(), dto.getNgayKham(), dto.getCaKham()
         );
@@ -221,27 +225,25 @@ public class LichKhamServiceImpl {
 //                    "Thời gian khám đã bị trùng với lịch khác");
 //        }
 
-        // ===== 4. Kiểm tra giờ hẹn có phù hợp với ca khám =====
-        if (!isThoiGianHopLeTheoCa(gioHen, dto.getCaKham())) {
-            return ServiceResponse.error(NotificationCode.APPOINTMENT_INVALID_TIME,
-                    "Giờ hẹn không phù hợp với ca khám đã chọn: " + dto.getCaKham());
-        }
-
-        // ===== 5. Tiến hành cập nhật =====
+        // ===== 4. Cập nhật =====
         try {
             LichKham existing = lichKhamRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám"));
 
             BacSi bacSi = bacSiRepo.findById(dto.getBacSiId())
                     .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
+
             BenhNhan benhNhan = benhNhanRepo.findById(dto.getBenhNhanId())
                     .orElseThrow(() -> new RuntimeException("Bệnh nhân không tồn tại"));
 
+            LoaiHinhKham loaiHinhKham = loaiHinhKhamRepo.findByTenLoai(dto.getLoaiHinhKham())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy loại hình khám tên: " + dto.getLoaiHinhKham()));
+
             existing.setBacSi(bacSi);
             existing.setBenhNhan(benhNhan);
-            existing.setThoiGianHen(Time.valueOf(dto.getThoiGianHen()).toLocalTime());
-            existing.setThoiGianDen(Time.valueOf(dto.getThoiGianDen()).toLocalTime());
-            existing.setKieuLichKham(dto.getKieuLichKham());
+            existing.setThoiGianTu(gioHen);
+            existing.setThoiGianDen(gioDen);
+            existing.setLoaiHinhKham(loaiHinhKham);
             existing.setTrangThai(dto.getTrangThai());
             existing.setGhiChu(dto.getGhiChu());
             existing.setNgayKham(dto.getNgayKham());
@@ -250,9 +252,12 @@ public class LichKhamServiceImpl {
             lichKhamRepo.save(existing);
             return ServiceResponse.success(NotificationCode.APPOINTMENT_UPDATE_SUCCESS);
 
+        } catch (RuntimeException e) {
+            return ServiceResponse.error(NotificationCode.APPOINTMENT_UPDATE_FAIL,
+                    "Không thể cập nhật lịch khám: " + e.getMessage());
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_UPDATE_FAIL,
-                    "Lỗi khi cập nhật lịch khám: " + e.getMessage());
+                    "Đã xảy ra lỗi không xác định: " + e.getMessage());
         }
     }
 
@@ -343,15 +348,24 @@ public class LichKhamServiceImpl {
     /**
      * Kiểm tra giờ hẹn có hợp lệ với ca khám đã chọn không.
      *
-     * @param time   Giờ hẹn
-     * @param caKham Ca khám ("SANG", "CHIEU")
-     * @return true nếu giờ hợp lệ, false nếu không
+     * <p>Quy ước giờ hợp lệ theo từng ca khám:
+     * <ul>
+     *   <li>Sáng: 06:00 đến trước 12:00</li>
+     *   <li>Chiều: 13:00 đến trước 18:00</li>
+     *   <li>Tối: 18:00 đến trước 21:00</li>
+     * </ul>
+     *
+     * @param time   Giờ hẹn cần kiểm tra (LocalTime)
+     * @param caKham Tên ca khám ("Sáng", "Chiều", "Tối")
+     * @return true nếu giờ nằm trong khoảng hợp lệ của ca, ngược lại là false
      */
     private boolean isThoiGianHopLeTheoCa(LocalTime time, String caKham) {
-        if ("SANG".equalsIgnoreCase(caKham)) {
+        if ("Sáng".equalsIgnoreCase(caKham)) {
             return !time.isBefore(LocalTime.of(6, 0)) && time.isBefore(LocalTime.of(12, 0));
-        } else if ("CHIEU".equalsIgnoreCase(caKham)) {
+        } else if ("Chiều".equalsIgnoreCase(caKham)) {
             return !time.isBefore(LocalTime.of(13, 0)) && time.isBefore(LocalTime.of(18, 0));
+        } else if ("Tối".equalsIgnoreCase(caKham)) {
+            return !time.isBefore(LocalTime.of(18, 0)) && time.isBefore(LocalTime.of(21, 0));
         }
         return false;
     }

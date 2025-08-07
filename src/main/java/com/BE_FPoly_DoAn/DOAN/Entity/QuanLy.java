@@ -23,16 +23,16 @@ public class QuanLy {
     @JoinColumn(name = "nguoidung_id", referencedColumnName = "nguoidung_id", unique = true)
     private NguoiDung nguoiDung;
 
-    @Column(name = "chuc_vu", columnDefinition = "NVARCHAR(50)")
+    @Column(name = "chuc_vu", length = 50,columnDefinition = "NVARCHAR(50)")
     @NotBlank(message = "Chức vụ không được để trống")
     private String chucVu;
 
-    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", length = 255,columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 
-    @Column(name = "ngay_tao")
+    @Column(name = "ngay_tao", columnDefinition = "DATE")
     private LocalDate ngayTao;
 
-    @Column(name = "ngay_cap_nhat")
+    @Column(name = "ngay_cap_nhat", columnDefinition = "DATE")
     private LocalDate ngayCapNhat;
 }

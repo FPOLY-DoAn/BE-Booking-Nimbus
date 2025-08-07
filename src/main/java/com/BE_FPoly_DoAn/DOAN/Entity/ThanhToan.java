@@ -37,26 +37,19 @@ public class ThanhToan {
     @DecimalMin(value = "0.01", inclusive = true, message = "Số tiền thanh toán phải lớn hơn 0")
     private BigDecimal soTienThanhToan;
 
-    @Column(name = "phuong_thuc_thanh_toan", length = 1, columnDefinition = "CHAR(1)")
+    @Column(name = "phuong_thuc_thanh_toan", length = 50, columnDefinition = "NVARCHAR(50)")
     @NotBlank(message = "Phương thức thanh toán không được để trống")
-    @Size(min = 1, max = 1, message = "Phương thức thanh toán chỉ được 1 ký tự")
     private String phuongThucThanhToan;
 
-    @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)")
+    @Column(name = "trang_thai", length = 50, columnDefinition = "NVARCHAR(50)")
     @NotBlank(message = "Trạng thái không được để trống")
-    @Size(min = 1, max = 1, message = "Trạng thái chỉ được 1 ký tự")
     private String trangThai;
 
-    @Column(name = "ma_giao_dich", length = 100, columnDefinition = "NVARCHAR(100)")
-    @Size(max = 100, message = "Mã giao dịch không được vượt quá 100 ký tự")
+    @Column(name = "ma_giao_dich", length = 225, columnDefinition = "NVARCHAR(225)")
+    @Size(max = 225, message = "Mã giao dịch không được vượt quá 225 ký tự")
     private String maGiaoDich;
 
-    @Column(name = "ghi_chu", length = 100, columnDefinition = "NVARCHAR(100)")
-    @Size(max = 100, message = "Ghi chú không được vượt quá 100 ký tự")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
+    @Size(max = 225, message = "Ghi chú không được vượt quá 225 ký tự")
     private String ghiChu;
-
-    public enum PhuongThucThanhToan {
-        T, // Tiền mặt
-        M  // MoMo
-    }
 }

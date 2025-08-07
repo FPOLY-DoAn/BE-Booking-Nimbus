@@ -27,23 +27,23 @@ public class Benh {
     @NotBlank(message = "Tên bệnh không được để trống")
     private String tenBenh;
 
-    @Column(name = "trieu_chung", length = 100, columnDefinition = "NVARCHAR(100)")
+    @Column(name = "trieu_chung", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Triệu chứng không được để trống")
     private String trieuChung;
 
-    @Column(name = "nguyen_nhan", length = 100, columnDefinition = "NVARCHAR(100)")
+    @Column(name = "nguyen_nhan", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Nguyên nhân không được để trống")
     private String nguyenNhan;
 
-    @Column(name = "phong_ngua", length = 100, columnDefinition = "NVARCHAR(100)")
+    @Column(name = "phong_ngua", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Phòng ngừa không được để trống")
     private String phongNgua;
 
-    @Column(name = "huong_dieu_tri", length = 100, columnDefinition = "NVARCHAR(100)")
+    @Column(name = "huong_dieu_tri", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Hướng điều trị không được để trống")
     private String huongDieuTri;
 
-    @Column(name = "ghi_chu", length = 100, columnDefinition = "NVARCHAR(100)")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 
     @OneToMany(mappedBy = "benh", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

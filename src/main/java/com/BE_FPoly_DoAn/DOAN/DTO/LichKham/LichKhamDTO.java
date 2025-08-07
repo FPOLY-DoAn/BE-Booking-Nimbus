@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.DTO.LichKham;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -29,14 +30,13 @@ public class LichKhamDTO {
 
     @Schema(type = "string", example = "10:30")
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime thoiGianHen;
+    private LocalTime thoiGianTu;
 
     @Schema(type = "string", example = "11:00")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime thoiGianDen;
-
-    @NotNull(message = "Kiểu lịch khám không được để trống")
-    private String kieuLichKham;
+    
+    private String loaiHinhKham;
 
     @NotNull(message = "Trạng thái không được để trống")
     private String trangThai;
@@ -50,7 +50,6 @@ public class LichKhamDTO {
     @Schema(type = "string", example = "2025-08-05T08:27:15.911", format = "date-time")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime ngayCapNhat;
-
 
     private String caKham;
 }

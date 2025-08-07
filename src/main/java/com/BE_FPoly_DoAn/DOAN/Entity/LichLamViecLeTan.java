@@ -28,10 +28,10 @@ public class LichLamViecLeTan {
     @NotNull(message = "Ngày làm việc không được để trống")
     private LocalDate ngay;
 
-    @Column(name = "ca_lam", columnDefinition = "CHAR(1)")
-    @Pattern(regexp = "[SCT]", message = "Ca làm phải là S (Sáng), C (Chiều) hoặc T (Tối)")
+    @Column(name = "ca_lam", columnDefinition = "NVARCHAR(50)")
+    @Pattern(regexp = "[SCT]", message = "Ca làm phải là SANG (Sáng), CHIEU (Chiều)")
     private String caLam;
 
-    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 }

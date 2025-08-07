@@ -4,9 +4,6 @@ import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamShortDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.*;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
-
 /**
  * Mapper hỗ trợ chuyển đổi giữa Entity <-> DTO cho đối tượng LichKham.
  */
@@ -20,14 +17,14 @@ public class LichKhamMapper {
      * @param benhNhan  Entity bệnh nhân đã được load từ DB
      * @return          Đối tượng LichKham đã được ánh xạ
      */
-    public static LichKham toEntity(LichKhamDTO dto, BacSi bacSi, BenhNhan benhNhan) {
+    public static LichKham toEntity(LichKhamDTO dto, BacSi bacSi, BenhNhan benhNhan, LoaiHinhKham loaiHinhKham) {
         LichKham entity = new LichKham();
         entity.setLichkhamId(dto.getLichkhamId());
         entity.setBacSi(bacSi);
         entity.setBenhNhan(benhNhan);
-        entity.setThoiGianHen(dto.getThoiGianHen());
+        entity.setThoiGianTu(dto.getThoiGianTu());
         entity.setThoiGianDen(dto.getThoiGianDen());
-        entity.setKieuLichKham(dto.getKieuLichKham());
+        entity.setLoaiHinhKham(loaiHinhKham);
         entity.setTrangThai(dto.getTrangThai());
         entity.setGhiChu(dto.getGhiChu());
         entity.setNgayKham(dto.getNgayKham());
@@ -47,9 +44,9 @@ public class LichKhamMapper {
         dto.setLichkhamId(entity.getLichkhamId());
         dto.setBacSiId(entity.getBacSi().getBacSiId());
         dto.setBenhNhanId(entity.getBenhNhan().getBenhNhanId());
-        dto.setThoiGianHen(entity.getThoiGianHen());
+        dto.setThoiGianTu(entity.getThoiGianTu());
         dto.setThoiGianDen(entity.getThoiGianDen());
-        dto.setKieuLichKham(entity.getKieuLichKham());
+        dto.setLoaiHinhKham(entity.getLoaiHinhKham().getTenLoai());
         dto.setTrangThai(entity.getTrangThai());
         dto.setGhiChu(entity.getGhiChu());
         dto.setNgayKham(entity.getNgayKham());
@@ -57,6 +54,7 @@ public class LichKhamMapper {
         dto.setNgayCapNhat(entity.getNgayCapNhat());
         return dto;
     }
+
 
     /**
      * Chuyển từ Entity sang ShortDTO – chứa thông tin rút gọn (chỉ vài trường cơ bản).
@@ -70,7 +68,7 @@ public class LichKhamMapper {
         return LichKhamShortDTO.builder()
                 .lichkhamId(entity.getLichkhamId())
                 .bacSiId(entity.getBacSi().getBacSiId())
-                .thoiGianHen(entity.getThoiGianHen())
+                .thoiGianHen(entity.getThoiGianTu())
                 .trangThai(entity.getTrangThai())
                 .ngayKham(entity.getNgayKham())
                 .build();

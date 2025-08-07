@@ -35,7 +35,7 @@ public class NguoiDung {
     @Column(name = "gioi_tinh", length = 10, columnDefinition = "NVARCHAR(10)")
     private String gioiTinh;
 
-    @Column(name = "email", length = 50, columnDefinition = "NVARCHAR(50)")
+    @Column(name = "email", length = 225, columnDefinition = "NVARCHAR(225)")
     @Email(message = "Email không hợp lệ")
     private String email;
 
@@ -43,7 +43,7 @@ public class NguoiDung {
     @Size(max = 15, message = "Số điện thoại không vượt quá 15 ký tự")
     private String soDienThoai;
 
-    @Column(name = "mat_khau", nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
+    @Column(name = "mat_khau", nullable = false, length = 225, columnDefinition = "VARCHAR(225)")
     @NotBlank(message = "Mật khẩu không được để trống")
     private String matKhau;
 

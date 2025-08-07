@@ -32,8 +32,8 @@ public class LichSuDieuTri {
     @Column(name = "ngay_dieu_tri", columnDefinition = "DATE")
     private LocalDate ngayDieuTri;
 
-    @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
-    @Size(max = 250, message = "Ghi chú không được vượt quá 250 ký tự")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
+    @Size(max = 225, message = "Ghi chú không được vượt quá 225 ký tự")
     private String ghiChu;
 
     @OneToMany(mappedBy = "lichSuDieuTri", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

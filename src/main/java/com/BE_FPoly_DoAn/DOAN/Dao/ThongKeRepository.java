@@ -17,10 +17,10 @@ public interface ThongKeRepository extends JpaRepository<LichKham, Integer>, Jpa
     List<Object[]> thongKeBenhNhanTheoGioiTinh();
 
     @Query("""
-        SELECT MONTH(lk.thoiGianHen), YEAR(lk.thoiGianHen), COUNT(lk)
+        SELECT MONTH(lk.thoiGianTu), YEAR(lk.thoiGianTu), COUNT(lk)
         FROM LichKham lk
-        GROUP BY YEAR(lk.thoiGianHen), MONTH(lk.thoiGianHen)
-        ORDER BY YEAR(lk.thoiGianHen), MONTH(lk.thoiGianHen)
+        GROUP BY YEAR(lk.thoiGianTu), MONTH(lk.thoiGianTu)
+        ORDER BY YEAR(lk.thoiGianTu), MONTH(lk.thoiGianTu)
     """)
     List<Object[]> thongKeLuotKhamTheoThang();
 

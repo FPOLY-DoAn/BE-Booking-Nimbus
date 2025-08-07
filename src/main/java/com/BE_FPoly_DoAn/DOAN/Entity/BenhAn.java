@@ -38,11 +38,11 @@ public class BenhAn {
     @NotBlank(message = "Tóm tắt không được để trống")
     private String tomTat;
 
-    @Column(name = "ket_luan", length = 250, columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ket_luan", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Kết luận không được để trống")
     private String ketLuan;
 
-    @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Ghi chú không được để trống")
     private String ghiChu;
 

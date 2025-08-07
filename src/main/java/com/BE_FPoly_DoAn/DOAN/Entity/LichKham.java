@@ -6,7 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,19 +37,19 @@ public class LichKham {
     @NotNull(message = "Bệnh nhân không được để trống")
     private BenhNhan benhNhan;
 
-    @Column(name = "thoi_gian_hen", columnDefinition = "TIME")
-    private LocalTime thoiGianHen;
+    @Column(name = "thoi_gian_tu", columnDefinition = "TIME")
+    private LocalTime thoiGianTu;
 
     @Column(name = "thoi_gian_den", columnDefinition = "TIME")
     private LocalTime thoiGianDen;
 
-    @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 
     @Column(name = "ngay_kham")
     private LocalDate ngayKham;
 
-    @Column(name = "ca_kham")
+    @Column(name = "ca_kham", length = 50, columnDefinition = "NVARCHAR(50)")
     private String caKham;
 
     @CreationTimestamp
@@ -64,9 +63,11 @@ public class LichKham {
     @OneToOne(mappedBy = "lichKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private BenhAn benhAn;
 
-    @Column(name = "kieu_lich_kham", columnDefinition = "NVARCHAR(50)")
-    private String kieuLichKham;
+    @ManyToOne
+    @JoinColumn(name = "loai_id", referencedColumnName = "loai_id", nullable = false)
+    @NotNull(message = "Loại hình khám không được để trống")
+    private LoaiHinhKham loaiHinhKham;
 
-    @Column(name = "trang_thai", columnDefinition = "NVARCHAR(50)")
+    @Column(name = "trang_thai", length = 50, columnDefinition = "NVARCHAR(50)")
     private String trangThai;
 }
