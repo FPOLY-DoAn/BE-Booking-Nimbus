@@ -1,6 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

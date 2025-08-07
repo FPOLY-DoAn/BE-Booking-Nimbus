@@ -1,8 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Dao;
 
-import com.BE_FPoly_DoAn.DOAN.Entity.DichVu;
+import com.BE_FPoly_DoAn.DOAN.Entity.LoaiHinhKham;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LoaiHinhKhamRepository extends JpaRepository<DichVu, Integer> {
-    boolean existsByTenDichVu(String tenDichVu);
+import java.util.Optional;
+
+public interface LoaiHinhKhamRepository extends JpaRepository<LoaiHinhKham, Integer> {
+    Optional<LoaiHinhKham> findByTenLoai(String tenLoai);
+
+    boolean existsByTenLoai(String tenLoai);
 }

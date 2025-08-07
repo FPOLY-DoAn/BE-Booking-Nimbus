@@ -43,10 +43,4 @@ public class BenhAnController {
     public ResponseEntity<ServiceResponse<?>> getByBenhNhanId(@PathVariable Integer benhNhanId) {
         return ResponseEntity.ok(benhAnService.getByBenhNhanId(benhNhanId));
     }
-
-    // @DeleteMapping("/XoaBenhAn/{id}")
-    // @PreAuthorize("hasRole('ROLE_QUANLY')")
-    // public ResponseEntity<ServiceResponse<?>> delete(@PathVariable Integer id) {
-    //     return ResponseEntity.ok(benhAnService.delete(id));
-    // }
 }

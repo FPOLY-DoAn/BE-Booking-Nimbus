@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Entity đại diện cho bảng LIC_HKHAM trong cơ sở dữ liệu.
@@ -36,30 +37,19 @@ public class LichKham {
     @NotNull(message = "Bệnh nhân không được để trống")
     private BenhNhan benhNhan;
 
-    @Column(name = "thoi_gian_hen", columnDefinition = "DATETIME", nullable = false)
-    @NotNull(message = "Thời gian hẹn không được để trống")
-    private LocalDateTime thoiGianHen;
+    @Column(name = "thoi_gian_tu", columnDefinition = "TIME")
+    private LocalTime thoiGianTu;
 
-    @Column(name = "thoi_gian_den", columnDefinition = "DATETIME")
-    private LocalDateTime thoiGianDen;
+    @Column(name = "thoi_gian_den", columnDefinition = "TIME")
+    private LocalTime thoiGianDen;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "kieu_lich_kham", length = 1, columnDefinition = "CHAR(1)", nullable = false)
-//    @NotNull(message = "Kiểu lịch khám không được để trống")
-//    private KieuLichKham kieuLichKham;
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "trang_thai", length = 1, columnDefinition = "CHAR(1)", nullable = false)
-//    @NotNull(message = "Trạng thái không được để trống")
-//    private TrangThaiLichKham trangThai;
-
-    @Column(name = "ghi_chu", length = 250, columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", length = 225, columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 
     @Column(name = "ngay_kham")
     private LocalDate ngayKham;
 
-    @Column(name = "ca_kham")
+    @Column(name = "ca_kham", length = 50, columnDefinition = "NVARCHAR(50)")
     private String caKham;
 
     @CreationTimestamp
@@ -73,17 +63,11 @@ public class LichKham {
     @OneToOne(mappedBy = "lichKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private BenhAn benhAn;
 
-    @Column(name = "kieu_lich_kham", columnDefinition = "NVARCHAR(50)")
-    private String kieuLichKham;
+    @ManyToOne
+    @JoinColumn(name = "loai_id", referencedColumnName = "loai_id", nullable = false)
+    @NotNull(message = "Loại hình khám không được để trống")
+    private LoaiHinhKham loaiHinhKham;
 
-    @Column(name = "trang_thai", columnDefinition = "NVARCHAR(50)")
+    @Column(name = "trang_thai", length = 50, columnDefinition = "NVARCHAR(50)")
     private String trangThai;
-
-//    public enum KieuLichKham {
-//        H, T, D
-//    }
-//
-//    public enum TrangThaiLichKham {
-//        A, C, P
-//    }
 }

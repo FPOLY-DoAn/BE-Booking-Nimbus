@@ -28,8 +28,8 @@ public class VaiTro {
     @Size(max = 50, message = "Tên vai trò không được vượt quá 50 ký tự")
     private String tenVaiTro;
 
-    @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
-    @Size(max = 250, message = "Mô tả không được vượt quá 250 ký tự")
+    @Column(name = "mo_ta", length = 225, columnDefinition = "NVARCHAR(225)")
+    @Size(max = 225, message = "Mô tả không được vượt quá 225 ký tự")
     private String moTa;
 
     @OneToMany(mappedBy = "vaiTro", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

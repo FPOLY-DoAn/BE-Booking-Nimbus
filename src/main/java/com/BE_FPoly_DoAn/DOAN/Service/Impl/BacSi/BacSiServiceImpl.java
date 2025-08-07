@@ -18,7 +18,6 @@ import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +30,6 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
     private final PhanQuyenServiceImpl phanQuyenServiceImpl;
     private final ChuyenKhoaServiceImpl chuyenKhoaServiceImpl;
     private final BCryptPasswordEncoder passwordEncoder;
-
 
     public BacSiServiceImpl(ChuyenKhoaServiceImpl chuyenKhoaServiceImpl,
                             PhanQuyenServiceImpl phanQuyenServiceImpl,
@@ -112,9 +110,18 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
             BacSi entity = BacSiMapper.toEntity(dto, ck);
 
-
+            if (dto.getMatKhau() != null && !dto.getMatKhau().isBlank()) {
+                String encoded = passwordEncoder.encode(dto.getMatKhau());
+                if (entity.getNguoiDung() != null) {
+                    entity.getNguoiDung().setMatKhau(encoded);
+                }
+            }
 
             BacSi saved = bacSiRepository.save(entity);
+
+            VaiTro vaiTro = vaiTroRepository.findById(1)
+                    .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
+            phanQuyenServiceImpl.save(new PhanQuyen(vaiTro, saved.getNguoiDung()));
 
             return ServiceResponse.success(NotificationCode.DOCTOR_CREATE_SUCCESS, BacSiMapper.toResponseDto(saved));
         } catch (IllegalArgumentException e) {
@@ -126,24 +133,17 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
     public ServiceResponse<?> update(Integer id, BacSiRequestDTO dto) {
         try {
-            BacSi existing = bacSiRepository.findById(id).orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
-            Optional<ChuyenKhoa> ck = chuyenKhoaServiceImpl.getById(Integer.valueOf(dto.getTenKhoa()));
-            NguoiDung nd = existing.getNguoiDung();
-            nd.setHoTen(dto.getHoTen());
-            nd.setEmail(dto.getEmail());
-            nd.setGioiTinh(dto.getGioiTinh());
-            nd.setNgayCapNhat(LocalDateTime.now());
-            nd.setSoDienThoai(dto.getSoDienThoai());
+            BacSi existing = bacSiRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
 
-            nguoiDungService.save(nd);
-            existing.setChuyenKhoa(ck.get());
-            existing.setTrinhDo(dto.getTrinhDo());
-            existing.setTrangThaiHoatDong(dto.getTrangThaiHoatDong());
-            existing.setChungChi(dto.getChungChi());
-            existing.setKinhNghiem(dto.getKinhNghiem());
-            existing.setGhiChu(dto.getGhiChu());
-            bacSiRepository.save(existing);
-            return ServiceResponse.success(NotificationCode.DOCTOR_UPDATE_SUCCESS);
+            ChuyenKhoa ck = chuyenKhoaServiceImpl.getByTen(dto.getTenKhoa())
+                    .orElseThrow(() -> new IllegalArgumentException("Chuyên khoa không tồn tại"));
+
+            BacSiMapper.updateEntity(existing, dto, ck, false);
+
+            BacSi saved = bacSiRepository.save(existing);
+
+            return ServiceResponse.success(NotificationCode.DOCTOR_UPDATE_SUCCESS, BacSiMapper.toResponseDto(saved));
         } catch (IllegalArgumentException e) {
             return ServiceResponse.error(NotificationCode.SPECIALTY_NOT_FOUND);
         } catch (Exception e) {

@@ -29,14 +29,13 @@ public class PhuongPhapDieuTri {
     @JsonIgnore
     private LichSuDieuTri lichSuDieuTri;
 
-    @Column(name = "ten_phuong_phap", length = 100, columnDefinition = "NVARCHAR(100)")
+    @Column(name = "ten_phuong_phap", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Tên phương pháp không được để trống")
-    @Size(max = 100, message = "Tên phương pháp không được vượt quá 100 ký tự")
+    @Size(max = 225, message = "Tên phương pháp không được vượt quá 225 ký tự")
     private String tenPhuongPhap;
 
-    @Column(name = "hieu_qua", length = 1, columnDefinition = "CHAR(1)")
+    @Column(name = "hieu_qua", length = 50, columnDefinition = "NVARCHAR(50)")
     @NotBlank(message = "Hiệu quả không được để trống")
-    @Size(min = 1, max = 1, message = "Hiệu quả chỉ được 1 ký tự")
     private String hieuQua;
 
     @OneToMany(mappedBy = "phuongPhapDieuTri", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

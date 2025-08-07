@@ -20,11 +20,8 @@ public class BenhAnDTO {
     @NotNull(message = "Lịch khám không được để trống")
     private Integer lichKhamId;
 
-    @NotNull(message = "Bác sĩ kết luận không được để trống")
-    private Integer bacSiKetLuanId;
-
-    @NotNull(message = "Dịch vụ không được để trống")
-    private Integer dichVuId;
+//    @NotNull(message = "Bác sĩ kết luận không được để trống")
+//    private Integer bacSiKetLuanId;
 
     @NotBlank(message = "Tóm tắt không được để trống")
     private String tomTat;

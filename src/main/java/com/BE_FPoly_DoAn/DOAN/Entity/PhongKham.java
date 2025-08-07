@@ -27,13 +27,12 @@ public class PhongKham {
     @Size(max = 4, message = "Số phòng không được vượt quá 4 ký tự")
     private String soPhong;
 
-    @Column(name = "loai_phong", length = 1, columnDefinition = "CHAR(1)", nullable = false)
+    @Column(name = "loai_phong", length = 225, columnDefinition = "NVARCHAR(225)", nullable = false)
     @NotBlank(message = "Loại phòng không được để trống")
-    @Size(min = 1, max = 1, message = "Loại phòng phải có 1 ký tự")
     private String loaiPhong;
 
-    @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
-    @Size(max = 250, message = "Mô tả không được vượt quá 250 ký tự")
+    @Column(name = "mo_ta", length = 225, columnDefinition = "NVARCHAR(225)")
+    @Size(max = 225, message = "Mô tả không được vượt quá 225 ký tự")
     private String moTa;
 
     @OneToMany(mappedBy = "phongKham", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

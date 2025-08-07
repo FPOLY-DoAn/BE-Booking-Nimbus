@@ -3,6 +3,7 @@ package com.BE_FPoly_DoAn.DOAN.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -39,17 +40,17 @@ public class LichLamViecBacSi {
     private LocalDateTime ngayTao;
 
     @UpdateTimestamp
-    @PastOrPresent(message = "Ngày cập nhật không được lớn hơn ngày hiện tại")
     @Column(name = "ngay_cap_nhat", columnDefinition = "DATETIME")
     private LocalDateTime ngayCapNhat;
 
     @OneToMany(mappedBy = "lichLamViecBacSi", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LichPhongKham> lichPhongKhams;
 
-    @Column(name = "ca_truc", columnDefinition = "NVARCHAR(50)")
+    @Column(name = "ca_truc", length = 50, columnDefinition = "NVARCHAR(50)")
+    @Pattern(regexp = "[SCT]", message = "Ca làm phải là SANG (Sáng), CHIEU (Chiều), TOI (Tối)")
     private String caTruc;
 
-    @Column(name = "ly_do_nghi", columnDefinition = "NVARCHAR(255)")
+    @Column(name = "ly_do_nghi", length = 225,columnDefinition = "NVARCHAR(225)")
     private String lyDoNghi;
 
 }

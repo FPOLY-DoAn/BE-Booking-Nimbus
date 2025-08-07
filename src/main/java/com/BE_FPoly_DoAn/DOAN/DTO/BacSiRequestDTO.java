@@ -18,8 +18,10 @@ public class BacSiRequestDTO {
     private String gioiTinh;
     private String email;
     private String soDienThoai;
+
     private String matKhau;
     private String tenKhoa;
+
     @JsonIgnore
     private Integer chuyenKhoaId;
     private String chungChi;

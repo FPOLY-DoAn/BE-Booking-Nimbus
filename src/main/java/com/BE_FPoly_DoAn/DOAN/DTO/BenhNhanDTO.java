@@ -5,7 +5,6 @@ import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamShortDTO;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -15,6 +14,7 @@ import java.util.List;
 public class BenhNhanDTO {
 
     private Integer benhNhanId;
+    private Integer nguoiDungId;
     private String hoTen;
     private String gioiTinh;
     private String email;

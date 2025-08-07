@@ -9,6 +9,7 @@ import com.BE_FPoly_DoAn.DOAN.Mapper.BenhAnMapper;
 import com.BE_FPoly_DoAn.DOAN.Mapper.HoSoBenhAnMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,32 +23,42 @@ public class BenhAnServiceImpl {
     private final BenhAnRepository benhAnRepo;
     private final LichKhamRepository lichKhamRepo;
     private final BacSiRepository bacSiRepo;
-    private final DichVuRepository dichVuRepo;
     private final BenhRepository benhRepo;
     private final HoSoBenhAnRepository hoSoRepo;
+    private final NguoiDungRepository nguoiDungRepo;
+    private final JwtService jwtService;
+    private final HttpServletRequest request;
 
-    public BenhAnServiceImpl(BenhAnRepository benhAnRepo,
-                             LichKhamRepository lichKhamRepo,
-                             BacSiRepository bacSiRepo,
-                             DichVuRepository dichVuRepo,
-                             BenhRepository benhRepo,
-                             HoSoBenhAnRepository hoSoRepo) {
+    public BenhAnServiceImpl(
+            BenhAnRepository benhAnRepo,
+            LichKhamRepository lichKhamRepo,
+            BacSiRepository bacSiRepo,
+            BenhRepository benhRepo,
+            HoSoBenhAnRepository hoSoRepo,
+            NguoiDungRepository nguoiDungRepo,
+            JwtService jwtService,
+            HttpServletRequest request
+    ) {
         this.benhAnRepo = benhAnRepo;
         this.lichKhamRepo = lichKhamRepo;
         this.bacSiRepo = bacSiRepo;
-        this.dichVuRepo = dichVuRepo;
         this.benhRepo = benhRepo;
         this.hoSoRepo = hoSoRepo;
+        this.nguoiDungRepo = nguoiDungRepo;
+        this.jwtService = jwtService;
+        this.request = request;
+    }
+
+    private BacSi getCurrentBacSiFromToken() {
+        Integer nguoiDungId = jwtService.extractUserIdFromRequest(request);
+        return bacSiRepo.findByNguoiDung_NguoiDungId(nguoiDungId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin bác sĩ từ token"));
     }
 
     @Transactional
     public ServiceResponse<?> create(BenhAnDTO dto) {
         if (dto.getLichKhamId() == null)
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_LICHKHAM_REQUIRED);
-        if (dto.getBacSiKetLuanId() == null)
-            return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_BACSI_REQUIRED);
-        if (dto.getDichVuId() == null)
-            return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_DICHVU_REQUIRED);
         if (dto.getTomTat() == null || dto.getTomTat().trim().isEmpty())
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_TOMTAT_REQUIRED);
         if (dto.getKetLuan() == null || dto.getKetLuan().trim().isEmpty())
@@ -60,17 +71,14 @@ public class BenhAnServiceImpl {
         try {
             LichKham lichKham = lichKhamRepo.findById(dto.getLichKhamId())
                     .orElseThrow(() -> new RuntimeException("Lịch khám không tồn tại"));
-            BacSi bacSi = bacSiRepo.findById(dto.getBacSiKetLuanId())
-                    .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
-            DichVu dichVu = dichVuRepo.findById(dto.getDichVuId())
-                    .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại"));
+            BacSi bacSi = getCurrentBacSiFromToken();
 
             Optional<BenhAn> existingBenhAn = benhAnRepo.findByLichKham_LichkhamId(dto.getLichKhamId());
             if (existingBenhAn.isPresent()) {
                 return ServiceResponse.error(NotificationCode.MEDICAL_RECORD_ALREADY_EXISTS);
             }
 
-            BenhAn benhAn = BenhAnMapper.toEntity(dto, lichKham, bacSi, dichVu);
+            BenhAn benhAn = BenhAnMapper.toEntity(dto, lichKham, bacSi);
             BenhAn savedBenhAn = benhAnRepo.save(benhAn);
 
             List<HoSoBenhAn> hoSoList = new ArrayList<>();
@@ -93,10 +101,6 @@ public class BenhAnServiceImpl {
     public ServiceResponse<?> update(Integer id, BenhAnDTO dto) {
         if (dto.getLichKhamId() == null)
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_LICHKHAM_REQUIRED);
-        if (dto.getBacSiKetLuanId() == null)
-            return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_BACSI_REQUIRED);
-        if (dto.getDichVuId() == null)
-            return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_DICHVU_REQUIRED);
         if (dto.getTomTat() == null || dto.getTomTat().trim().isEmpty())
             return ServiceResponse.error(NotificationCode.VALIDATION_BENHAN_TOMTAT_REQUIRED);
         if (dto.getKetLuan() == null || dto.getKetLuan().trim().isEmpty())
@@ -111,10 +115,7 @@ public class BenhAnServiceImpl {
                     .orElseThrow(() -> new RuntimeException("Bệnh án không tồn tại"));
             LichKham lichKham = lichKhamRepo.findById(dto.getLichKhamId())
                     .orElseThrow(() -> new RuntimeException("Lịch khám không tồn tại"));
-            BacSi bacSi = bacSiRepo.findById(dto.getBacSiKetLuanId())
-                    .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
-            DichVu dichVu = dichVuRepo.findById(dto.getDichVuId())
-                    .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại"));
+            BacSi bacSi = getCurrentBacSiFromToken();
 
             existing.setLichKham(lichKham);
             existing.setBacSiKetLuan(bacSi);

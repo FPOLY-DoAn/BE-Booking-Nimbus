@@ -26,7 +26,7 @@ public class ChuyenKhoa {
     @NotBlank(message = "Tên khoa không được để trống")
     private String tenKhoa;
 
-    @Column(name = "mo_ta", length = 250, columnDefinition = "NVARCHAR(250)")
+    @Column(name = "mo_ta", length = 225, columnDefinition = "NVARCHAR(225)")
     @NotBlank(message = "Mô tả không được để trống")
     private String moTa;
 

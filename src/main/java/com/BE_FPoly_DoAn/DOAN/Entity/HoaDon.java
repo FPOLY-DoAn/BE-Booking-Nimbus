@@ -52,7 +52,7 @@ public class HoaDon {
     private List<ThanhToan> thanhToans;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "trang_thai", length = 20, columnDefinition = "VARCHAR(20)")
+    @Column(name = "trang_thai", length = 50, columnDefinition = "NVARCHAR(50)")
     private TrangThaiHoaDon trangThai;
 
     public enum TrangThaiHoaDon {

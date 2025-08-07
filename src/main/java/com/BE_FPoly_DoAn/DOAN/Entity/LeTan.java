@@ -32,10 +32,16 @@ public class LeTan {
     @PastOrPresent(message = "Ngày tuyển dụng không được là ngày trong tương lai")
     private LocalDate ngayTuyenDung;
 
-    @Column(name = "chuc_vu", columnDefinition = "NVARCHAR(50)")
+    @Column(name = "ngay_tao", updatable = false)
+    private LocalDate ngayTao;
+
+    @Column(name = "ngay_cap_nhat")
+    private LocalDate ngayCapNhat;
+
+    @Column(name = "chuc_vu", length = 50,columnDefinition = "NVARCHAR(50)")
     private String chucVu;
 
-    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(250)")
+    @Column(name = "ghi_chu", length = 225,columnDefinition = "NVARCHAR(225)")
     private String ghiChu;
 
     @Column(name = "trang_thai_hoat_dong")
