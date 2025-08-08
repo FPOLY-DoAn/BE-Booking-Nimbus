@@ -12,6 +12,8 @@ import jakarta.validation.constraints.*;
 @Setter
 public class NguoiDungDTO {
 
+    private Integer nguoiDungId;
+
     @NotBlank(message = "VALIDATION_NAME_REQUIRED")
     @Size(max = 50, message = "VALIDATION_NAME_TOO_LONG")
     private String hoTen;

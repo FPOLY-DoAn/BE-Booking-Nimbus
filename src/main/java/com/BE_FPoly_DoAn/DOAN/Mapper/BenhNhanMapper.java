@@ -1,5 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Mapper;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.BenhNhanRequestDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.BenhNhan;
 
@@ -20,6 +21,8 @@ public class BenhNhanMapper {
                 .ngayTao(entity.getNgayTao())
                 .ngayCapNhat(entity.getNgayCapNhat())
                 .diaChi(entity.getDiaChi())
+                .canCuocCongDan(entity.getCanCuocCongDan())
+                .danToc(entity.getDanToc())
 //                .lichKhams(entity.getLichKhams() != null
 //                        ? entity.getLichKhams().stream()
 //                        .map(LichKhamMapper::toShortDTO)
@@ -39,5 +42,20 @@ public class BenhNhanMapper {
                 .baoHiem(dto.getBaoHiem())
                 .lienHeKhanCap(dto.getLienHeKhanCap())
                 .build();
+    }
+
+    public static BenhNhanRequestDTO toRequestDTO(BenhNhan entity) {
+        if (entity == null) return null;
+
+        return new BenhNhanRequestDTO(
+                entity.getBenhNhanId(),
+                entity.getBaoHiem(),
+                entity.getDiaChi(),
+                entity.getLienHeKhanCap(),
+                entity.getCanCuocCongDan(),
+                entity.getDanToc(),
+                entity.getNgayTao(),
+                entity.getNgayCapNhat()
+        );
     }
 }

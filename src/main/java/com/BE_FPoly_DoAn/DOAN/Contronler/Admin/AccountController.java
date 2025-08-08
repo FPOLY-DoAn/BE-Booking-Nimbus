@@ -33,7 +33,7 @@ public class AccountController {
     }
 
     @GetMapping("/LayThongTin")
-    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @PreAuthorize("hasAnyAuthority('ROLE_QUANLY', 'ROLE_BACSI', 'ROLE_LETAN', 'ROLE_BENHNHAN')")
     public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
         Integer userId = jwtService.extractUserIdFromRequest(request);
         return ResponseEntity.ok(nguoiDungService.getCurrentUserInfo(userId));

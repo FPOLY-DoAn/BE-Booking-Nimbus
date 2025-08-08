@@ -24,15 +24,11 @@ public class BenhAnMapper {
         BenhAnDTO dto = new BenhAnDTO();
         dto.setBenhAnId(entity.getBenhAnId());
         dto.setLichKhamId(entity.getLichKham().getLichkhamId());
-//        dto.setBacSiKetLuanId(entity.getBacSiKetLuan().getBacSiId());
         dto.setTomTat(entity.getTomTat());
         dto.setKetLuan(entity.getKetLuan());
         dto.setGhiChu(entity.getGhiChu());
         dto.setThoiGian(entity.getThoiGian());
-
-        List<String> benhTenList = benhInfoList.stream()
-                .map(BenhInfoDTO::getTenBenh)
-                .toList();
+        List<String> benhTenList = benhInfoList.stream().map(BenhInfoDTO::getTenBenh).toList();
         dto.setBenhTenList(benhTenList);
         return dto;
     }

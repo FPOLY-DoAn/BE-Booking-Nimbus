@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface BenhNhanRepository extends JpaRepository<BenhNhan, Integer> {
     Optional<BenhNhan> getByNguoiDung(NguoiDung nguoiDung);
+
+    Optional<BenhNhan> findByNguoiDung(NguoiDung nguoiDung);
 }

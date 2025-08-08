@@ -14,7 +14,6 @@ import java.time.LocalDate;
 public class BenhNhanDTO {
 
     private Integer benhNhanId;
-    private Integer nguoiDungId;
     private String hoTen;
     private String gioiTinh;
     private String email;
@@ -22,6 +21,8 @@ public class BenhNhanDTO {
     private String baoHiem;
     private String lienHeKhanCap;
     private String diaChi;
+    private String canCuocCongDan;
+    private String danToc;
     private LocalDate ngayTao;
     private LocalDate ngayCapNhat;
 //    private List<LichKhamShortDTO> lichKhams;

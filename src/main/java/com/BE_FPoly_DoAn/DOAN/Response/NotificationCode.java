@@ -96,6 +96,7 @@ public enum NotificationCode {
     PATIENT_LIST_SUCCESS("PAT_007", "Lấy danh sách bệnh nhân thành công"),
     PATIENT_DETAIL_SUCCESS("PAT_008", "Lấy chi tiết bệnh nhân thành công"),
     PATIENT_NOT_FOUND("PAT_009", "Không tìm thấy bệnh nhân"),
+    PATIENT_ALREADY_EXISTS("PAT_010", "Bệnh nhân đã tồn tại"),
 
     // ===== BỆNH ÁN =====
     MEDICAL_RECORD_CREATE_SUCCESS("MED_001", "Tạo bệnh án thành công"),

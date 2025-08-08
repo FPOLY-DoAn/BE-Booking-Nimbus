@@ -239,14 +239,12 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         return nguoiDungRepository.findById(nguoiDungId)
                 .map(user -> {
                     NguoiDungDTO dto = new NguoiDungDTO(
+                            user.getNguoiDungId(),
                             user.getHoTen(),
                             user.getGioiTinh(),
                             user.getEmail(),
                             user.getSoDienThoai(),
                             user.getMatKhau()
-//                            ,
-//                            null,
-//                            null
                     );
                     return ServiceResponse.success(NotificationCode.USER_INFO, dto);
                 })
