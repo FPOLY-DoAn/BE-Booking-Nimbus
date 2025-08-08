@@ -160,9 +160,7 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
                     .gioiTinh(bacSiDTO.getGioiTinh())
                     .matKhau(passwordEncoder.encode(bacSiDTO.getMatKhau()))
                     .build();
-
             nguoiDungService.save(nguoiDung);
-
             BacSi bacSi = BacSi.builder()
                     .nguoiDung(nguoiDung)
                     .chungChi(bacSiDTO.getChungChi())
@@ -173,10 +171,8 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
                     .trangThaiHoatDong(bacSiDTO.getTrangThaiHoatDong())
                     .chuyenKhoa(chuyenKhoaServiceImpl.getById(bacSiDTO.getChuyenKhoaId()).get())
                     .build();
-
             bacSiRepository.save(bacSi);
-
-            VaiTro vaiTro = vaiTroRepository.findById(1)
+            VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Bác sĩ")
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
 
             phanQuyenServiceImpl.save(new PhanQuyen(vaiTro, nguoiDung));

@@ -57,13 +57,17 @@ public class QuanLyServiceImpl implements InterfaceService<QuanLy> {
                     .email(quanLyDTO.getEmail()).soDienThoai(quanLyDTO.getSoDienThoai()).matKhau(new BCryptPasswordEncoder().encode(quanLyDTO.getMatKhau()))
                     .gioiTinh(quanLyDTO.getGioiTinh()).build();
             nguoiDungService.save(nguoiDung);
+
+
             QuanLy quanLy = QuanLy.builder().nguoiDung(nguoiDung)
                     .chucVu(quanLyDTO.getChucVu()).ghiChu(quanLyDTO.getGhiChu())
                     .ngayTao(LocalDate.now())
                     .ngayCapNhat(LocalDate.now())
                     .build();
             quanLyRepository.save(quanLy);
-            VaiTro vaiTro = vaiTroRepository.findById(1)
+
+
+            VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Quản lý")
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
 
             phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
