@@ -1,12 +1,14 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BenhNhan;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.BenhNhanRequestDTO;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.BenhNhanServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +24,9 @@ public class BenhNhanController {
     }
 
     @PostMapping("/TaoMoiBenhNhan")
-    public ResponseEntity<ServiceResponse<?>> create(@RequestBody @Valid BenhNhanDTO dto) {
-        Integer id = dto.getNguoiDungId();
-        return ResponseEntity.ok(service.create(id, dto));
+    @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
+    public ResponseEntity<ServiceResponse<?>> getOrCreateBenhNhan(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.getOrCreateBenhNhanIdByEmail(userDetails.getUsername()));
     }
 
     @GetMapping("/LayDanhSachBenhNhan")
@@ -37,14 +39,17 @@ public class BenhNhanController {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @PutMapping("/CapNhatBenhNhan/{id}")
-    public ResponseEntity<ServiceResponse<?>> update(@PathVariable Integer id,
-                                                     @RequestBody @Valid BenhNhanDTO dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+    @PutMapping("/CapNhatBenhNhan")
+    @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
+    public ResponseEntity<ServiceResponse<?>> update(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @RequestBody @Valid BenhNhanRequestDTO dto) {
+        return ResponseEntity.ok(service.updateByEmail(userDetails.getUsername(), dto));
     }
 
-//    @DeleteMapping("/XoaBenhNhan/{id}")
-//    public ResponseEntity<ServiceResponse<?>> delete(@PathVariable Integer id) {
-//        return ResponseEntity.ok(service.delete(id));
-//    }
+    @GetMapping("/LayThongTinBenhNhan")
+    @PreAuthorize("hasAuthority('ROLE_BENHNHAN')")
+    public ResponseEntity<ServiceResponse<?>> getBenhNhanCuaToi(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername(); // Thông thường username là email
+        return ResponseEntity.ok(service.getBenhNhanByEmail(email));
+    }
 }

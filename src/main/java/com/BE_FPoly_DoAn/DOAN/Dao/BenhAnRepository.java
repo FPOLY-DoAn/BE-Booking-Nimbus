@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Dao;
 
 import com.BE_FPoly_DoAn.DOAN.Entity.BenhAn;
+import com.BE_FPoly_DoAn.DOAN.Entity.BenhNhan;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
