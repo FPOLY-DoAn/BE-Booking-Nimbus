@@ -6,10 +6,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @Repository
-public interface OtpRepository extends JpaRepository<OTP_NguoiDung, Long > {
+public interface OtpRepository extends JpaRepository<OTP_NguoiDung, Long> {
     Optional<OTP_NguoiDung> findByOtpCode(String otpCode);
+
     void deleteAllByOtpCode(String otpCode);
+
     void deleteByExpireAtBefore(LocalDateTime time);
 
     Optional<OTP_NguoiDung> findByEmail(String email);

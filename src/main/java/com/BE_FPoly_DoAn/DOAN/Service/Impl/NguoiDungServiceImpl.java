@@ -195,7 +195,7 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             String text = """
                     <div style="font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f6f8fc; color: #333;">
                         <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <h2 style="text-align: center; color: #0a5bff;">Mimbus - Xác nhận tài khoản</h2>
+                            <h2 style="text-align: center; color: #0a5bff;">Nimbus - Xác nhận tài khoản</h2>
                             <p>Xin chào <strong>%s</strong>,</p>
                             <p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>Nimbus</strong> – hệ thống đặt lịch khám bệnh hiện đại.</p>
                             <p style="margin: 20px 0;">Mã xác nhận của bạn là:</p>
