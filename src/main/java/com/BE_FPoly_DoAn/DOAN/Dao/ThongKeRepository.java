@@ -1,9 +1,12 @@
 package com.BE_FPoly_DoAn.DOAN.Dao;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.ThongKe.ThongKeKhoaDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.LichKham;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface ThongKeRepository extends JpaRepository<LichKham, Integer>, JpaSpecificationExecutor<LichKham> {
@@ -67,4 +70,43 @@ public interface ThongKeRepository extends JpaRepository<LichKham, Integer>, Jpa
         ORDER BY SUM(ct.tongGia) DESC
     """)
     List<Object[]> thongKeHoaDonTheoDichVu();
+
+    @Query(value = """
+        SELECT 
+            k.ten_khoa AS tenKhoa,
+            COUNT(ba.benhan_id) AS soLuong,
+            COALESCE(prev.soLuong, 0) AS soLuongThangTruoc,
+            CASE 
+                WHEN COALESCE(prev.soLuong, 0) = 0 THEN NULL
+                ELSE ROUND(((COUNT(ba.benhan_id) - prev.soLuong) * 100.0) / prev.soLuong, 2)
+            END AS tangTruongPhanTram,
+            YEAR(ba.thoi_gian) AS nam,
+            MONTH(ba.thoi_gian) AS thang
+        FROM BENH_AN ba
+        JOIN BAC_SI bs ON ba.bacsi_ket_luan_id = bs.bacsi_id
+        JOIN CHUYEN_KHOA k ON bs.chuyenkhoa_id = k.chuyenkhoa_id
+        LEFT JOIN (
+            SELECT 
+                k2.chuyenkhoa_id,
+                COUNT(ba2.benhan_id) AS soLuong,
+                YEAR(ba2.thoi_gian) AS nam,
+                MONTH(ba2.thoi_gian) AS thang
+            FROM BENH_AN ba2
+            JOIN BAC_SI bs2 ON ba2.bacsi_ket_luan_id = bs2.bacsi_id
+            JOIN CHUYEN_KHOA k2 ON bs2.chuyenkhoa_id = k2.chuyenkhoa_id
+            WHERE YEAR(ba2.thoi_gian) = :namThangTruoc
+              AND MONTH(ba2.thoi_gian) = :thangTruoc
+            GROUP BY k2.chuyenkhoa_id, YEAR(ba2.thoi_gian), MONTH(ba2.thoi_gian)
+        ) prev ON prev.chuyenkhoa_id = k.chuyenkhoa_id
+        WHERE YEAR(ba.thoi_gian) = :nam
+          AND (:thang IS NULL OR MONTH(ba.thoi_gian) = :thang)
+        GROUP BY k.ten_khoa, prev.soLuong, YEAR(ba.thoi_gian), MONTH(ba.thoi_gian)
+        ORDER BY k.ten_khoa
+        """, nativeQuery = true)
+    List<Object[]> thongKeTheoKhoa(
+            @Param("nam") int nam,
+            @Param("thang") Integer thang,
+            @Param("namThangTruoc") int namThangTruoc,
+            @Param("thangTruoc") int thangTruoc
+    );
 }

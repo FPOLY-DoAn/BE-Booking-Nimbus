@@ -389,4 +389,37 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         mailConfig.sendTo("dai582005@gmail.com", email, "Gửi lại mã xác nhận tài khoản", html);
         return true;
     }
+
+    @Transactional
+    public int verifyResetPasswordOtp(String email, String otpCode) {
+        Optional<OTP_NguoiDung> otpOptional = otpRepository.findByOtpCode(otpCode);
+        if (otpOptional.isEmpty()) return -1;
+
+        OTP_NguoiDung otp = otpOptional.get();
+
+        if (!otp.getEmail().equals(email)) return -3;
+        if (otp.getExpireAt().isBefore(LocalDateTime.now())) return -2;
+
+        otp.setVerified(true);
+        otpRepository.save(otp);
+
+        return 1;
+    }
+
+    @Transactional
+    public boolean resetPassword(String email, String newPassword) {
+        Optional<OTP_NguoiDung> otpOptional = otpRepository.findVerifiedOtpByEmail(email, LocalDateTime.now());
+        if (otpOptional.isEmpty()) return false;
+
+        Optional<NguoiDung> userOpt = nguoiDungRepository.findByEmail(email);
+        if (userOpt.isEmpty()) return false;
+
+        NguoiDung user = userOpt.get();
+        user.setMatKhau(new BCryptPasswordEncoder().encode(newPassword));
+        nguoiDungRepository.save(user);
+
+        otpRepository.deleteAllByEmail(email);
+
+        return true;
+    }
 }

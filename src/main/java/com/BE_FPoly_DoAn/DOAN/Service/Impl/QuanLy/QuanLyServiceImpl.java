@@ -63,7 +63,7 @@ public class QuanLyServiceImpl implements InterfaceService<QuanLy> {
                     .ngayCapNhat(LocalDate.now())
                     .build();
             quanLyRepository.save(quanLy);
-            VaiTro vaiTro = vaiTroRepository.findById(1)
+            VaiTro vaiTro = vaiTroRepository.findById(3)
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
 
             phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));

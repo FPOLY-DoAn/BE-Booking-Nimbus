@@ -32,4 +32,28 @@ public class BenhAnMapper {
         dto.setBenhTenList(benhTenList);
         return dto;
     }
+
+    public static BenhAnDTO toDTO(BenhAn entity) {
+        BenhAnDTO dto = new BenhAnDTO();
+        dto.setBenhAnId(entity.getBenhAnId());
+        dto.setLichKhamId(entity.getLichKham().getLichkhamId());
+        dto.setTomTat(entity.getTomTat());
+        dto.setKetLuan(entity.getKetLuan());
+        dto.setGhiChu(entity.getGhiChu());
+        dto.setThoiGian(entity.getThoiGian());
+
+        List<BenhInfoDTO> benhInfoList = entity.getHoSoBenhAns().stream()
+                .map(hs -> new BenhInfoDTO(hs.getBenh().getBenhId(), hs.getBenh().getTenBenh()))
+                .toList();
+
+        dto.setBenhInfoList(benhInfoList);
+
+        List<String> benhTenList = benhInfoList.stream()
+                .map(BenhInfoDTO::getTenBenh)
+                .toList();
+
+        dto.setBenhTenList(benhTenList);
+
+        return dto;
+    }
 }

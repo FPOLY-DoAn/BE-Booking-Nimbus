@@ -167,6 +167,7 @@ public enum NotificationCode {
     AVAILABLE_TIME_FETCH_SUCCESS("GT01", "Lấy giờ trống thành công"),
     AVAILABLE_TIME_NOT_FOUND("DO_001", "Không có giờ trống trong ca làm việc này"),
     SHIFT_NOT_FOUND("DO_002", "Bác sĩ không có ca làm việc vào ngày này"),
+    FETCH_SUCCESS("US_001", "Lấy thông tin thành công"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
