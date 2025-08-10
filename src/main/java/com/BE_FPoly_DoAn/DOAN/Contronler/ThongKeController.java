@@ -1,13 +1,17 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.ThongKe.ThongKeKhoaDTO;
+import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.LichKhamServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy.ThongKeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/thong-ke")
@@ -53,5 +57,17 @@ public class ThongKeController {
     @GetMapping("/ThongKeHoaDonTheoDichVu")
     public ResponseEntity<ServiceResponse<?>> thongKeHoaDonTheoDichVu() {
         return ResponseEntity.ok(thongKeService.thongKeHoaDonTheoDichVu());
+    }
+
+    @GetMapping("/TheoKhoa")
+    @Operation(summary = "Thống kê theo khoa (có thể lọc theo năm/tháng, kèm tăng trưởng so với tháng trước)")
+    public ResponseEntity<ServiceResponse<?>> thongKeTheoKhoa(
+            @RequestParam(required = false) Integer nam,
+            @RequestParam(required = false) Integer thang
+    ) {
+        List<ThongKeKhoaDTO> result = thongKeService.thongKeTheoKhoa(nam, thang);
+        return ResponseEntity.ok(
+                ServiceResponse.success(NotificationCode.FETCH_SUCCESS, result)
+        );
     }
 }

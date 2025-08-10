@@ -33,6 +33,9 @@ public class OTP_NguoiDung {
     @Column(name = "is_reset_password")
     private boolean resetPassword = false;
 
+    @Column(name = "verified")
+    private boolean verified = false;
+
     public OTP_NguoiDung(String otpCode, String email, String hoTen, String gioiTinh, String soDienThoai, String matKhau) {
         this.otpCode = otpCode;
         this.email = email;

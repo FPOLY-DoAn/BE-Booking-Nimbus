@@ -39,7 +39,7 @@ public class BenhAnDTO {
     @NotEmpty(message = "Danh sách bệnh không được để trống")
     private List<Integer> benhIds;
 
-//    private List<BenhInfoDTO> benhInfoList;
+    private List<BenhInfoDTO> benhInfoList;
 
     private List<String> benhTenList;
 }
