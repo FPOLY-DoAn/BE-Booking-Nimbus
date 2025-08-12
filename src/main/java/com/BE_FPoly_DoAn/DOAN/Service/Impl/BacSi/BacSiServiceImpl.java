@@ -119,7 +119,7 @@ public class BacSiServiceImpl implements InterfaceService<BacSi> {
 
             BacSi saved = bacSiRepository.save(entity);
 
-            VaiTro vaiTro = vaiTroRepository.findById(1)
+            VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Bác sĩ")
                     .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
             phanQuyenServiceImpl.save(new PhanQuyen(vaiTro, saved.getNguoiDung()));
 
