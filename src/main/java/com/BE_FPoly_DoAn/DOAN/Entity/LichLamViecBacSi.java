@@ -2,8 +2,6 @@ package com.BE_FPoly_DoAn.DOAN.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -47,7 +45,6 @@ public class LichLamViecBacSi {
     private List<LichPhongKham> lichPhongKhams;
 
     @Column(name = "ca_truc", length = 50, columnDefinition = "NVARCHAR(50)")
-    @Pattern(regexp = "[SCT]", message = "Ca làm phải là SANG (Sáng), CHIEU (Chiều), TOI (Tối)")
     private String caTruc;
 
     @Column(name = "ly_do_nghi", length = 225,columnDefinition = "NVARCHAR(225)")
