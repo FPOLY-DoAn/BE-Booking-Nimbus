@@ -52,4 +52,17 @@ public class GuestAppointmentController {
     public ResponseEntity<ServiceResponse<?>> getAll() {
         return ResponseEntity.ok(bacSiService.getAllResponse());
     }
+
+    @GetMapping("/chuyen-khoa/{tenKhoa}/lich-trong")
+    public ResponseEntity<ServiceResponse<?>> getLichKhamTrong(@PathVariable String tenKhoa) {
+        return ResponseEntity.ok(guestService.getLichKhamTrongTheoChuyenKhoa(tenKhoa));
+    }
+
+    @GetMapping("/chuyen-khoa/{tenKhoa}/ngay/{ngay}/ca/{ca}/gio-trong")
+    public ResponseEntity<ServiceResponse<?>> getGioTrongChuyenKhoa(
+            @PathVariable String tenKhoa,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngay,
+            @PathVariable String ca) {
+        return ResponseEntity.ok(guestService.getGioTrongTheoChuyenKhoa(tenKhoa, ngay, ca));
+    }
 }

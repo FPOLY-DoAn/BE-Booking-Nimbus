@@ -10,4 +10,8 @@ public interface GuestAppointmentService {
     ServiceResponse<?> getNgayLamViec(Integer bacSiId);
     ServiceResponse<?> getCaLamViec(Integer bacSiId, LocalDate ngay);
     ServiceResponse<?> getGioTrongTheoCa(Integer bacSiId, LocalDate ngay, String ca);
+
+    ServiceResponse<?> getLichKhamTrongTheoChuyenKhoa(String tenKhoa);
+
+    ServiceResponse<?> getGioTrongTheoChuyenKhoa(String tenKhoa, LocalDate ngay, String ca);
 }
