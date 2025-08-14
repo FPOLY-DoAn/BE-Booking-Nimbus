@@ -19,4 +19,6 @@ public interface LichLamViecBacSiRepository extends JpaRepository<LichLamViecBac
     List<LichLamViecBacSi> findByBacSiIn(List<BacSi> bacSiList);
 
     List<LichLamViecBacSi> findByBacSiInAndNgayAndCaTruc(List<BacSi> bacSiList, LocalDate ngay, String caTruc);
+
+    List<LichLamViecBacSi> findByNgay(LocalDate ngay);
 }
