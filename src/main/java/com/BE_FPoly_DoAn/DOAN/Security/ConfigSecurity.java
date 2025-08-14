@@ -75,7 +75,6 @@ public class ConfigSecurity {
 
                 .addFilterBefore(jwtFillter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable);
-
         return http.build();
     }
 

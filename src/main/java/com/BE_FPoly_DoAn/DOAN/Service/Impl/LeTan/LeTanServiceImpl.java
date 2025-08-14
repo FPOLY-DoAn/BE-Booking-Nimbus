@@ -67,9 +67,7 @@ public class LeTanServiceImpl implements InterfaceService<LeTan> {
                     .chucVu(leTanDTO.getChucVu())
                     .ngayTuyenDung(leTanDTO.getNgayTuyenDung()).build();
             leTanRepository.save(leTan);
-            VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Lễ tân")
-                    .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
-
+            VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Lễ tân") .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
             phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
