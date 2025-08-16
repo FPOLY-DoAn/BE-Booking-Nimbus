@@ -206,7 +206,7 @@ public class LichKhamServiceImpl {
             existing.setCaKham(dto.getCaKham());
 
             lichKhamRepo.save(existing);
-            return ServiceResponse.success(NotificationCode.APPOINTMENT_UPDATE_SUCCESS);
+            return ServiceResponse.success(NotificationCode.APPOINTMENT_UPDATE_SUCCESS, LichKhamMapper.toDTO(existing));
 
         } catch (RuntimeException e) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_UPDATE_FAIL,
