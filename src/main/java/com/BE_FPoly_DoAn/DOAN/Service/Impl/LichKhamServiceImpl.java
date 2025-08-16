@@ -12,8 +12,6 @@ import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -23,7 +21,6 @@ import java.util.Map;
 @Service
 public class LichKhamServiceImpl {
 
-    // Inject các repository cần thiết cho các thao tác với DB
     private final LichKhamRepository lichKhamRepo;
     private final BacSiRepository bacSiRepo;
     private final BenhNhanRepository benhNhanRepo;
@@ -44,20 +41,8 @@ public class LichKhamServiceImpl {
         this.loaiHinhKhamRepo = loaiHinhKhamRepo;
     }
 
-    /**
-     * Tạo mới lịch khám cho bệnh nhân
-     * - Kiểm tra dữ liệu đầu vào (ngày, giờ)
-     * - Kiểm tra bác sĩ có làm việc trong ca đó không
-     * - Kiểm tra trùng lịch, quá số lượng lịch cho phép
-     * - Kiểm tra giờ hẹn hợp lệ với ca
-     * - Lưu lịch và cập nhật trạng thái giờ khám chi tiết
-     *
-     * @param dto Thông tin lịch khám từ client
-     * @return ServiceResponse phản hồi thành công hoặc thất bại
-     */
     @Transactional
     public ServiceResponse<?> create(LichKhamDTO dto) {
-        // ===== 1. Kiểm tra hợp lệ dữ liệu đầu vào =====
         if (dto.getThoiGianTu() == null || dto.getThoiGianDen() == null || dto.getNgayKham() == null) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_INVALID_TIME,
                     "Thời gian hẹn hoặc ngày khám không được để trống");
@@ -76,7 +61,6 @@ public class LichKhamServiceImpl {
                     "Không thể đặt lịch cho ngày trong quá khứ");
         }
 
-        // ===== 2. Kiểm tra bác sĩ có làm việc trong ca đó không =====
         boolean isBacSiRanh = lichLamViecBacSiRepo.existsByBacSi_BacSiIdAndNgayAndCaTruc(
                 dto.getBacSiId(), dto.getNgayKham(), dto.getCaKham()
         );
@@ -84,20 +68,18 @@ public class LichKhamServiceImpl {
             return ServiceResponse.error("APP_015", "Bác sĩ không có lịch làm việc trong ca này");
         }
 
-//        // ===== 3. Kiểm tra lịch khám có bị trùng giờ với lịch khác =====
-//        boolean daTrungLich = lichKhamRepo.existsLichKhamTrung(
-//                dto.getBacSiId(),
-//                dto.getNgayKham(),
-//                gioHen,
-//                gioDen,
-//                null
-//        );
-//        if (daTrungLich) {
-//            return ServiceResponse.error(NotificationCode.APPOINTMENT_CONFLICT,
-//                    "Thời gian khám đã bị trùng với lịch khác của bác sĩ");
-//        }
+        boolean daTrungLich = lichKhamRepo.existsLichKhamTrung(
+                dto.getBacSiId(),
+                dto.getNgayKham(),
+                gioHen,
+                gioDen,
+                null
+        );
+        if (daTrungLich) {
+            return ServiceResponse.error(NotificationCode.APPOINTMENT_CONFLICT,
+                    "Thời gian khám đã bị trùng với lịch khác của bác sĩ");
+        }
 
-        // ===== 4. Kiểm tra số lượng lịch trong ca có vượt giới hạn =====
         int soLich = lichKhamRepo.countLichKhamByBacSiAndNgayAndCa(
                 Long.valueOf(dto.getBacSiId()), dto.getNgayKham(), dto.getCaKham()
         );
@@ -107,13 +89,11 @@ public class LichKhamServiceImpl {
                     "Bác sĩ đã đủ lịch trong ca " + dto.getCaKham());
         }
 
-        // ===== 5. Kiểm tra giờ hẹn có phù hợp với ca khám =====
         if (!isThoiGianHopLeTheoCa(gioHen, dto.getCaKham())) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_INVALID_TIME,
                     "Giờ hẹn không phù hợp với ca khám đã chọn: " + dto.getCaKham());
         }
 
-        // ===== 6. Tiến hành tạo lịch khám =====
         try {
             BacSi bacSi = bacSiRepo.findById(dto.getBacSiId())
                     .orElseThrow(() -> new RuntimeException("Bác sĩ không tồn tại"));
@@ -126,7 +106,6 @@ public class LichKhamServiceImpl {
             LichKham lichKham = LichKhamMapper.toEntity(dto, bacSi, benhNhan, loaiHinhKham);
             lichKhamRepo.save(lichKham);
 
-            // ===== 7. Đánh dấu giờ khám chi tiết là đã đặt =====
             List<GioKhamChiTiet> gioKhamChiTietList = gioKhamChiTietRepo
                     .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(
                             dto.getBacSiId(), dto.getNgayKham(), dto.getCaKham()
@@ -139,19 +118,13 @@ public class LichKhamServiceImpl {
 
             gioKhamChiTietRepo.saveAll(gioKhamChiTietList);
 
-            return ServiceResponse.success(NotificationCode.APPOINTMENT_CREATE_SUCCESS);
-
+            return ServiceResponse.success(NotificationCode.APPOINTMENT_CREATE_SUCCESS, LichKhamMapper.toDTO(lichKham));
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.APPOINTMENT_CREATE_FAIL,
                     "Lỗi khi tạo lịch khám: " + e.getMessage());
         }
     }
 
-    /**
-     * Lấy danh sách tất cả lịch khám có trong hệ thống.
-     *
-     * @return ServiceResponse chứa danh sách lịch khám hoặc lỗi nếu có.
-     */
     public ServiceResponse<?> getAll() {
         try {
             List<LichKhamDTO> list = lichKhamRepo.findAll().stream()
@@ -163,26 +136,12 @@ public class LichKhamServiceImpl {
         }
     }
 
-    /**
-     * Lấy chi tiết lịch khám theo ID.
-     *
-     * @param id ID lịch khám
-     * @return ServiceResponse chứa thông tin lịch khám nếu tìm thấy, ngược lại báo lỗi.
-     */
     public ServiceResponse<?> getById(Integer id) {
         return lichKhamRepo.findById(id)
                 .map(lk -> ServiceResponse.success(NotificationCode.APPOINTMENT_DETAIL_SUCCESS, LichKhamMapper.toDTO(lk)))
                 .orElseGet(() -> ServiceResponse.error(NotificationCode.APPOINTMENT_NOT_FOUND));
     }
 
-    /**
-     * Cập nhật thông tin lịch khám theo ID.
-     * Kiểm tra ràng buộc thời gian, trùng lịch, bác sĩ làm việc, và giờ hợp lệ với ca.
-     *
-     * @param id  ID lịch khám cần cập nhật
-     * @param dto Dữ liệu mới từ client
-     * @return ServiceResponse thông báo kết quả
-     */
     @Transactional
     public ServiceResponse<?> update(Integer id, LichKhamDTO dto) {
 
@@ -204,7 +163,6 @@ public class LichKhamServiceImpl {
                     "Không thể cập nhật lịch cho ngày đã qua");
         }
 
-        // ===== 2. Kiểm tra bác sĩ có làm trong ca không =====
         boolean isBacSiRanh = lichLamViecBacSiRepo.existsByBacSi_BacSiIdAndNgayAndCaTruc(
                 dto.getBacSiId(), dto.getNgayKham(), dto.getCaKham()
         );
@@ -212,20 +170,18 @@ public class LichKhamServiceImpl {
             return ServiceResponse.error("APP_015", "Bác sĩ không có lịch làm việc trong ca này");
         }
 
-//        // ===== 3. Kiểm tra trùng lịch =====
-//        boolean daTrung = lichKhamRepo.existsLichKhamTrung(
-//                dto.getBacSiId(),
-//                dto.getNgayKham(),
-//                gioHen,
-//                gioDen,
-//                id
-//        );
-//        if (daTrung) {
-//            return ServiceResponse.error(NotificationCode.APPOINTMENT_CONFLICT,
-//                    "Thời gian khám đã bị trùng với lịch khác");
-//        }
+        boolean daTrung = lichKhamRepo.existsLichKhamTrung(
+                dto.getBacSiId(),
+                dto.getNgayKham(),
+                gioHen,
+                gioDen,
+                id
+        );
+        if (daTrung) {
+            return ServiceResponse.error(NotificationCode.APPOINTMENT_CONFLICT,
+                    "Thời gian khám đã bị trùng với lịch khác");
+        }
 
-        // ===== 4. Cập nhật =====
         try {
             LichKham existing = lichKhamRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám"));
@@ -261,13 +217,6 @@ public class LichKhamServiceImpl {
         }
     }
 
-
-    /**
-     * Xóa lịch khám theo ID.
-     *
-     * @param id ID lịch khám cần xóa
-     * @return ServiceResponse thông báo kết quả xóa
-     */
     @Transactional
     public ServiceResponse<?> delete(Integer id) {
         try {
@@ -281,12 +230,6 @@ public class LichKhamServiceImpl {
         }
     }
 
-    /**
-     * Tìm kiếm lịch khám theo các tiêu chí lọc như bác sĩ, ngày, ca, trạng thái,...
-     *
-     * @param filter DTO chứa điều kiện lọc
-     * @return ServiceResponse chứa danh sách kết quả hoặc thông báo không tìm thấy
-     */
     public ServiceResponse<?> searchLichKham(LichKhamFilterDTO filter) {
         List<LichKham> result = lichKhamRepo.findAll(LichKhamSpecification.filterBy(filter));
 
@@ -301,13 +244,6 @@ public class LichKhamServiceImpl {
         return ServiceResponse.success(NotificationCode.APPOINTMENT_LIST_SUCCESS, dtoList);
     }
 
-    /**
-     * Thống kê số lượng lịch khám theo từng tháng của một năm.
-     *
-     * @param month tháng cần thống kê
-     * @param year  năm cần thống kê
-     * @return ServiceResponse chứa dữ liệu thống kê hoặc báo lỗi nếu không có dữ liệu
-     */
     public ServiceResponse<?> thongKeTheoThang(int month, int year) {
         var raw = lichKhamRepo.thongKeTheoThang(month, year);
         if (raw.isEmpty()) {
@@ -324,11 +260,6 @@ public class LichKhamServiceImpl {
         return ServiceResponse.success(NotificationCode.STATISTICS_MONTHLY, result);
     }
 
-    /**
-     * Thống kê số lượng lịch khám theo từng bác sĩ.
-     *
-     * @return ServiceResponse chứa dữ liệu thống kê
-     */
     public ServiceResponse<?> thongKeTheoBacSi() {
         var raw = lichKhamRepo.thongKeTheoBacSi();
         if (raw.isEmpty()) {
@@ -345,20 +276,6 @@ public class LichKhamServiceImpl {
         return ServiceResponse.success(NotificationCode.STATISTICS_DOCTOR, result);
     }
 
-    /**
-     * Kiểm tra giờ hẹn có hợp lệ với ca khám đã chọn không.
-     *
-     * <p>Quy ước giờ hợp lệ theo từng ca khám:
-     * <ul>
-     *   <li>Sáng: 06:00 đến trước 12:00</li>
-     *   <li>Chiều: 13:00 đến trước 18:00</li>
-     *   <li>Tối: 18:00 đến trước 21:00</li>
-     * </ul>
-     *
-     * @param time   Giờ hẹn cần kiểm tra (LocalTime)
-     * @param caKham Tên ca khám ("Sáng", "Chiều", "Tối")
-     * @return true nếu giờ nằm trong khoảng hợp lệ của ca, ngược lại là false
-     */
     private boolean isThoiGianHopLeTheoCa(LocalTime time, String caKham) {
         if ("Sáng".equalsIgnoreCase(caKham)) {
             return !time.isBefore(LocalTime.of(6, 0)) && time.isBefore(LocalTime.of(12, 0));
@@ -370,20 +287,12 @@ public class LichKhamServiceImpl {
         return false;
     }
 
-    /**
-     * Lấy danh sách khung giờ còn trống của bác sĩ theo ngày và ca.
-     *
-     * @param bacSiId  ID bác sĩ
-     * @param ngayKham Ngày khám
-     * @param caKham   Ca khám ("SANG", "CHIEU")
-     * @return Danh sách các khung giờ rảnh (DTO)
-     */
     public List<GioKhamChiTietDto> getKhungGioRanh(Integer bacSiId, LocalDate ngayKham, String caKham) {
         List<GioKhamChiTiet> list = gioKhamChiTietRepo
                 .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(
                         bacSiId, ngayKham, caKham)
                 .stream()
-                .filter(GioKhamChiTiet::getTrangThai) // Chỉ lấy khung giờ có trạng thái còn trống
+                .filter(GioKhamChiTiet::getTrangThai)
                 .toList();
 
         return list.stream().map(GioKhamChiTietMapper::toDto).toList();

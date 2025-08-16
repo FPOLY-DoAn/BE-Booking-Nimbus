@@ -10,10 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * DTO chính dùng để tạo và cập nhật lịch khám.
- * Ánh xạ dữ liệu giữa client và backend.
- */
 @Getter
 @Setter
 @NoArgsConstructor

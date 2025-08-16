@@ -4,19 +4,8 @@ import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamShortDTO;
 import com.BE_FPoly_DoAn.DOAN.Entity.*;
 
-/**
- * Mapper hỗ trợ chuyển đổi giữa Entity <-> DTO cho đối tượng LichKham.
- */
 public class LichKhamMapper {
 
-    /**
-     * Chuyển từ DTO sang Entity để lưu vào database.
-     *
-     * @param dto       DTO chứa thông tin lịch khám từ phía client gửi lên
-     * @param bacSi     Entity bác sĩ đã được load từ DB
-     * @param benhNhan  Entity bệnh nhân đã được load từ DB
-     * @return          Đối tượng LichKham đã được ánh xạ
-     */
     public static LichKham toEntity(LichKhamDTO dto, BacSi bacSi, BenhNhan benhNhan, LoaiHinhKham loaiHinhKham) {
         LichKham entity = new LichKham();
         entity.setLichkhamId(dto.getLichkhamId());
@@ -32,21 +21,14 @@ public class LichKhamMapper {
         return entity;
     }
 
-
-    /**
-     * Chuyển từ Entity sang DTO để trả về cho client.
-     *
-     * @param entity    Entity LichKham từ database
-     * @return          Đối tượng DTO chứa thông tin lịch khám
-     */
     public static LichKhamDTO toDTO(LichKham entity) {
         LichKhamDTO dto = new LichKhamDTO();
         dto.setLichkhamId(entity.getLichkhamId());
-        dto.setBacSiId(entity.getBacSi().getBacSiId());
-        dto.setBenhNhanId(entity.getBenhNhan().getBenhNhanId());
+        dto.setBacSiId(entity.getBacSi() != null ? entity.getBacSi().getBacSiId() : null);
+        dto.setBenhNhanId(entity.getBenhNhan() != null ? entity.getBenhNhan().getBenhNhanId() : null);
         dto.setThoiGianTu(entity.getThoiGianTu());
         dto.setThoiGianDen(entity.getThoiGianDen());
-        dto.setLoaiHinhKham(entity.getLoaiHinhKham().getTenLoai());
+        dto.setLoaiHinhKham(entity.getLoaiHinhKham() != null ? entity.getLoaiHinhKham().getTenLoai() : null);
         dto.setTrangThai(entity.getTrangThai());
         dto.setGhiChu(entity.getGhiChu());
         dto.setNgayKham(entity.getNgayKham());
@@ -55,13 +37,6 @@ public class LichKhamMapper {
         return dto;
     }
 
-
-    /**
-     * Chuyển từ Entity sang ShortDTO – chứa thông tin rút gọn (chỉ vài trường cơ bản).
-     *
-     * @param entity    Entity LichKham từ database
-     * @return          DTO rút gọn, phục vụ hiển thị danh sách nhanh
-     */
     public static LichKhamShortDTO toShortDTO(LichKham entity) {
         if (entity == null) return null;
 

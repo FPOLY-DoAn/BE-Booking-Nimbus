@@ -165,8 +165,23 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
 
             List<LichLamViecBacSi> lichList = lichLamViecRepo.findByBacSiInAndNgayAndCaTruc(bacSiList, ngay, ca);
 
-            List<GioKhamChiTietDto> gioTrongList = lichList.stream()
-                    .flatMap(lich -> gioKhamRepo.findByLichLamViecBacSi(lich).stream())
+            if (lichList.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.SHIFT_NOT_FOUND, "Không có ca làm việc phù hợp.");
+            }
+
+            List<LichLamViecBacSi> lichCoGioTrong = lichList.stream()
+                    .filter(lich -> gioKhamRepo.findByLichLamViecBacSi(lich)
+                            .stream()
+                            .anyMatch(GioKhamChiTiet::getTrangThai))
+                    .toList();
+
+            if (lichCoGioTrong.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không còn giờ trống.");
+            }
+
+            LichLamViecBacSi randomLich = lichCoGioTrong.get(new java.util.Random().nextInt(lichCoGioTrong.size()));
+
+            List<GioKhamChiTietDto> gioTrongList = gioKhamRepo.findByLichLamViecBacSi(randomLich).stream()
                     .filter(GioKhamChiTiet::getTrangThai)
                     .map(GioKhamChiTietMapper::toDto)
                     .toList();
@@ -175,7 +190,11 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
                 return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không có giờ trống cho chuyên khoa này.");
             }
 
-            return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, gioTrongList);
+            return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, new Object() {
+                public final Integer bacSiId = randomLich.getBacSi().getBacSiId();
+                public final String bacSiName = randomLich.getBacSi().getNguoiDung().getHoTen();
+                public final List<GioKhamChiTietDto> gioTrong = gioTrongList;
+            });
 
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
