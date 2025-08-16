@@ -2,7 +2,7 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhAn.BenhAnDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.BenhNhanRequestDTO;
-import com.BE_FPoly_DoAn.DOAN.DTO.LichKham.LichKhamDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhan.LichSuKhamDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhAnRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.LichKhamRepository;
@@ -14,7 +14,7 @@ import com.BE_FPoly_DoAn.DOAN.Entity.LichKham;
 import com.BE_FPoly_DoAn.DOAN.Entity.NguoiDung;
 import com.BE_FPoly_DoAn.DOAN.Mapper.BenhAnMapper;
 import com.BE_FPoly_DoAn.DOAN.Mapper.BenhNhanMapper;
-import com.BE_FPoly_DoAn.DOAN.Mapper.LichKhamMapper;
+import com.BE_FPoly_DoAn.DOAN.Mapper.LichSuKhamMapper;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import jakarta.transaction.Transactional;
@@ -268,7 +268,6 @@ public class BenhNhanServiceImpl {
         }
 
         NguoiDung nguoiDung = nguoiDungOpt.get();
-
         Optional<BenhNhan> benhNhanOpt = benhNhanRepo.findByNguoiDung(nguoiDung);
         if (benhNhanOpt.isEmpty()) {
             return ServiceResponse.error(NotificationCode.PATIENT_NOT_FOUND);
@@ -280,8 +279,8 @@ public class BenhNhanServiceImpl {
                 (root, query, cb) -> cb.equal(root.get("benhNhan").get("benhNhanId"), benhNhanId)
         );
 
-        List<LichKhamDTO> dtoList = lichKhamList.stream()
-                .map(LichKhamMapper::toDTO)
+        List<LichSuKhamDTO> dtoList = lichKhamList.stream()
+                .map(LichSuKhamMapper::toDTO)
                 .toList();
 
         return ServiceResponse.success(NotificationCode.FETCH_SUCCESS, dtoList);
