@@ -1,6 +1,7 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.Guest;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.Guest.LichKhamTrongDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.*;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
 import com.BE_FPoly_DoAn.DOAN.DTO.ChuyenKhoa.ChuyenKhoaDTO;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -109,6 +111,91 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
             }
 
             return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, list);
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    public ServiceResponse<?> getLichKhamTrongTheoChuyenKhoa(String tenKhoa) {
+        try {
+            List<BacSi> bacSiList = bacSiRepo.findByChuyenKhoa_TenKhoa(tenKhoa);
+
+            if (bacSiList.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.DOCTOR_NOT_FOUND, "Không có bác sĩ cho chuyên khoa này.");
+            }
+
+            List<LichLamViecBacSi> lichList = lichLamViecRepo.findByBacSiIn(bacSiList);
+
+            List<LichKhamTrongDTO> result = lichList.stream()
+                    .flatMap(lich -> {
+                        long soGioTrong = gioKhamRepo
+                                .findByLichLamViecBacSi(lich)
+                                .stream()
+                                .filter(GioKhamChiTiet::getTrangThai)
+                                .count();
+                        if (soGioTrong > 0) {
+                            LichKhamTrongDTO dto = new LichKhamTrongDTO();
+                            dto.setNgay(lich.getNgay());
+                            dto.setCaTruc(lich.getCaTruc());
+                            dto.setSoGioTrong((int) soGioTrong);
+                            return Stream.of(dto);
+                        }
+                        return Stream.empty();
+                    })
+                    .toList();
+
+            if (result.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không có lịch trống cho chuyên khoa này.");
+            }
+
+            return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, result);
+
+        } catch (Exception e) {
+            return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    public ServiceResponse<?> getGioTrongTheoChuyenKhoa(String tenKhoa, LocalDate ngay, String ca) {
+        try {
+            List<BacSi> bacSiList = bacSiRepo.findByChuyenKhoa_TenKhoa(tenKhoa);
+
+            if (bacSiList.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.DOCTOR_NOT_FOUND, "Không có bác sĩ cho chuyên khoa này.");
+            }
+
+            List<LichLamViecBacSi> lichList = lichLamViecRepo.findByBacSiInAndNgayAndCaTruc(bacSiList, ngay, ca);
+
+            if (lichList.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.SHIFT_NOT_FOUND, "Không có ca làm việc phù hợp.");
+            }
+
+            List<LichLamViecBacSi> lichCoGioTrong = lichList.stream()
+                    .filter(lich -> gioKhamRepo.findByLichLamViecBacSi(lich)
+                            .stream()
+                            .anyMatch(GioKhamChiTiet::getTrangThai))
+                    .toList();
+
+            if (lichCoGioTrong.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không còn giờ trống.");
+            }
+
+            LichLamViecBacSi randomLich = lichCoGioTrong.get(new java.util.Random().nextInt(lichCoGioTrong.size()));
+
+            List<GioKhamChiTietDto> gioTrongList = gioKhamRepo.findByLichLamViecBacSi(randomLich).stream()
+                    .filter(GioKhamChiTiet::getTrangThai)
+                    .map(GioKhamChiTietMapper::toDto)
+                    .toList();
+
+            if (gioTrongList.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không có giờ trống cho chuyên khoa này.");
+            }
+
+            return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, new Object() {
+                public final Integer bacSiId = randomLich.getBacSi().getBacSiId();
+                public final String bacSiName = randomLich.getBacSi().getNguoiDung().getHoTen();
+                public final List<GioKhamChiTietDto> gioTrong = gioTrongList;
+            });
+
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
         }

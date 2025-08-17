@@ -19,4 +19,6 @@ public interface GioKhamChiTietRepository extends JpaRepository<GioKhamChiTiet, 
 
     List<GioKhamChiTiet> findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(
             Integer bacSiId, LocalDate ngayKham, String caTruc);
+
+    List<GioKhamChiTiet> findByLichLamViecBacSi(LichLamViecBacSi lich);
 }

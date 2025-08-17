@@ -15,4 +15,10 @@ public interface LichLamViecBacSiRepository extends JpaRepository<LichLamViecBac
     List<LichLamViecBacSi> findByBacSiAndNgayBetween(BacSi bacSi, @NotNull(message = "Ngày bắt đầu không được để trống") @FutureOrPresent(message = "Ngày bắt đầu phải là hiện tại hoặc tương lai") LocalDate ngayBatDau, @NotNull(message = "Ngày kết thúc không được để trống") @FutureOrPresent(message = "Ngày kết thúc phải là hiện tại hoặc tương lai") LocalDate ngayKetThuc);
 
     boolean existsByBacSi_BacSiIdAndNgayAndCaTruc(Integer bacSiId, LocalDate ngay, String caTruc);
+
+    List<LichLamViecBacSi> findByBacSiIn(List<BacSi> bacSiList);
+
+    List<LichLamViecBacSi> findByBacSiInAndNgayAndCaTruc(List<BacSi> bacSiList, LocalDate ngay, String caTruc);
+
+    List<LichLamViecBacSi> findByNgay(LocalDate ngay);
 }
