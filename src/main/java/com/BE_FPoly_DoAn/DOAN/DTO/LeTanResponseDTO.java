@@ -1,7 +1,5 @@
 package com.BE_FPoly_DoAn.DOAN.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,19 +11,16 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BacSiRequestDTO {
+public class LeTanResponseDTO {
+    private Integer leTanId;
     private String hoTen;
     private String gioiTinh;
     private String email;
     private String soDienThoai;
-    private String matKhau;
-    private String tenKhoa;
-    @JsonIgnore
-    private Integer chuyenKhoaId;
-    private String chungChi;
-    private String trinhDo;
-    private Integer kinhNghiem;
     private LocalDate ngayTuyenDung;
+    private String chucVu;
     private String ghiChu;
+    private LocalDate ngayTao;
+    private LocalDate ngayCapNhat;
     private Boolean trangThaiHoatDong;
 }

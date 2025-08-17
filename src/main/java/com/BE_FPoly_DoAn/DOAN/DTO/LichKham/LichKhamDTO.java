@@ -47,7 +47,7 @@ public class LichKhamDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayKham;
 
-    @Schema(type = "string", example = "2025-08-05T08:27:15.911", format = "date-time")
+    @JsonIgnore
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime ngayCapNhat;
 

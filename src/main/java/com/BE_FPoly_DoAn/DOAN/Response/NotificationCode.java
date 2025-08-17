@@ -17,6 +17,8 @@ public enum NotificationCode {
     USER_OLD_PASSWORD_INVALID("USR_013", "Mật khẩu cũ không đúng"),
     USER_PASSWORD_CHANGE_SUCCESS("USR_014", "Thay đổi mật khẩu thành công"),
     USER_LIST_SUCCESS("USR_015", "Lấy danh sách người dùng thành công"),
+    USER_ACCOUNT_CLOSE("USR_016", "Tài Khoản Đã Bị Khóa"),
+
 
     // ===== OTP =====
     OTP("OTP_000", "Mã OTP đã gửi tới email của bạn"),
@@ -167,6 +169,21 @@ public enum NotificationCode {
     AVAILABLE_TIME_FETCH_SUCCESS("GT01", "Lấy giờ trống thành công"),
     AVAILABLE_TIME_NOT_FOUND("DO_001", "Không có giờ trống trong ca làm việc này"),
     SHIFT_NOT_FOUND("DO_002", "Bác sĩ không có ca làm việc vào ngày này"),
+    FETCH_SUCCESS("US_001", "Lấy thông tin thành công"),
+
+    // ==== QUẢN LÝ ====
+    MANAGER_CREATE_SUCCESS("ADM_001", "Tạo quản lý thành công"),
+    MANAGER_UPDATE_SUCCESS("ADM_002", "Cập nhật quản lý thành công"),
+    MANAGER_LIST_SUCCESS("ADM_003", "Hiển thị danh sách quản lý thành công"),
+    MANAGER_FOUND("ADM_004", "Hiển thị thông tin quản lý thành công"),
+    MANAGER_NOT_FOUND("ADM_005", "Không tìm thấy thông tin quản lý"),
+
+    // ==== LỄ TÂN ====
+    RECEPTIONIST_CREATE_SUCCESS("REC_001", "Tạo lễ tân thành công"),
+    RECEPTIONIST_UPDATE_SUCCESS("REC_002", "Cập nhật lễ tân thành công"),
+    RECEPTIONIST_LIST_SUCCESS("REC_003", "Hiển thị danh sách lễ tân thành công"),
+    RECEPTIONIST_FOUND("REC_004", "Hiển thị thông tin lễ tân thành công"),
+    RECEPTIONIST_NOT_FOUND("REC_005", "Không tìm thấy thông tin lễ tân"),
 
     // ===== VALIDATION =====
     VALIDATION_FAILED("VAL_000", "Dữ liệu không hợp lệ"),
@@ -207,6 +224,8 @@ public enum NotificationCode {
     VALIDATION_BENHAN_BENHIDS_REQUIRED("VAL_BA_007", "Danh sách bệnh không được để trống"),
     VALIDATION_BENHAN_BENHIDS_EMPTY("VAL_BA_008", "Danh sách bệnh không được rỗng"),
     AUTH_INVALID_TOKEN("VAL_TOKEN_001", "Token không khả dụng"),
+    EMAIL_DUPLICATE("USR_001", "Email đã tồn tại, vui lòng sử dụng email khác"),
+    PHONE_DUPLICATE("USR_002", "Số điện thoại đã tồn tại, vui lòng sử dụng số khác"),
 
     // ===== SYSTEM =====
     ACCESS_DENIED("SYS_403", "Bạn không có quyền truy cập"),

@@ -1,10 +1,13 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.QuanLy;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.ThongKe.ThongKeKhoaDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.ThongKeRepository;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,4 +93,35 @@ public class ThongKeServiceImpl {
 
         return ServiceResponse.success(NotificationCode.STATISTICS_SERVICE_REVENUE, result);
     }
+
+    public List<ThongKeKhoaDTO> thongKeTheoKhoa(Integer nam, Integer thang) {
+        if (nam == null) nam = LocalDate.now().getYear();
+
+        int namThangTruoc;
+        int thangTruoc;
+
+        if (thang != null) {
+            YearMonth current = YearMonth.of(nam, thang);
+            YearMonth prev = current.minusMonths(1);
+            namThangTruoc = prev.getYear();
+            thangTruoc = prev.getMonthValue();
+        } else {
+            YearMonth prev = YearMonth.of(nam - 1, 12);
+            namThangTruoc = prev.getYear();
+            thangTruoc = prev.getMonthValue();
+        }
+
+        return thongKeRepo.thongKeTheoKhoa(nam, thang, namThangTruoc, thangTruoc)
+                .stream()
+                .map(row -> new ThongKeKhoaDTO(
+                        (String) row[0],
+                        ((Number) row[1]).intValue(),
+                        ((Number) row[2]).intValue(),
+                        row[3] != null ? ((Number) row[3]).doubleValue() : null,
+                        ((Number) row[4]).intValue(),
+                        ((Number) row[5]).intValue()
+                ))
+                .toList();
+    }
+
 }

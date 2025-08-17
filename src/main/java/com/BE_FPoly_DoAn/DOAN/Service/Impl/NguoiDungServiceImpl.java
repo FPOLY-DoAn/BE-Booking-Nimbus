@@ -2,14 +2,12 @@ package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BenhNhanDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.NguoiDungDTO;
-import com.BE_FPoly_DoAn.DOAN.Dao.BenhNhanRepository;
-import com.BE_FPoly_DoAn.DOAN.Dao.NguoiDungRepository;
-import com.BE_FPoly_DoAn.DOAN.Dao.OtpRepository;
-import com.BE_FPoly_DoAn.DOAN.Dao.VaiTroRepository;
+import com.BE_FPoly_DoAn.DOAN.Dao.*;
 import com.BE_FPoly_DoAn.DOAN.Entity.*;
 import com.BE_FPoly_DoAn.DOAN.Response.NotificationCode;
 import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import com.BE_FPoly_DoAn.DOAN.Service.InterfaceService;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -39,14 +37,21 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
     private final VaiTroRepository vaiTroRepository;
     private final BenhNhanRepository benhNhanRepository;
     private final OtpRepository otpRepository;
+    private final LeTanRepository leTanRepository;
+    private final BacSiRepository bacSiRepository;
+    private final QuanLyRepository quanLyRepository;
 
-    public NguoiDungServiceImpl(NguoiDungRepository nguoiDungRepository, MailConfig mailConfig, PhanQuyenServiceImpl phanQuyenService, VaiTroRepository vaiTroRepository, BenhNhanRepository benhNhanRepository, OtpRepository otpRepository) {
+
+    public NguoiDungServiceImpl(NguoiDungRepository nguoiDungRepository, MailConfig mailConfig, PhanQuyenServiceImpl phanQuyenService, VaiTroRepository vaiTroRepository, BenhNhanRepository benhNhanRepository, OtpRepository otpRepository, LeTanRepository leTanRepository, BacSiRepository bacSiRepository, QuanLyRepository quanLyRepository) {
         this.nguoiDungRepository = nguoiDungRepository;
         this.mailConfig = mailConfig;
         this.phanQuyenService = phanQuyenService;
         this.vaiTroRepository = vaiTroRepository;
         this.benhNhanRepository = benhNhanRepository;
         this.otpRepository = otpRepository;
+        this.leTanRepository = leTanRepository;
+        this.bacSiRepository = bacSiRepository;
+        this.quanLyRepository = quanLyRepository;
     }
 
     public NguoiDung findByEmail(String email) {
@@ -59,6 +64,34 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
         if (nguoiDungOption.isEmpty()) {
             throw new UsernameNotFoundException("tài khoản không được tìm thấy");
         }
+
+         List<PhanQuyen> phanQuyen = nguoiDungOption.get().getPhanQuyens();
+
+        for(PhanQuyen pq: phanQuyen){
+            String ten = pq.getVaiTro().getTenVaiTro();
+            System.out.println( pq.getVaiTro().getTenVaiTro());
+            switch(ten){
+                case "Bác sĩ":
+                   Optional<BacSi> bacSi = bacSiRepository.findByNguoiDung_NguoiDungId(nguoiDungOption.get().getNguoiDungId());
+                   if(!bacSi.get().getTrangThaiHoatDong()){
+                      throw  new InternalAuthenticationServiceException("Tài Khoản Đã Bị Khóa");
+                   }
+                    break;
+                case "Quản lý":
+                    Optional<QuanLy> quanLy = quanLyRepository.findByNguoiDung_NguoiDungId(nguoiDungOption.get().getNguoiDungId());
+                    if(!quanLy.get().getTrangThaiHoatDong()){
+                        throw  new InternalAuthenticationServiceException("Tài Khoản Đã Bị Khóa");
+                    }
+                    break;
+                case "Lễ tân":
+                    Optional<LeTan> leTan = leTanRepository.findByNguoiDung_NguoiDungId(nguoiDungOption.get().getNguoiDungId());
+                    if(!leTan.get().getTrangThaiHoatDong()){
+                        throw  new InternalAuthenticationServiceException("Tài Khoản Đã Bị Khóa");
+                    }
+                    break;
+            }
+        }
+
         User user = new User(nguoiDungOption.get().getEmail(), nguoiDungOption.get().getMatKhau(), toRolesAuthories(nguoiDungOption.get().getPhanQuyens()));
         return user;
     }
@@ -387,6 +420,39 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
             """.formatted(oldOtp.getHoTen(), newOtp);
 
         mailConfig.sendTo("dai582005@gmail.com", email, "Gửi lại mã xác nhận tài khoản", html);
+        return true;
+    }
+
+    @Transactional
+    public int verifyResetPasswordOtp(String email, String otpCode) {
+        Optional<OTP_NguoiDung> otpOptional = otpRepository.findByOtpCode(otpCode);
+        if (otpOptional.isEmpty()) return -1;
+
+        OTP_NguoiDung otp = otpOptional.get();
+
+        if (!otp.getEmail().equals(email)) return -3;
+        if (otp.getExpireAt().isBefore(LocalDateTime.now())) return -2;
+
+        otp.setVerified(true);
+        otpRepository.save(otp);
+
+        return 1;
+    }
+
+    @Transactional
+    public boolean resetPassword(String email, String newPassword) {
+        Optional<OTP_NguoiDung> otpOptional = otpRepository.findVerifiedOtpByEmail(email, LocalDateTime.now());
+        if (otpOptional.isEmpty()) return false;
+
+        Optional<NguoiDung> userOpt = nguoiDungRepository.findByEmail(email);
+        if (userOpt.isEmpty()) return false;
+
+        NguoiDung user = userOpt.get();
+        user.setMatKhau(new BCryptPasswordEncoder().encode(newPassword));
+        nguoiDungRepository.save(user);
+
+        otpRepository.deleteAllByEmail(email);
+
         return true;
     }
 }

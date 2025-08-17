@@ -15,6 +15,9 @@
         private String message;
         private T data;
 
+        public ServiceResponse(NotificationCode notificationCode) {
+        }
+
         public static <T> ServiceResponse<T> success(String code, String message, T data) {
             return new ServiceResponse<>(true, code, message, data);
         }

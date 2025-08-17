@@ -17,9 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,12 +59,12 @@ public class UserAuthenticate {
             final String token = jwtService.generateToken(userDetails.getUsername());
 
             return ResponseEntity.ok(ServiceResponse.success(NotificationCode.AUTH_LOGIN_SUCCESS, token));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_FAIL));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ServiceResponse.error(NotificationCode.SERVER_ERROR));
+        } catch (InternalAuthenticationServiceException e) {
+            System.out.println("ok UsernameNotFoundException");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ServiceResponse.error(NotificationCode.USER_ACCOUNT_CLOSE));
+        }catch (BadCredentialsException e) {
+            System.out.println("ok BadCredentialsException");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_FAIL));
         }
     }
 
@@ -149,21 +151,31 @@ public class UserAuthenticate {
         }
     }
 
+    @PostMapping("/verify-reset-otp")
+    public ResponseEntity<?> verifyResetOtp(@RequestParam String email, @RequestParam String otp) {
+        int result = nguoiDungServicel.verifyResetPasswordOtp(email, otp);
+        return switch (result) {
+            case 1 -> ResponseEntity.ok(ServiceResponse.success("OTP_VALID", "Mã OTP hợp lệ."));
+            case -1 -> ResponseEntity.badRequest().body(ServiceResponse.error("OTP_INVALID", "Mã OTP không đúng."));
+            case -2 -> ResponseEntity.badRequest().body(ServiceResponse.error("OTP_EXPIRED", "Mã OTP đã hết hạn."));
+            case -3 -> ResponseEntity.badRequest().body(ServiceResponse.error("EMAIL_NOT_FOUND", "Email không tồn tại."));
+            default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ServiceResponse.error("VERIFY_FAIL", "Xác thực OTP không thành công."));
+        };
+    }
+
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(
             @RequestParam String email,
-            @RequestParam String otp,
             @RequestParam String newPassword) {
 
-        int result = nguoiDungServicel.resetPasswordWithOtp(email, otp, newPassword);
-        return switch (result) {
-            case 1 -> ResponseEntity.ok(ServiceResponse.success("RESET_SUCCESS", "Mật khẩu đã được cập nhật."));
-            case -1 -> ResponseEntity.badRequest().body(ServiceResponse.error("OTP_INVALID", "Mã OTP không đúng."));
-            case -2 -> ResponseEntity.badRequest().body(ServiceResponse.error("OTP_EXPIRED", "Mã OTP đã hết hạn."));
-            case -3 -> ResponseEntity.badRequest().body(ServiceResponse.error("EMAIL_NOT_FOUND", "Email không đúng."));
-            default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        boolean success = nguoiDungServicel.resetPassword(email, newPassword);
+        if (success) {
+            return ResponseEntity.ok(ServiceResponse.success("RESET_SUCCESS", "Mật khẩu đã được cập nhật."));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ServiceResponse.error("RESET_FAIL", "Không thể đặt lại mật khẩu."));
-        };
+        }
     }
 
     @GetMapping("/resend-otp")
@@ -176,7 +188,7 @@ public class UserAuthenticate {
         }
     }
 
-    @PostMapping("/thong-tin-bo-sung")
+    @PutMapping("/thong-tin-bo-sung")
     public ResponseEntity<?> themThongTinBenhNhan(
             @RequestBody @Valid BenhNhanRequestDTO dto,
             HttpServletRequest request) {
@@ -188,7 +200,7 @@ public class UserAuthenticate {
                         .body(ServiceResponse.error(NotificationCode.AUTH_INVALID_TOKEN));
             }
 
-            String token = tokenHeader.replace("Bearer ", "");
+            String token = tokenHeader.replace("Bearer ","");
             String email = jwtService.extractUserEmail(token);
 
             ServiceResponse<?> response = benhNhanService.themThongTinBenhNhan(dto, email);
