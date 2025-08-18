@@ -1,7 +1,9 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl;
 
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
-import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioTuDongDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.KhungGioRanhDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.CaKham;
+import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioNhieuLichDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.GioKhamChiTietRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.LichLamViecBacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Entity.GioKhamChiTiet;
@@ -12,89 +14,102 @@ import com.BE_FPoly_DoAn.DOAN.Response.ServiceResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GioKhamChiTietServiceImpl {
 
     private final GioKhamChiTietRepository repository;
     private final LichLamViecBacSiRepository lichLamViecRepo;
-
+    
     public GioKhamChiTietServiceImpl(GioKhamChiTietRepository repository, LichLamViecBacSiRepository lichLamViecRepo) {
         this.repository = repository;
         this.lichLamViecRepo = lichLamViecRepo;
     }
 
-    public ServiceResponse<?> getByLichId(Integer lichId) {
-        List<GioKhamChiTietDto> dtoList = repository.findByLichLamViecBacSi_LichlvId(lichId)
-                .stream()
-                .map(GioKhamChiTietMapper::toDto)
-                .toList();
-        return ServiceResponse.success(NotificationCode.SERVICE_ID, dtoList);
-    }
-
-    public ServiceResponse<?> create(GioKhamChiTietDto dto) {
-        LichLamViecBacSi lich = lichLamViecRepo.findById(dto.getLichLamViecId()).orElse(null);
-        if (lich == null) {
-            return ServiceResponse.error(NotificationCode.NOT_FOUND, "Không tìm thấy lịch làm việc bác sĩ");
-        }
-
-        boolean isDuplicate = repository.findByLichLamViecBacSi_LichlvId(dto.getLichLamViecId())
-                .stream()
-                .anyMatch(gio -> gio.getThoiGian().equals(dto.getThoiGian()));
-        if (isDuplicate) {
-            return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Giờ khám đã tồn tại trong lịch này");
-        }
-
-        boolean isToday = lich.getNgay().isEqual(java.time.LocalDate.now());
-        if (isToday && dto.getThoiGian().isBefore(java.time.LocalTime.now())) {
-            return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Không thể tạo giờ khám trong quá khứ");
-        }
-
-        GioKhamChiTiet entity = GioKhamChiTietMapper.toEntity(dto, lich);
-        repository.save(entity);
-
-        List<GioKhamChiTietDto> updated = repository.findByLichLamViecBacSi_LichlvId(dto.getLichLamViecId())
-                .stream()
-                .map(GioKhamChiTietMapper::toDto)
-                .toList();
-        return ServiceResponse.success(NotificationCode.CREATED_SUCCESS, updated);
-    }
-
-    public ServiceResponse<?> generate(TaoGioTuDongDTO req) {
+    public ServiceResponse<?> generateTheoCa(TaoGioNhieuLichDTO req) {
         try {
-            LichLamViecBacSi lich = lichLamViecRepo.findById(req.getLichLamViecId()).orElse(null);
-            if (lich == null) {
-                return ServiceResponse.error(NotificationCode.NOT_FOUND, "Không tìm thấy lịch làm việc bác sĩ");
+            Map<Integer, List<GioKhamChiTietDto>> result = new HashMap<>();
+
+            if (req.getLichLamViecIds() == null || req.getLichLamViecIds().isEmpty()) {
+                return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Danh sách lichLamViecIds trống");
             }
 
-            List<LocalTime> gioTonTai = repository.findByLichLamViecBacSi_LichlvId(req.getLichLamViecId())
-                    .stream().map(GioKhamChiTiet::getThoiGian).toList();
+            for (Integer lichId : req.getLichLamViecIds()) {
+                LichLamViecBacSi lich = lichLamViecRepo.findById(lichId).orElse(null);
+                if (lich == null) continue;
 
-            List<GioKhamChiTiet> taoMoi = new java.util.ArrayList<>();
-            LocalTime start = LocalTime.parse(req.getBatDau());
-            LocalTime end = LocalTime.parse(req.getKetThuc());
-            while (!start.isAfter(end)) {
-                if (!gioTonTai.contains(start)) {
-                    taoMoi.add(GioKhamChiTiet.builder()
-                            .lichLamViecBacSi(lich)
-                            .thoiGian(start)
-                            .trangThai(true)
-                            .build());
+                CaKham ca = CaKham.fromViet(lich.getCaTruc());
+
+                List<LocalTime> gioTonTai = repository.findByLichLamViecBacSi_LichlvId(lichId)
+                        .stream().map(GioKhamChiTiet::getThoiGian).toList();
+
+                List<GioKhamChiTiet> taoMoi = new ArrayList<>();
+                LocalTime start = ca.getStart();
+                LocalTime end = ca.getEnd();
+                int buocNhay = 15;
+
+                while (!start.isAfter(end.minusMinutes(buocNhay))) {
+                    if (!gioTonTai.contains(start)) {
+                        taoMoi.add(GioKhamChiTiet.builder()
+                                .lichLamViecBacSi(lich)
+                                .thoiGian(start)
+                                .trangThai(true)
+                                .build());
+                    }
+                    start = start.plusMinutes(buocNhay);
                 }
-                start = start.plusMinutes(req.getBuocNhayPhut());
+
+                repository.saveAll(taoMoi);
+
+                List<GioKhamChiTietDto> ketQua = repository.findByLichLamViecBacSi_LichlvId(lichId)
+                        .stream()
+                        .map(GioKhamChiTietMapper::toDto)
+                        .toList();
+
+                result.put(lichId, ketQua);
             }
 
-            repository.saveAll(taoMoi);
+            return ServiceResponse.success(NotificationCode.CREATED_SUCCESS, result);
 
-            List<GioKhamChiTietDto> ketQua = repository.findByLichLamViecBacSi_LichlvId(req.getLichLamViecId())
-                    .stream()
-                    .map(GioKhamChiTietMapper::toDto)
-                    .toList();
-
-            return ServiceResponse.success(NotificationCode.CREATED_SUCCESS, ketQua);
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Lỗi khi tạo tự động: " + e.getMessage());
         }
+    }
+
+    public ServiceResponse<?> getByLichId(Integer lichId) {
+        List<GioKhamChiTiet> slotList = repository.findByLichLamViecBacSi_LichlvId(lichId)
+                .stream()
+                .sorted(Comparator.comparing(GioKhamChiTiet::getThoiGian))
+                .toList();
+
+        List<KhungGioRanhDTO> khungList = new ArrayList<>();
+
+        for (int i = 0; i < slotList.size() - 1; i++) {
+            GioKhamChiTiet slotA = slotList.get(i);
+            GioKhamChiTiet slotB = slotList.get(i + 1);
+
+            boolean aTrue = Boolean.TRUE.equals(slotA.getTrangThai());
+            boolean bTrue = Boolean.TRUE.equals(slotB.getTrangThai());
+
+            boolean daDat;
+            if (aTrue && bTrue) {
+                daDat = false;
+            } else if (aTrue && !bTrue) {
+                daDat = true;
+            } else if (!aTrue && !bTrue) {
+                daDat = true;
+            } else {
+                daDat = false;
+            }
+
+            khungList.add(KhungGioRanhDTO.builder()
+                    .batDau(slotA.getThoiGian())
+                    .ketThuc(slotA.getThoiGian().plusMinutes(15))
+                    .daDat(!daDat)
+                    .build());
+        }
+
+        return ServiceResponse.success(NotificationCode.SERVICE_ID, khungList);
     }
 }

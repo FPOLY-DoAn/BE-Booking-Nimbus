@@ -1,7 +1,6 @@
 package com.BE_FPoly_DoAn.DOAN.Contronler.BacSi;
 
-import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
-import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioTuDongDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioNhieuLichDTO;
 import com.BE_FPoly_DoAn.DOAN.Service.Impl.GioKhamChiTietServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,15 +26,9 @@ public class GioKhamChiTietController {
         return ResponseEntity.ok(gioKhamChiTietService.getByLichId(lichId));
     }
 
-    @PostMapping("/TaoGioKhamChiTiet")
-    @Operation(summary = "Tạo giờ khám thủ công")
-    public ResponseEntity<?> createGioKhamChiTiet(@RequestBody GioKhamChiTietDto dto) {
-        return ResponseEntity.ok(gioKhamChiTietService.create(dto));
-    }
-
-    @PostMapping("/TaoGioKhamChiTietTuDong")
-    @Operation(summary = "Tạo giờ khám tự động theo bước nhảy")
-    public ResponseEntity<?> generateGioKham(@RequestBody TaoGioTuDongDTO req) {
-        return ResponseEntity.ok(gioKhamChiTietService.generate(req));
+    @PostMapping("/TaoGioKhamTuDong")
+    @Operation(summary = "Tạo giờ khám tự động cho nhiều lịch")
+    public ResponseEntity<?> generateGioTheoCa(@RequestBody TaoGioNhieuLichDTO req) {
+        return ResponseEntity.ok(gioKhamChiTietService.generateTheoCa(req));
     }
 }
