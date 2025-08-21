@@ -170,6 +170,10 @@ System.out.println("quản lý"+dto.getEmail()+","+dto.getSoDienThoai()+","+dto.
                     .ngayCapNhat(LocalDate.now())
                     .ghiChu(dto.getGhiChu())
                     .build();
+
+
+
+
             quanLyRepository.save(quanLy);
 
             VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Quản lý")

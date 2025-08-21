@@ -133,33 +133,30 @@ public class LeTanServiceImpl implements InterfaceService<LeTan> {
 
     @Transactional
     public ServiceResponse<?> createNguoiDungAndLeTan(LeTanDTO leTanDTO) {
-        try {
-            NguoiDung nguoiDung = NguoiDung.builder()
-                    .hoTen(leTanDTO.getHoTen())
-                    .email(leTanDTO.getEmail())
-                    .matKhau(passwordEncoder.encode(leTanDTO.getMatKhau()))
-                    .soDienThoai(leTanDTO.getSoDienThoai())
-                    .gioiTinh(leTanDTO.getGioiTinh())
-                    .build();
-            nguoiDungRepository.save(nguoiDung);
+        NguoiDung nguoiDung = NguoiDung.builder()
+                .hoTen(leTanDTO.getHoTen())
+                .email(leTanDTO.getEmail())
+                .matKhau(passwordEncoder.encode(leTanDTO.getMatKhau()))
+                .soDienThoai(leTanDTO.getSoDienThoai())
+                .gioiTinh(leTanDTO.getGioiTinh())
+                .build();
+        nguoiDungRepository.save(nguoiDung);
 
-            LeTan leTan = LeTan.builder()
-                    .nguoiDung(nguoiDung)
-                    .ghiChu(leTanDTO.getGhiChu())
-                    .trangThaiHoatDong(leTanDTO.getTrangThaiHoatDong())
-                    .chucVu(leTanDTO.getChucVu())
-                    .ngayTuyenDung(leTanDTO.getNgayTuyenDung())
-                    .build();
-            leTanRepository.save(leTan);
+        LeTan leTan = LeTan.builder()
+                .nguoiDung(nguoiDung)
+                .ghiChu(leTanDTO.getGhiChu())
+                .trangThaiHoatDong(leTanDTO.getTrangThaiHoatDong())
+                .chucVu(leTanDTO.getChucVu())
+                .ngayTuyenDung(leTanDTO.getNgayTuyenDung())
+                .build();
+        leTanRepository.save(leTan);
 
-            VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Lễ tân")
-                    .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
+        VaiTro vaiTro = vaiTroRepository.findByTenVaiTro("Lễ tân")
+                .orElseThrow(() -> new RuntimeException("Vai trò không tồn tại"));
 
-            phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
+        phanQuyenService.save(new PhanQuyen(vaiTro, nguoiDung));
 
-            return ServiceResponse.success("200", "Tạo tài khoản thành công");
-        } catch (Exception e) {
-            return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
-        }
+        return ServiceResponse.success("200", "Tạo tài khoản thành công");
     }
+
 }
