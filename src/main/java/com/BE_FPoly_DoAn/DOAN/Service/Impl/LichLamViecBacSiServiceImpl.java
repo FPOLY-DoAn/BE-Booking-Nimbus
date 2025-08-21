@@ -4,6 +4,7 @@ import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecHomNayChiTietDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.TaoGioNhieuLichDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.BacSiRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.GioKhamChiTietRepository;
 import com.BE_FPoly_DoAn.DOAN.Dao.LichLamViecBacSiRepository;
@@ -28,11 +29,13 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
     private final LichLamViecBacSiRepository repository;
     private final BacSiRepository bacSiRepository;
     private final GioKhamChiTietRepository repositoryGioKham;
+    private final GioKhamChiTietServiceImpl gioKhamChiTietService;
 
-    public LichLamViecBacSiServiceImpl(LichLamViecBacSiRepository repository, BacSiRepository bacSiRepository, GioKhamChiTietRepository repositoryGioKham) {
+    public LichLamViecBacSiServiceImpl(LichLamViecBacSiRepository repository, BacSiRepository bacSiRepository, GioKhamChiTietRepository repositoryGioKham, GioKhamChiTietServiceImpl gioKhamChiTietService) {
         this.repository = repository;
         this.bacSiRepository = bacSiRepository;
         this.repositoryGioKham = repositoryGioKham;
+        this.gioKhamChiTietService = gioKhamChiTietService;
     }
 
     @Override
@@ -103,7 +106,9 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
 
     public ServiceResponse<?> taoLichLamViec(Integer bacSiId, LichLamViecDTO dto) {
         try {
-            boolean isExist = repository.existsByBacSi_BacSiIdAndNgayAndCaTruc(bacSiId, dto.getNgay(), dto.getCaTruc());
+            boolean isExist = repository.existsByBacSi_BacSiIdAndNgayAndCaTruc(
+                    bacSiId, dto.getNgay(), dto.getCaTruc()
+            );
             if (isExist) {
                 return ServiceResponse.error(NotificationCode.CREATE_FAIL, "Bác sĩ đã có lịch làm việc trong ca này");
             }
@@ -124,9 +129,16 @@ public class LichLamViecBacSiServiceImpl implements InterfaceService<LichLamViec
 
             LichLamViecBacSi saved = repository.save(entity);
 
+            TaoGioNhieuLichDTO taoGioReq = new TaoGioNhieuLichDTO(List.of(saved.getLichlvId()));
+            ServiceResponse<?> gioResponse = gioKhamChiTietService.generateTheoCa(taoGioReq);
+
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("lichLamViec", LichLamViecMapper.toDto(saved));
+            responseData.put("gioKhamChiTiet", gioResponse.getData());
+
             return ServiceResponse.success(
                     NotificationCode.WORK_SCHEDULE_CREATE_SUCCESS,
-                    LichLamViecMapper.toDto(saved)
+                    responseData
             );
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.WORK_SCHEDULE_CREATE_FAIL, e.getMessage());

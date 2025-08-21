@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface LichLamViecBacSiRepository extends JpaRepository<LichLamViecBacSi, Integer> {
     List<LichLamViecBacSi> findByBacSi_BacSiId(Integer bacSiId);
@@ -21,4 +22,6 @@ public interface LichLamViecBacSiRepository extends JpaRepository<LichLamViecBac
     List<LichLamViecBacSi> findByBacSiInAndNgayAndCaTruc(List<BacSi> bacSiList, LocalDate ngay, String caTruc);
 
     List<LichLamViecBacSi> findByNgay(LocalDate ngay);
+
+    List<LichLamViecBacSi> findByBacSi_BacSiIdAndNgayAndCaTruc(Integer bacSiId, LocalDate ngay, String ca);
 }

@@ -23,7 +23,7 @@ public class LichLamViecController {
     }
 
     @PostMapping("/TaoLichLamViec")
-    @Operation(summary = "Tạo ngày khám theo ca của lịch làm việc bác sĩ")
+    @Operation(summary = "Tạo ngày khám và tự sinh giờ khám chi tiết theo ca")
     public ResponseEntity<?> create(@RequestParam Integer bacSiId, @RequestBody LichLamViecDTO dto) {
         return ResponseEntity.ok(lichLamViecService.taoLichLamViec(bacSiId, dto));
     }
