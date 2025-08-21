@@ -1,6 +1,8 @@
 package com.BE_FPoly_DoAn.DOAN.Service.Impl.Guest;
 
+import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.KhungGioRanhDTO;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.LichLamViecResponseDTO;
+import com.BE_FPoly_DoAn.DOAN.DTO.CaKham;
 import com.BE_FPoly_DoAn.DOAN.DTO.Guest.LichKhamTrongDTO;
 import com.BE_FPoly_DoAn.DOAN.Dao.*;
 import com.BE_FPoly_DoAn.DOAN.DTO.BacSi.GioKhamChiTietDto;
@@ -16,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -99,18 +103,45 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
     @Override
     public ServiceResponse<?> getGioTrongTheoCa(Integer bacSiId, LocalDate ngay, String ca) {
         try {
-            List<GioKhamChiTietDto> list = gioKhamRepo
-                    .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(bacSiId, ngay, ca)
-                    .stream()
-                    .filter(GioKhamChiTiet::getTrangThai)
-                    .map(GioKhamChiTietMapper::toDto)
-                    .toList();
+            List<LichLamViecBacSi> lichList = lichLamViecRepo
+                    .findByBacSi_BacSiIdAndNgayAndCaTruc(bacSiId, ngay, ca);
 
-            if (list.isEmpty()) {
-                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không có giờ trống trong ca làm việc này.");
+            if (lichList.isEmpty()) {
+                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND,
+                        "Không tìm thấy ca làm việc của bác sĩ này.");
             }
 
-            return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, list);
+            CaKham caKham = CaKham.fromViet(ca);
+            LocalTime start = caKham.getStart();
+            LocalTime end = caKham.getEnd();
+            int buocNhay = 15;
+
+            List<GioKhamChiTiet> gioTrongDb = gioKhamRepo
+                    .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(
+                            bacSiId, ngay, ca
+                    );
+
+            Map<LocalTime, Boolean> mapTrangThai = gioTrongDb.stream()
+                    .collect(Collectors.toMap(GioKhamChiTiet::getThoiGian, GioKhamChiTiet::getTrangThai));
+
+            List<KhungGioRanhDTO> result = new ArrayList<>();
+
+            while (!start.isAfter(end.minusMinutes(buocNhay))) {
+                LocalTime ketThuc = start.plusMinutes(buocNhay);
+
+                boolean trangThai = mapTrangThai.getOrDefault(start, true);
+
+                result.add(KhungGioRanhDTO.builder()
+                        .batDau(start)
+                        .ketThuc(ketThuc)
+                        .daDat(trangThai)
+                        .build());
+
+                start = ketThuc;
+            }
+
+            return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, result);
+
         } catch (Exception e) {
             return ServiceResponse.error(NotificationCode.SERVER_ERROR, e.getMessage());
         }
@@ -155,6 +186,7 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
         }
     }
 
+    @Override
     public ServiceResponse<?> getGioTrongTheoChuyenKhoa(String tenKhoa, LocalDate ngay, String ca) {
         try {
             List<BacSi> bacSiList = bacSiRepo.findByChuyenKhoa_TenKhoa(tenKhoa);
@@ -172,7 +204,7 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
             List<LichLamViecBacSi> lichCoGioTrong = lichList.stream()
                     .filter(lich -> gioKhamRepo.findByLichLamViecBacSi(lich)
                             .stream()
-                            .anyMatch(GioKhamChiTiet::getTrangThai))
+                            .anyMatch(gio -> !gio.getTrangThai()))
                     .toList();
 
             if (lichCoGioTrong.isEmpty()) {
@@ -181,19 +213,33 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
 
             LichLamViecBacSi randomLich = lichCoGioTrong.get(new java.util.Random().nextInt(lichCoGioTrong.size()));
 
-            List<GioKhamChiTietDto> gioTrongList = gioKhamRepo.findByLichLamViecBacSi(randomLich).stream()
-                    .filter(GioKhamChiTiet::getTrangThai)
-                    .map(GioKhamChiTietMapper::toDto)
-                    .toList();
+            CaKham caKham = CaKham.fromViet(ca);
+            LocalTime start = caKham.getStart();
+            LocalTime end = caKham.getEnd();
+            int buocNhay = 15;
 
-            if (gioTrongList.isEmpty()) {
-                return ServiceResponse.error(NotificationCode.AVAILABLE_TIME_NOT_FOUND, "Không có giờ trống cho chuyên khoa này.");
+            Map<LocalTime, Boolean> mapTrangThai = gioKhamRepo.findByLichLamViecBacSi(randomLich).stream()
+                    .collect(Collectors.toMap(GioKhamChiTiet::getThoiGian, GioKhamChiTiet::getTrangThai));
+
+            List<KhungGioRanhDTO> result = new ArrayList<>();
+            while (!start.isAfter(end.minusMinutes(buocNhay))) {
+                LocalTime ketThuc = start.plusMinutes(buocNhay);
+
+                boolean trangThai = mapTrangThai.getOrDefault(start, true);
+
+                result.add(KhungGioRanhDTO.builder()
+                        .batDau(start)
+                        .ketThuc(ketThuc)
+                        .daDat(trangThai)
+                        .build());
+
+                start = ketThuc;
             }
 
             return ServiceResponse.success(NotificationCode.AVAILABLE_TIME_FETCH_SUCCESS, new Object() {
                 public final Integer bacSiId = randomLich.getBacSi().getBacSiId();
                 public final String bacSiName = randomLich.getBacSi().getNguoiDung().getHoTen();
-                public final List<GioKhamChiTietDto> gioTrong = gioTrongList;
+                public final List<KhungGioRanhDTO> gioTrong = result;
             });
 
         } catch (Exception e) {

@@ -85,28 +85,13 @@ public class GioKhamChiTietServiceImpl {
 
         List<KhungGioRanhDTO> khungList = new ArrayList<>();
 
-        for (int i = 0; i < slotList.size() - 1; i++) {
-            GioKhamChiTiet slotA = slotList.get(i);
-            GioKhamChiTiet slotB = slotList.get(i + 1);
-
-            boolean aTrue = Boolean.TRUE.equals(slotA.getTrangThai());
-            boolean bTrue = Boolean.TRUE.equals(slotB.getTrangThai());
-
-            boolean daDat;
-            if (aTrue && bTrue) {
-                daDat = false;
-            } else if (aTrue && !bTrue) {
-                daDat = true;
-            } else if (!aTrue && !bTrue) {
-                daDat = true;
-            } else {
-                daDat = false;
-            }
+        for (int i = 0; i < slotList.size(); i++) {
+            GioKhamChiTiet slot = slotList.get(i);
 
             khungList.add(KhungGioRanhDTO.builder()
-                    .batDau(slotA.getThoiGian())
-                    .ketThuc(slotA.getThoiGian().plusMinutes(15))
-                    .daDat(!daDat)
+                    .batDau(slot.getThoiGian())
+                    .ketThuc(slot.getThoiGian().plusMinutes(15))
+                    .daDat(!Boolean.FALSE.equals(slot.getTrangThai()))
                     .build());
         }
 

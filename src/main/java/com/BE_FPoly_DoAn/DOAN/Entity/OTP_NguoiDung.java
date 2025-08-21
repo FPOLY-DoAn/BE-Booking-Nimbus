@@ -24,6 +24,7 @@ public class OTP_NguoiDung {
     private String email;
     @Column(name = "ho_ten", columnDefinition = "NVARCHAR(50)")
     private String hoTen;
+    @Column(name = "gioi_tinh", columnDefinition = "NVARCHAR(50)")
     private String gioiTinh;
     private String soDienThoai;
     private String matKhau;

@@ -12,6 +12,7 @@ import java.time.LocalTime;
 public class GioKhamChiTietDto {
     private Integer gioKhamId;
     private Integer lichLamViecId;
-    private LocalTime thoiGian;
-    private Boolean trangThai;
+    private LocalTime batDau;
+    private LocalTime ketThuc;
+    private Boolean daDat;
 }
