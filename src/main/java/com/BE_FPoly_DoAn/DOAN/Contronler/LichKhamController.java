@@ -48,4 +48,10 @@ public class LichKhamController {
     public ResponseEntity<ServiceResponse<?>> search(@RequestBody LichKhamFilterDTO filter) {
         return ResponseEntity.ok(lichKhamService.searchLichKham(filter));
     }
+
+    @PutMapping("/HuyLichKham/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_LETAN', 'ROLE_BACSI', 'ROLE_BENHNHAN', 'ROLE_QUANLY')")
+    public ResponseEntity<ServiceResponse<?>> cancel(@PathVariable Integer id) {
+        return ResponseEntity.ok(lichKhamService.cancelLichKham(id));
+    }
 }

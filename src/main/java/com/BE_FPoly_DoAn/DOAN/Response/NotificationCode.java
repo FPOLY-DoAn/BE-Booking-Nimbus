@@ -140,7 +140,7 @@ public enum NotificationCode {
     APPOINTMENT_CONFLICT("APP_012", "Lịch khám trùng giờ với bác sĩ khác"),
     APPOINTMENT_INVALID_TIME("APP_013", "Thời gian khám không hợp lệ"),
     APPOINTMENT_NO_AVAILABLE_SLOTS("APP_014", "Không còn khung giờ trống trong ca này"),
-
+    APP_CANCEL_SUCCESS("APP_015", "Hủy lịch khám thành công"),
 
     // === LỊCH LÀM VIỆC BÁC SĨ
     WORK_SCHEDULE_DETAILS_CUSSCESS("SCE_001", "Hiển thị chi tiết ngày làm việc của bác sĩ thành công"),

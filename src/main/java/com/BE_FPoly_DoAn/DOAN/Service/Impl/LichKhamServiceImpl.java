@@ -297,4 +297,35 @@ public class LichKhamServiceImpl {
 
         return list.stream().map(GioKhamChiTietMapper::toDto).toList();
     }
+
+    @Transactional
+    public ServiceResponse<?> cancelLichKham(Integer id) {
+        try {
+            LichKham lichKham = lichKhamRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám"));
+
+            lichKham.setTrangThai("Đã hủy");
+            lichKhamRepo.save(lichKham);
+
+            List<GioKhamChiTiet> gioKhamList = gioKhamChiTietRepo
+                    .findByLichLamViecBacSi_BacSi_BacSiIdAndLichLamViecBacSi_NgayAndLichLamViecBacSi_CaTruc(
+                            lichKham.getBacSi().getBacSiId(),
+                            lichKham.getNgayKham(),
+                            lichKham.getCaKham()
+                    );
+
+            LocalTime tu = lichKham.getThoiGianTu();
+            LocalTime den = lichKham.getThoiGianDen();
+
+            gioKhamList.stream()
+                    .filter(slot -> !slot.getThoiGian().isBefore(tu) && !slot.getThoiGian().isAfter(den))
+                    .forEach(slot -> slot.setTrangThai(true));
+
+            gioKhamChiTietRepo.saveAll(gioKhamList);
+
+            return ServiceResponse.success(NotificationCode.APP_CANCEL_SUCCESS, LichKhamMapper.toDTO(lichKham));
+        } catch (Exception e) {
+            return ServiceResponse.error("APP_CANCEL_FAIL", "Hủy lịch khám thất bại: " + e.getMessage());
+        }
+    }
 }
