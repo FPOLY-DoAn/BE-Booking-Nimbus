@@ -204,7 +204,7 @@ public class GuestAppointmentServiceImpl implements GuestAppointmentService {
             List<LichLamViecBacSi> lichCoGioTrong = lichList.stream()
                     .filter(lich -> gioKhamRepo.findByLichLamViecBacSi(lich)
                             .stream()
-                            .anyMatch(gio -> !gio.getTrangThai()))
+                            .anyMatch(GioKhamChiTiet::getTrangThai))
                     .toList();
 
             if (lichCoGioTrong.isEmpty()) {
