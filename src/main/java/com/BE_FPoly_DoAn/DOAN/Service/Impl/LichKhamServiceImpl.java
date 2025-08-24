@@ -328,4 +328,19 @@ public class LichKhamServiceImpl {
             return ServiceResponse.error("APP_CANCEL_FAIL", "Hủy lịch khám thất bại: " + e.getMessage());
         }
     }
+
+    public Object thongKeBenhNhanMoiService(Integer month, Integer year) {
+        return lichKhamRepo.thongKeBenhNhanMoi(month, year);
+    }
+
+    public Object thongKeTongLuotKham(Integer month, Integer year) {
+        return lichKhamRepo.thongKeTongLuotKham(month, year);
+    }
+    public Object thongKeDangKiKham(Integer month, Integer year) {
+        return lichKhamRepo.thongKeDangKiKham(month, year);
+    }
+
+    public Object thongKeBenhNhanHuyKham(Integer month, Integer year) {
+        return lichKhamRepo.thongKeBenhNhanHuyKham(month, year);
+    }
 }

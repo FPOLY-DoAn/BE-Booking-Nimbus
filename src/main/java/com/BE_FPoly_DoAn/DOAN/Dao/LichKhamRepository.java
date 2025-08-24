@@ -4,6 +4,7 @@ import com.BE_FPoly_DoAn.DOAN.Entity.LichKham;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
@@ -43,4 +44,17 @@ public interface LichKhamRepository extends JpaRepository<LichKham, Integer>, Jp
     int countLichKhamByBacSiAndNgayAndCa(@Param("bacSiId") Long bacSiId,
                                          @Param("ngayKham") LocalDate ngayKham,
                                          @Param("caKham") String caKham);
+
+
+    @Query(value = "EXEC ThongKeBenhNhanMoi :month, :year", nativeQuery = true)
+    Object thongKeBenhNhanMoi(@Param("month") Integer month, @Param("year") Integer year);
+
+    @Query(value = "EXEC ThongKeDangKiKham :month, :year", nativeQuery = true)
+    Object thongKeDangKiKham(@Param("month") Integer month, @Param("year") Integer year);
+
+    @Query(value = "EXEC ThongKeTongLuotKham :month, :year", nativeQuery = true)
+    Object thongKeTongLuotKham(@Param("month") Integer month, @Param("year") Integer year);
+
+    @Query(value = "  exec ThongKeBenhNhanHuyKham :month, :year", nativeQuery = true)
+    Object thongKeBenhNhanHuyKham(@Param("month") Integer month, @Param("year") Integer year);
 }

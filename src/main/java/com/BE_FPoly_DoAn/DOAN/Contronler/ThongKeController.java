@@ -12,16 +12,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/thong-ke")
 @PreAuthorize("hasRole('ROLE_QUANLY')")
-@RequiredArgsConstructor
 @Tag(name = "Xem thống kê theo Bác sĩ, Tháng")
 public class ThongKeController {
 
     private final ThongKeServiceImpl thongKeService;
     private final LichKhamServiceImpl lichKhamService;
+
+    public ThongKeController(ThongKeServiceImpl thongKeService, LichKhamServiceImpl lichKhamService) {
+        this.thongKeService = thongKeService;
+        this.lichKhamService = lichKhamService;
+    }
 
     @GetMapping("/ThongKeTheoThang")
     public ResponseEntity<ServiceResponse<?>> thongKeTheoThangVaNam(@RequestParam int month,
@@ -70,4 +75,24 @@ public class ThongKeController {
                 ServiceResponse.success(NotificationCode.FETCH_SUCCESS, result)
         );
     }
+
+    @GetMapping("/thongkebenhnhan-dangkikham-luotKham-huykham")
+    @Operation(summary = "Thống kê bệnh nhân mới, số lượng đăng kí khám, và số lượt khám(có thể lọc theo năm/tháng)")
+    public ResponseEntity<?> thongKeBenhNhanAndDangKiKhamAndLuotKhamController(@RequestParam("month")Integer month, @RequestParam("year")Integer year) {
+        Object thongKeBenhNhanMoi = lichKhamService.thongKeBenhNhanMoiService(month, year);
+        Object DangKiKham = lichKhamService.thongKeDangKiKham(month, year);
+        Object tongLuotKham = lichKhamService.thongKeTongLuotKham(month, year);
+        Object tongLuotHuyKham = lichKhamService.thongKeBenhNhanHuyKham(month, year);
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "benhNhanMoi", thongKeBenhNhanMoi,
+                        "dangKiKham", DangKiKham,
+                        "tongLuotKham", tongLuotKham,
+                        "tongLuotHuyKham", tongLuotHuyKham
+                )
+        );
+    }
+
+
 }

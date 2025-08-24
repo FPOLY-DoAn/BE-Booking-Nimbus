@@ -235,8 +235,8 @@ public class NguoiDungServiceImpl implements InterfaceService<NguoiDung>, UserDe
                             <div style="font-size: 24px; font-weight: bold; text-align: center; letter-spacing: 5px; background: #f0f3ff; padding: 15px; border-radius: 8px; color: #0a5bff;">
                                 %s
                             </div>
-                            <p style="margin-top: 30px;">Mã này sẽ hết hạn sau 5 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
-                            <p style="margin-top: 30px;">Trân trọng,<br><strong>Đội ngũ Mimbus</strong></p>
+                            <p style="margin-top: 30px;">Mã này sẽ hết hạn sau 1 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
+                            <p style="margin-top: 30px;">Trân trọng,<br><strong>Đội ngũ Nimbus</strong></p>
                         </div>
                     </div>
                     """.formatted(nguoiDung.getHoTen(), otpCode);
