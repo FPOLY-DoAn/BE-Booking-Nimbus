@@ -47,7 +47,7 @@ public class AccountController {
     }
 
     @PutMapping("/DoiMatKhau")
-    @PreAuthorize("hasAuthority('ROLE_QUANLY')")
+    @PreAuthorize("hasAnyAuthority('ROLE_QUANLY', 'ROLE_BENHNHAN')")
     public ResponseEntity<?> changePassword(@Valid @RequestBody DoiMatKhauDTO dto, HttpServletRequest request) {
         Integer userId = jwtService.extractUserIdFromRequest(request);
         return ResponseEntity.ok(nguoiDungService.changePassword(userId, dto.getOldPassword(), dto.getNewPassword()));

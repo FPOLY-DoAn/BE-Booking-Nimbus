@@ -18,7 +18,6 @@ public class OTP_NguoiDung {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "otp_code")
     private String otpCode;
     private String email;
@@ -45,6 +44,6 @@ public class OTP_NguoiDung {
         this.soDienThoai = soDienThoai;
         this.matKhau = matKhau;
         this.createdAt = LocalDateTime.now();
-        this.expireAt = this.createdAt.plusMinutes(5); // Set hết hạn sau 5 phút
+        this.expireAt = this.createdAt.plusMinutes(5);
     }
 }
